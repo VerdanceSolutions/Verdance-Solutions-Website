@@ -899,12 +899,6 @@ p {
   border: 1px solid rgba(53, 88, 52, 0.4);
 }
 
-.about-cta-btn:hover {
-  background-color: #34495e;
-  transform: translateY(-2px); /* Subtle lift for a premium feel */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
 /* =========================
    13. Contact / Lead capture
    ========================= */
