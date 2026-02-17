@@ -278,6 +278,63 @@ p {
 }
 
 /* =========================
+   6. Buttons & Badges
+   ========================= */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  gap: var(--space-xs);
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  padding: 0.6rem 1.3rem;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.btn--primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  box-shadow: 0 10px 22px rgba(53, 88, 52, 0.4);
+}
+
+.btn--wide {
+  min-width: 14rem; /* tweak to taste: 12–16rem */
+  width: 100%;
+  max-width: 20rem;
+}
+
+/* Smaller shadow for header CTA */
+.site-header .navbar__cta.btn.btn--primary {
+  box-shadow: 0 4px 10px rgba(53, 88, 52, 0.25) !important;
+}
+
+.btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(53, 88, 52, 0.5);
+  background-color: var(--color-primary-soft);
+}
+
+.btn--ghost {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid rgba(53, 88, 52, 0.4);
+}
+
+.btn--ghost:hover {
+  background-color: rgba(53, 88, 52, 0.06);
+}
+
+/* =========================
    4. Navbar (mobile-first)
    ========================= */
 
@@ -476,62 +533,6 @@ p {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-/* =========================
-   6. Buttons & Badges
-   ========================= */
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-xs);
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-  padding: 0.6rem 1.3rem;
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  text-decoration: none;
-  transition:
-    transform var(--transition-fast),
-    box-shadow var(--transition-fast),
-    background-color var(--transition-fast),
-    color var(--transition-fast);
-}
-
-.btn--primary {
-  background-color: var(--color-primary);
-  color: var(--color-text-inverse);
-  box-shadow: 0 10px 22px rgba(53, 88, 52, 0.4);
-}
-
-.btn--wide {
-  min-width: 14rem; /* tweak to taste: 12–16rem */
-  width: 100%;
-  max-width: 20rem;
-}
-
-/* Smaller shadow for header CTA */
-.site-header .navbar__cta.btn.btn--primary {
-  box-shadow: 0 4px 10px rgba(53, 88, 52, 0.25) !important;
-}
-
-.btn--primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 14px 28px rgba(53, 88, 52, 0.5);
-  background-color: var(--color-primary-soft);
-}
-
-.btn--ghost {
-  background-color: transparent;
-  color: var(--color-primary);
-  border: 1px solid rgba(53, 88, 52, 0.4);
-}
-
-.btn--ghost:hover {
-  background-color: rgba(53, 88, 52, 0.06);
 }
 
 /* =========================
@@ -893,16 +894,9 @@ p {
 }
 
 .about-cta-btn {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 12px 28px;
-  background-color: #2c3e50; /* Adjust to match your primary brand color */
-  color: #ffffff;
-  text-decoration: none;
-  border-radius: 4px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid rgba(53, 88, 52, 0.4);
 }
 
 .about-cta-btn:hover {
