@@ -231,6 +231,14 @@ ol {
   gap: var(--space-lg);
 }
 
+.card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: var(--border-subtle);
+  box-shadow: 0 10px 24px rgba(17, 24, 17, 0.06);
+  padding: var(--space-lg);
+}
+
 /* =========================
    3. Typography
    ========================= */
@@ -536,101 +544,6 @@ p {
 }
 
 /* =========================
-   7. “Why Verdance” / Feature cards
-   ========================= */
-
-.features {
-  background-color: var(--color-surface-muted);
-}
-
-.features__grid {
-  display: grid;
-  gap: var(--space-lg);
-}
-
-.feature-card {
-  background-color: var(--color-surface);
-  border-radius: var(--radius-md);
-  padding: var(--space-lg);
-  border: var(--border-subtle);
-  box-shadow: 0 10px 24px rgba(17, 24, 17, 0.06);
-}
-
-.feature-card__eyebrow {
-  font-size: var(--font-size-xs);
-  text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-wide);
-  color: var(--color-accent-gold);
-  margin-bottom: var(--space-xs);
-}
-
-.feature-card__title {
-  margin-bottom: var(--space-xs);
-}
-
-.feature-card__body {
-  font-size: var(--font-size-sm);
-}
-
-/* =========================
-   8. Timeline / Heritage section
-   ========================= */
-
-.heritage {
-  background-color: var(--color-bg-dark);
-  color: var(--color-text-inverse);
-}
-
-.heritage .section-heading {
-  color: var(--color-text-inverse);
-}
-
-.heritage__grid {
-  display: grid;
-  gap: var(--space-xl);
-}
-
-.heritage__intro {
-  max-width: 34rem;
-}
-
-.heritage__timeline {
-  border-left: 1px solid rgba(226, 210, 186, 0.5);
-  padding-left: var(--space-md);
-}
-
-.timeline-item {
-  position: relative;
-  padding-bottom: var(--space-md);
-  margin-bottom: var(--space-md);
-}
-
-.timeline-item::before {
-  content: "";
-  position: absolute;
-  left: -0.53rem;
-  top: 0.15rem;
-  width: 9px;
-  height: 9px;
-  border-radius: 999px;
-  background-color: var(--color-accent-gold);
-}
-
-.timeline-item__year {
-  font-size: var(--font-size-xs);
-  text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-wide);
-  color: rgba(244, 231, 205, 0.88);
-  margin-bottom: var(--space-2xs);
-}
-
-.timeline-item__title {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-inverse);
-  margin-bottom: var(--space-2xs);
-}
-
-/* =========================
    9. Who For
    ========================= */
 .who-for {
@@ -666,8 +579,6 @@ p {
 }
 
 .who-for__list {
-  display: grid;
-  gap: var(--space-sm);
   padding-left: 1.25rem;
   list-style: disc;
 }
@@ -691,11 +602,6 @@ p {
 }
 
 .problem-card {
-  background-color: var(--color-surface);
-  border-radius: var(--radius-md);
-  padding: var(--space-lg);
-  border: var(--border-subtle);
-  box-shadow: 0 10px 24px rgba(17, 24, 17, 0.06);
   min-height: 150px;
 }
 
@@ -721,11 +627,7 @@ p {
 }
 
 .solution-card {
-  background-color: var(--color-surface);
-  border-radius: var(--radius-md);
-  padding: var(--space-lg);
-  border: var(--border-subtle);
-  box-shadow: 0 10px 24px rgba(17, 24, 17, 0.06);
+  min-height: 150px;
 }
 
 .solution-card__title {
@@ -754,13 +656,9 @@ p {
 }
 
 .origin-card {
-  background-color: var(--color-surface);
-  border-radius: var(--radius-md);
   overflow: hidden;
-  border: var(--border-subtle);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 10px 24px rgba(17, 24, 17, 0.06);
 }
 
 .origin-card__media {
@@ -845,7 +743,6 @@ p {
    ========================= */
 
 .faq__list {
-  display: grid;
   gap: var(--space-sm);
 }
 
@@ -887,7 +784,6 @@ p {
    ========================= */
 
 .about__content {
-  display: grid;
   gap: var(--space-sm);
   max-width: 40rem;
   font-size: var(--font-size-sm);
@@ -909,7 +805,6 @@ p {
 
 .contact__card {
   border-radius: var(--radius-lg);
-  border: var(--border-subtle);
   padding: var(--space-xl) var(--space-lg);
   background: radial-gradient(circle at 0% 0%, #f5e5c4, #fdfaf5);
 }
@@ -919,7 +814,6 @@ p {
 }
 
 .contact__form {
-  display: grid;
   gap: var(--space-md);
   margin-top: var(--space-md);
 }
@@ -985,7 +879,7 @@ select,
   position: absolute;
   width: 100%;
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: var(--border-subtle);
   border-top: none;
   border-radius: 0 0 var(--radius-sm) var(--radius-sm);
   z-index: 10;
@@ -1000,7 +894,7 @@ select,
 }
 
 .dropdown-multi__options label:hover {
-  background: var(--color-muted);
+  background: var(--color-surface-muted);
 }
 
 .dropdown-multi__options input[type="checkbox"] {
@@ -1029,7 +923,7 @@ textarea,
   border-radius: var(--radius-sm);
   border: var(--border-subtle);
   font: inherit;
-  background-color: #fff;
+  background-color: var(--color-surface);
   color: var(--color-text-main);
   min-height: 3rem;
   box-sizing: border-box;
@@ -1097,7 +991,7 @@ textarea,
 
 /* =========================
    15. Media Queries (mobile-first)
-   ========================= *
+   ========================= */
 
 /* ≥ 600px: small tablets / landscape phones */
 @media (min-width: 535px) {
@@ -1200,21 +1094,12 @@ textarea,
     display: inline-flex;
   }
 
-  .features__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
   .problems__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .origins__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .heritage__grid {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
-    align-items: flex-start;
   }
 
   .site-footer__top {
@@ -1327,15 +1212,7 @@ textarea,
     margin-inline: auto;
   }
 
-  .features__grid {
-    gap: var(--space-xl);
-  }
-
   .origins__grid {
     gap: var(--space-xl);
-  }
-
-  .stats__strip {
-    padding: var(--space-xl) var(--space-2xl);
   }
 }
