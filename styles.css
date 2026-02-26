@@ -464,7 +464,7 @@ p {
    5. Hero (mobile-first)
    ========================= */
 
-.hero {
+#hero {
   padding-block: var(--space-2xl);
   color: var(--color-text-main);
   background-color: #e4eee4;
@@ -546,14 +546,14 @@ p {
 /* =========================
    9. Who For
    ========================= */
-.who-for {
+#who-for {
   text-align: center;
   margin-top: 0;
   padding-block: var(--space-2xl);
   color: var(--color-text-main);
 }
 
-.who-for > .container {
+#who-for > .container {
   max-width: 40rem;
   margin-inline: auto;
   padding-inline: var(--container-padding);
@@ -592,13 +592,8 @@ p {
    9. Problems
    ========================= */
 
-.problems {
+#problems {
   background-color: var(--color-surface-muted);
-}
-
-.problems__grid {
-  display: grid;
-  gap: var(--space-lg);
 }
 
 .problem-card {
