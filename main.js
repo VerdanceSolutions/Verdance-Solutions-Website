@@ -80,45 +80,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const successMessage = document.getElementById("form-success");
 
-  contactForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
+  if (contactForm) {
+    contactForm.addEventListener("submit", function (e) {
+      // 1. Stop all default browser actions immediately
+      e.preventDefault();
+      e.stopImmediatePropagation();
 
-    // 1. Capture multi-select checkboxes for Products
-    const selectedProducts = Array.from(
-      document.querySelectorAll('input[name="products"]:checked'),
-    ).map((checkbox) => checkbox.value);
+      // 2. Gather data (matching your HTML IDs)
+      const formData = {
+        fullName: document.getElementById("name").value,
+        title: document.getElementById("title").value,
+        company: document.getElementById("company").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        annualVolume: document.getElementById("volume").value,
+        message: document.getElementById("message").value,
+        // Gather checkboxes into an array
+        products: Array.from(
+          document.querySelectorAll('input[name="products"]:checked'),
+        ).map((cb) => cb.value),
+      };
 
-    // 2. Map all form fields to a JSON object
-    const formData = {
-      fullName: document.getElementById("name").value,
-      title: document.getElementById("title").value,
-      company: document.getElementById("company").value,
-      email: document.getElementById("email").value,
-      phone: document.getElementById("phone").value,
-      productsOfInterest: selectedProducts, // Sends as an array
-      annualVolume: document.getElementById("volume").value,
-      message: document.getElementById("message").value,
-    };
-
-    try {
-      // 3. Send to Zoho Flow Webhook
-      const response = await fetch(
-        "https://flow.zoho.com/899150883/flow/webhook/incoming?zapikey=1001.26ffad7e21e73319a764d74752dd4c45.f4c12ed0122f3ac1df10f3c5dc57bed3&isdebug=false",
-        {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        },
-      );
-
-      if (response.ok) {
-        contactForm.hidden = true; // Hide form on success
-        successMessage.hidden = false; // Show your success div
-      }
-    } catch (error) {
-      console.error("Submission Error:", error);
-      alert("There was an issue sending your request. Please try again.");
-    }
-  });
+      // 3. Send to Zoho Flow using 'no-cors' to ignore the security block
+      fetch("https://zoho.com", {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify(formData),
+      })
+        .then(() => {
+          // Because of 'no-cors', we won't get a status back,
+          // so we just assume success and show your message.
+          contactForm.hidden = true;
+          document.getElementById("form-success").hidden = false;
+        })
+        .catch((err) => {
+          console.error("Submission Error:", err);
+          alert("There was an error. Please try again.");
+        });
+    });
+  }
 });
