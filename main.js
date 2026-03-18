@@ -103,9 +103,10 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       // 3. Send to Zoho Flow Webhook
       const response = await fetch(
-        "https://flow.zoho.com/899150883/flow/webhook/incoming?zapikey=1001.1039014c937738121e0c0141dcac731e.ef6fd6d5e3dbff0f7b77773f5cc1b1dc&isdebug=false",
+        "https://flow.zoho.com/899150883/flow/webhook/incoming?zapikey=1001.26ffad7e21e73319a764d74752dd4c45.f4c12ed0122f3ac1df10f3c5dc57bed3&isdebug=false",
         {
           method: "POST",
+          mode: "no-cors",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
         },
