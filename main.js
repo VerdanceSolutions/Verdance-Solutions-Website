@@ -78,3 +78,47 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+const contactForm = document.getElementById("contact-form");
+const successMessage = document.getElementById("form-success");
+
+contactForm.addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  // 1. Capture multi-select checkboxes for Products
+  const selectedProducts = Array.from(
+    document.querySelectorAll('input[name="products"]:checked'),
+  ).map((checkbox) => checkbox.value);
+
+  // 2. Map all form fields to a JSON object
+  const formData = {
+    fullName: document.getElementById("name").value,
+    title: document.getElementById("title").value,
+    company: document.getElementById("company").value,
+    email: document.getElementById("email").value,
+    phone: document.getElementById("phone").value,
+    productsOfInterest: selectedProducts, // Sends as an array
+    annualVolume: document.getElementById("volume").value,
+    message: document.getElementById("message").value,
+  };
+
+  try {
+    // 3. Send to Zoho Flow Webhook
+    const response = await fetch(
+      "https://flow.zoho.com/899150883/flow/webhook/incoming?zapikey=1001.1039014c937738121e0c0141dcac731e.ef6fd6d5e3dbff0f7b77773f5cc1b1dc&isdebug=false",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      },
+    );
+
+    if (response.ok) {
+      contactForm.hidden = true; // Hide form on success
+      successMessage.hidden = false; // Show your success div
+    }
+  } catch (error) {
+    console.error("Submission Error:", error);
+    alert("There was an issue sending your request. Please try again.");
+  }
+});

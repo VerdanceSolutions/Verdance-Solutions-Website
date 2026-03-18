@@ -808,7 +808,7 @@ p {
   margin-top: var(--space-md);
 }
 
-.contact__form {
+#contact__form {
   gap: var(--space-md);
   margin-top: var(--space-md);
 }
