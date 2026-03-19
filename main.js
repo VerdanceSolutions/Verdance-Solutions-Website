@@ -82,6 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (contactForm) {
     contactForm.addEventListener("submit", function (e) {
+      console.log("Submit intercepted! Starting fetch...");
       e.preventDefault();
       e.stopImmediatePropagation();
 
@@ -102,10 +103,12 @@ document.addEventListener("DOMContentLoaded", () => {
       fetch("https://zoho.com", {
         method: "POST",
         mode: "no-cors", // Bypasses the CORS check you saw in API Tester
+        cache: "no-cahe", // Bypass local browser cache
         body: JSON.stringify(formData),
       })
         .then(() => {
-          contactForm.hidden = true;
+          console.log("Fetch executed successfully.");
+          contactForm.style.display = "none";
           document.getElementById("form-success").hidden = false;
         })
         .catch((err) => console.error("Integration failed:", err));
