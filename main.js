@@ -38,48 +38,39 @@ document.addEventListener("DOMContentLoaded", () => {
   const successBlock = document.getElementById("form-success");
   const successMessage = document.getElementById("form-success");
 
+  // Final Form Handler
   if (contactForm && successBlock) {
     contactForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      e.stopImmediatePropagation();
 
-      console.log("Form submit caught. Processing...");
+      // 1. Prepare data using URLSearchParams instead of a JSON object
+      const params = new URLSearchParams();
+      params.append("fullName", document.getElementById("name").value);
+      params.append("title", document.getElementById("title").value);
+      params.append("company", document.getElementById("company").value);
+      params.append("email", document.getElementById("email").value);
+      params.append("phone", document.getElementById("phone").value);
+      params.append("volume", document.getElementById("volume").value);
+      params.append("message", document.getElementById("message").value);
 
-      const formData = {
-        fullName: document.getElementById("name").value,
-        title: document.getElementById("title").value,
-        company: document.getElementById("company").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
-        volume: document.getElementById("volume").value,
-        message: document.getElementById("message").value,
-        products: Array.from(
-          document.querySelectorAll('input[name="products"]:checked'),
-        ).map((cb) => cb.value),
-      };
+      // Handle products (checkboxes)
+      const selectedProducts = Array.from(
+        document.querySelectorAll('input[name="products"]:checked'),
+      ).map((cb) => cb.value);
+      params.append("products", selectedProducts.join(", "));
 
-      const webhookURL =
-        "https://flow.zoho.com/899150883/flow/webhook/incoming?zapikey=1001.26ffad7e21e73319a764d74752dd4c45.f4c12ed0122f3ac1df10f3c5dc57bed3&isdebug=false";
+      // 2. Send the request
       fetch(webhookURL, {
         method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      })
-        .then(() => {
-          contactForm.style.display = "none";
-          successBlock.style.display = "block";
-          successBlock.hidden = false;
-          successBlock.scrollIntoView({ behavior: "smooth", block: "start" });
-        })
-        .catch((err) => {
-          console.error("Integration failed:", err);
-        });
+        mode: "no-cors", // Bypasses CORS browser restrictions
+        body: params, // Browser handles the content-type automatically
+      });
 
-      // Optional: Reset form after display
-      // contactForm.reset();
+      // 3. UI Success Swap (Trigger immediately for no-cors)
+      contactForm.style.display = "none";
+      successBlock.style.display = "block";
+      successBlock.hidden = false;
+      successBlock.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   }
 
