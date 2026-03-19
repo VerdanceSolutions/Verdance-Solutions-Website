@@ -62,11 +62,13 @@ document.addEventListener("DOMContentLoaded", () => {
         "https://flow.zoho.com/899150883/flow/webhook/incoming?zapikey=1001.26ffad7e21e73319a764d74752dd4c45.f4c12ed0122f3ac1df10f3c5dc57bed3&isdebug=false";
       fetch(webhookURL, {
         method: "POST",
-        mode: "cors",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(formData),
       })
         .then(() => {
-          if (!response.ok) throw new Error("Network response was not ok");
           contactForm.style.display = "none";
           successBlock.style.display = "block";
           successBlock.hidden = false;
