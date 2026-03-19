@@ -82,41 +82,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (contactForm) {
     contactForm.addEventListener("submit", function (e) {
-      // 1. Stop all default browser actions immediately
       e.preventDefault();
       e.stopImmediatePropagation();
 
-      // 2. Gather data (matching your HTML IDs)
       const formData = {
         fullName: document.getElementById("name").value,
         title: document.getElementById("title").value,
         company: document.getElementById("company").value,
         email: document.getElementById("email").value,
         phone: document.getElementById("phone").value,
-        annualVolume: document.getElementById("volume").value,
+        volume: document.getElementById("volume").value,
         message: document.getElementById("message").value,
-        // Gather checkboxes into an array
         products: Array.from(
           document.querySelectorAll('input[name="products"]:checked'),
         ).map((cb) => cb.value),
       };
 
-      // 3. Send to Zoho Flow using 'no-cors' to ignore the security block
+      // This is the bridge you were missing:
       fetch("https://zoho.com", {
         method: "POST",
-        mode: "no-cors",
+        mode: "no-cors", // Bypasses the CORS check you saw in API Tester
         body: JSON.stringify(formData),
       })
         .then(() => {
-          // Because of 'no-cors', we won't get a status back,
-          // so we just assume success and show your message.
           contactForm.hidden = true;
           document.getElementById("form-success").hidden = false;
         })
-        .catch((err) => {
-          console.error("Submission Error:", err);
-          alert("There was an error. Please try again.");
-        });
+        .catch((err) => console.error("Integration failed:", err));
     });
   }
 });
