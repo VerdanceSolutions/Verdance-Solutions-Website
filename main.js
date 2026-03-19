@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       const webhookURL =
-        "https://flow.zoho.com/899150883/flow/webhook/incoming?zapikey=1001.26ffad7e21e73319a764d74752dd4c45.f4c12ed0122f3ac1df10f3c5dc57bed3&isdebug=false://zoho.com";
+        "https://flow.zoho.com/899150883/flow/webhook/incoming?zapikey=1001.26ffad7e21e73319a764d74752dd4c45.f4c12ed0122f3ac1df10f3c5dc57bed3&isdebug=false";
       fetch(webhookURL, {
         method: "POST",
         mode: "cors",
