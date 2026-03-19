@@ -36,10 +36,44 @@ document.addEventListener("DOMContentLoaded", () => {
   // ========== FORM SUCCESS SWAP (v1 Feature) ==========
   const contactForm = document.getElementById("contact__form");
   const successBlock = document.getElementById("form-success");
+  const successMessage = document.getElementById("form-success");
 
   if (contactForm && successBlock) {
     contactForm.addEventListener("submit", (e) => {
       e.preventDefault();
+      e.stopImmediatePropagation();
+
+      console.log("Form submit caught. Processing...");
+
+      const formData = {
+        fullName: document.getElementById("name").value,
+        title: document.getElementById("title").value,
+        company: document.getElementById("company").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        volume: document.getElementById("volume").value,
+        message: document.getElementById("message").value,
+        products: Array.from(
+          document.querySelectorAll('input[name="products"]:checked'),
+        ).map((cb) => cb.value),
+      };
+
+      // This is the bridge you were missing:
+      fetch(
+        "https://flow.zoho.com/899150883/flow/webhook/incoming?zapikey=1001.26ffad7e21e73319a764d74752dd4c45.f4c12ed0122f3ac1df10f3c5dc57bed3&isdebug=false://zoho.com",
+        {
+          method: "POST",
+          mode: "no-cors", // Bypasses the CORS check you saw in API Tester
+          cache: "no-cahe", // Bypass local browser cache
+          body: JSON.stringify(formData),
+        },
+      )
+        .then(() => {
+          console.log("Fetch executed successfully.");
+          contactForm.style.display = "none";
+          document.getElementById("form-success").hidden = false;
+        })
+        .catch((err) => console.error("Integration failed:", err));
 
       // Hide form and show success message
       contactForm.style.display = "none";
@@ -75,43 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
           block: "start",
         });
       });
-    });
-  }
-
-  const successMessage = document.getElementById("form-success");
-
-  if (contactForm) {
-    contactForm.addEventListener("submit", function (e) {
-      console.log("Submit intercepted! Starting fetch...");
-      e.preventDefault();
-      e.stopImmediatePropagation();
-
-      const formData = {
-        fullName: document.getElementById("name").value,
-        title: document.getElementById("title").value,
-        company: document.getElementById("company").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
-        volume: document.getElementById("volume").value,
-        message: document.getElementById("message").value,
-        products: Array.from(
-          document.querySelectorAll('input[name="products"]:checked'),
-        ).map((cb) => cb.value),
-      };
-
-      // This is the bridge you were missing:
-      fetch("https://zoho.com", {
-        method: "POST",
-        mode: "no-cors", // Bypasses the CORS check you saw in API Tester
-        cache: "no-cahe", // Bypass local browser cache
-        body: JSON.stringify(formData),
-      })
-        .then(() => {
-          console.log("Fetch executed successfully.");
-          contactForm.style.display = "none";
-          document.getElementById("form-success").hidden = false;
-        })
-        .catch((err) => console.error("Integration failed:", err));
     });
   }
 });
