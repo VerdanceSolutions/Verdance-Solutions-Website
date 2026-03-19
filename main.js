@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const selectedProducts = Array.from(
         document.querySelectorAll('input[name="products"]:checked'),
       ).map((cb) => cb.value);
-      params.append("products", selectedProducts.join(", "));
+      params.append("products", selectedProducts.join(";"));
 
       // 2. Send the request
       fetch(webhookURL, {
