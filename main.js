@@ -58,29 +58,23 @@ document.addEventListener("DOMContentLoaded", () => {
         ).map((cb) => cb.value),
       };
 
-      // This is the bridge you were missing:
-      fetch(
-        "https://flow.zoho.com/899150883/flow/webhook/incoming?zapikey=1001.26ffad7e21e73319a764d74752dd4c45.f4c12ed0122f3ac1df10f3c5dc57bed3&isdebug=false://zoho.com",
-        {
-          method: "POST",
-          mode: "no-cors", // Bypasses the CORS check you saw in API Tester
-          cache: "no-cache", // Bypass local browser cache
-          body: JSON.stringify(formData),
-        },
-      )
+      const webhookURL =
+        "https://flow.zoho.com/899150883/flow/webhook/incoming?zapikey=1001.26ffad7e21e73319a764d74752dd4c45.f4c12ed0122f3ac1df10f3c5dc57bed3&isdebug=false://zoho.com";
+      fetch(webhookURL, {
+        method: "POST",
+        mode: "cors",
+        body: JSON.stringify(formData),
+      })
         .then(() => {
-          console.log("Fetch executed successfully.");
+          if (!response.ok) throw new Error("Network response was not ok");
           contactForm.style.display = "none";
-          document.getElementById("form-success").hidden = false;
+          successBlock.style.display = "block";
+          successBlock.hidden = false;
+          successBlock.scrollIntoView({ behavior: "smooth", block: "start" });
         })
-        .catch((err) => console.error("Integration failed:", err));
-
-      // Hide form and show success message
-      contactForm.style.display = "none";
-      successBlock.style.display = "block";
-
-      // Smooth scroll into view for mobile clarity
-      successBlock.scrollIntoView({ behavior: "smooth", block: "start" });
+        .catch((err) => {
+          console.error("Integration failed:", err);
+        });
 
       // Optional: Reset form after display
       // contactForm.reset();
