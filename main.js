@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
         {
           method: "POST",
           mode: "no-cors", // Bypasses the CORS check you saw in API Tester
-          cache: "no-cahe", // Bypass local browser cache
+          cache: "no-cache", // Bypass local browser cache
           body: JSON.stringify(formData),
         },
       )
