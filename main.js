@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Final Form Handler
   if (contactForm && successBlock) {
-    contactForm.addEventListener("submit", (e) => {
+    contactForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const requiredFields = ["name", "email", "company", "message"];
@@ -54,28 +54,68 @@ document.addEventListener("DOMContentLoaded", () => {
       // TODO: Webhook disabled — Node proxy integration pending
       // Form submission will be re-enabled once /api/submit is live
       // *GOES HERE* //
+      const API_URL =
+        "https://verdance-server-production.up.railway.app/api/submit";
 
-      const params = new URLSearchParams();
-      params.append("fullName", document.getElementById("name").value);
-      params.append("title", document.getElementById("title").value);
-      params.append("company", document.getElementById("company").value);
-      params.append("email", document.getElementById("email").value);
-      params.append("phone", document.getElementById("phone").value);
-      params.append("volume", document.getElementById("volume").value);
-      params.append("message", document.getElementById("message").value);
-
-      // Handle products (checkboxes)
-      const selectedProducts = Array.from(
+      const products = Array.from(
         document.querySelectorAll('input[name="products"]:checked'),
-      ).map((cb) => cb.value);
-      params.append("products", selectedProducts.join(";"));
+      )
+        .map((cb) => cb.value)
+        .join(";");
 
-      // 2. Send the request
-      fetch(webhookURL, {
-        method: "POST",
-        mode: "no-cors", // Bypasses CORS browser restrictions
-        body: params, // Browser handles the content-type automatically
-      });
+      const payload = {
+        fullName: document.getElementById("name").value,
+        title: document.getElementById("title").value,
+        company: document.getElementById("company").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        volume: document.getElementById("volume").value,
+        description: document.getElementById("message").value,
+        products,
+      };
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          console.error("Submit failed:", await response.text());
+          return;
+        }
+
+        // UI success swap
+        contactForm.style.display = "none";
+        successBlock.style.display = "block";
+        successBlock.hidden = false;
+        successBlock.scrollIntoView({ behavior: "smooth", block: "start" });
+      } catch (err) {
+        console.error("Network error:", err);
+      }
+
+      // const params = new URLSearchParams();
+      // params.append("fullName", document.getElementById("name").value);
+      // params.append("title", document.getElementById("title").value);
+      // params.append("company", document.getElementById("company").value);
+      // params.append("email", document.getElementById("email").value);
+      // params.append("phone", document.getElementById("phone").value);
+      // params.append("volume", document.getElementById("volume").value);
+      // params.append("message", document.getElementById("message").value);
+
+      // // Handle products (checkboxes)
+      // const selectedProducts = Array.from(
+      //   document.querySelectorAll('input[name="products"]:checked'),
+      // ).map((cb) => cb.value);
+      // params.append("products", selectedProducts.join(";"));
+
+      // // 2. Send the request
+      // fetch(webhookURL, {
+      //   method: "POST",
+      //   mode: "no-cors", // Bypasses CORS browser restrictions
+      //   body: params, // Browser handles the content-type automatically
+      // });
 
       // 3. UI Success Swap (Trigger immediately for no-cors)
       contactForm.style.display = "none";
