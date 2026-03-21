@@ -94,34 +94,6 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (err) {
         console.error("Network error:", err);
       }
-
-      // const params = new URLSearchParams();
-      // params.append("fullName", document.getElementById("name").value);
-      // params.append("title", document.getElementById("title").value);
-      // params.append("company", document.getElementById("company").value);
-      // params.append("email", document.getElementById("email").value);
-      // params.append("phone", document.getElementById("phone").value);
-      // params.append("volume", document.getElementById("volume").value);
-      // params.append("message", document.getElementById("message").value);
-
-      // // Handle products (checkboxes)
-      // const selectedProducts = Array.from(
-      //   document.querySelectorAll('input[name="products"]:checked'),
-      // ).map((cb) => cb.value);
-      // params.append("products", selectedProducts.join(";"));
-
-      // // 2. Send the request
-      // fetch(webhookURL, {
-      //   method: "POST",
-      //   mode: "no-cors", // Bypasses CORS browser restrictions
-      //   body: params, // Browser handles the content-type automatically
-      // });
-
-      // 3. UI Success Swap (Trigger immediately for no-cors)
-      contactForm.style.display = "none";
-      successBlock.style.display = "block";
-      successBlock.hidden = false;
-      successBlock.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   }
 
