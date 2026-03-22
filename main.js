@@ -36,7 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // ========== FORM SUCCESS SWAP (v1 Feature) ==========
   const contactForm = document.getElementById("contact__form");
   const successBlock = document.getElementById("form-success");
-  const successMessage = document.getElementById("form-success");
 
   // Final Form Handler
   if (contactForm && successBlock) {
