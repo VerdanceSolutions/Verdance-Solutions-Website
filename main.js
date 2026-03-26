@@ -50,9 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // TODO: Webhook disabled — Node proxy integration pending
-      // Form submission will be re-enabled once /api/submit is live
-      // *GOES HERE* //
       const API_URL =
         "https://verdance-server-production.up.railway.app/api/submit";
 
