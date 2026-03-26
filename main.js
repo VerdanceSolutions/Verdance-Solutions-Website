@@ -36,6 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // ========== FORM SUCCESS SWAP (v1 Feature) ==========
   const contactForm = document.getElementById("contact__form");
   const successBlock = document.getElementById("form-success");
+  const errorBlock = document.getElementById("form-error");
+  const submitBtn = document.getElementById("form-submit-btn");
 
   // Final Form Handler
   if (contactForm && successBlock) {
@@ -49,6 +51,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if (isEmpty) {
         return;
       }
+
+      // Reset error state and set loading
+      errorBlock.hidden = true;
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending...";
 
       const API_URL =
         "https://verdance-server-production.up.railway.app/api/submit";
@@ -79,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!response.ok) {
           console.error("Submit failed:", await response.text());
-          return;
+          throw new Error("Server error");
         }
 
         // UI success swap
@@ -89,6 +96,9 @@ document.addEventListener("DOMContentLoaded", () => {
         successBlock.scrollIntoView({ behavior: "smooth", block: "start" });
       } catch (err) {
         console.error("Network error:", err);
+        errorBlock.hidden = false;
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Request Briefing";
       }
     });
   }
