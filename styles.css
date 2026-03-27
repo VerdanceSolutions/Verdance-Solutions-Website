@@ -933,6 +933,16 @@ textarea,
   font-size: var(--font-size-sm);
 }
 
+.form-error {
+  margin-top: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-error);
+  background-color: rgba(197, 48, 48, 0.06);
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+}
+
 /* =========================
    14. Footer
    ========================= */
@@ -949,7 +959,7 @@ textarea,
   display: flex;
   flex-direction: column;
   align-items: center; /* centers block items horizontally */
-  justify-content: center; /* optional: vertical centering if there’s a fixed height */
+  justify-content: center; /* optional: vertical centering if there's a fixed height */
   gap: var(--space-sm);
 }
 
