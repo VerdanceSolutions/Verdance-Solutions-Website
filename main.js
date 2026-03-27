@@ -44,11 +44,14 @@ document.addEventListener("DOMContentLoaded", () => {
     contactForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const requiredFields = ["name", "title", "company", "email", "volume", "message"];
+      const requiredFields = ["name", "title", "company", "email", "phone", "volume"];
       const isEmpty = requiredFields.some(
         (id) => !document.getElementById(id).value.trim(),
       );
-      if (isEmpty) {
+
+      const hasProduct = document.querySelectorAll('input[name="products"]:checked').length > 0;
+
+      if (isEmpty || !hasProduct) {
         return;
       }
 
