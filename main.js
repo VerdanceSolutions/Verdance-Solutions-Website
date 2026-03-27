@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     contactForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const requiredFields = ["name", "email", "company", "message"];
+      const requiredFields = ["name", "title", "company", "email", "volume", "message"];
       const isEmpty = requiredFields.some(
         (id) => !document.getElementById(id).value.trim(),
       );
