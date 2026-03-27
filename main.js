@@ -33,6 +33,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // ========== PRODUCTS OTHER TOGGLE ==========
+  const otherCheckbox = document.getElementById("products-other-checkbox");
+  const otherInputWrap = document.getElementById("products-other-input-wrap");
+  const otherInput = document.getElementById("products-other-input");
+
+  if (otherCheckbox && otherInputWrap && otherInput) {
+    otherCheckbox.addEventListener("change", () => {
+      otherInputWrap.hidden = !otherCheckbox.checked;
+      if (otherCheckbox.checked) {
+        otherInput.focus();
+      } else {
+        otherInput.value = "";
+      }
+    });
+  }
+
   // ========== FORM SUCCESS SWAP (v1 Feature) ==========
   const contactForm = document.getElementById("contact__form");
   const successBlock = document.getElementById("form-success");
@@ -49,9 +65,15 @@ document.addEventListener("DOMContentLoaded", () => {
         (id) => !document.getElementById(id).value.trim(),
       );
 
-      const hasProduct = document.querySelectorAll('input[name="products"]:checked').length > 0;
+      const checkedProducts = document.querySelectorAll('input[name="products"]:checked');
+      const hasProduct = checkedProducts.length > 0;
 
-      if (isEmpty || !hasProduct) {
+      // If "Other" is checked, its text input must not be empty
+      const otherChecked = document.getElementById("products-other-checkbox")?.checked;
+      const otherValue = document.getElementById("products-other-input")?.value.trim();
+      const otherInvalid = otherChecked && !otherValue;
+
+      if (isEmpty || !hasProduct || otherInvalid) {
         return;
       }
 
@@ -63,10 +85,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const API_URL =
         "https://verdance-server-production.up.railway.app/api/submit";
 
-      const products = Array.from(
-        document.querySelectorAll('input[name="products"]:checked'),
-      )
-        .map((cb) => cb.value)
+      const products = Array.from(checkedProducts)
+        .map((cb) => cb.value === "other" ? `other: ${otherValue}` : cb.value)
         .join(";");
 
       const payload = {
