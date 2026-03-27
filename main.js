@@ -59,8 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // const API_URL =
       //   "https://verdance-server-production.up.railway.app/api/submit";
-      const API_URL =
-        "https://verdance-server-production.up.railway.app/api/bad-route";
+      const API_URL = "https://httpstat.us/500";
 
       const products = Array.from(
         document.querySelectorAll('input[name="products"]:checked'),
