@@ -285,6 +285,19 @@ p {
   font-size: var(--font-size-sm);
 }
 
+/* Screen-reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 /* =========================
    6. Buttons & Badges
    ========================= */
@@ -922,6 +935,20 @@ textarea,
   color: var(--color-text-main);
   min-height: 3rem;
   box-sizing: border-box;
+}
+
+/* Required field marker */
+.form-required-asterisk {
+  color: var(--color-error);
+  margin-left: 0.2em;
+  font-style: normal;
+}
+
+/* Required fields note above the form */
+.form-required-note {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-bottom: 0;
 }
 
 /* Inline field error state */

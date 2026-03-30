@@ -684,9 +684,19 @@
                 novalidate
                 action="javascript:void(0)"
               >
+                <!-- Required fields note -->
+                <p class="form-required-note">
+                  Fields marked <span class="form-required-asterisk" aria-hidden="true">*</span>
+                  <span class="sr-only">with an asterisk</span> are required.
+                </p>
+
                 <div class="form-row">
                   <div class="form-group">
-                    <label class="label" for="name">Full Name</label>
+                    <label class="label" for="name">
+                      Full Name
+                      <span class="form-required-asterisk" aria-hidden="true">*</span>
+                      <span class="sr-only">(required)</span>
+                    </label>
                     <input
                       class="input"
                       type="text"
@@ -698,7 +708,11 @@
                     />
                   </div>
                   <div class="form-group">
-                    <label class="label" for="title">Title</label>
+                    <label class="label" for="title">
+                      Title
+                      <span class="form-required-asterisk" aria-hidden="true">*</span>
+                      <span class="sr-only">(required)</span>
+                    </label>
                     <input
                       class="input"
                       type="text"
@@ -710,7 +724,11 @@
                     />
                   </div>
                   <div class="form-group">
-                    <label class="label" for="company">Company</label>
+                    <label class="label" for="company">
+                      Company
+                      <span class="form-required-asterisk" aria-hidden="true">*</span>
+                      <span class="sr-only">(required)</span>
+                    </label>
                     <input
                       class="input"
                       type="text"
@@ -724,7 +742,11 @@
                 </div>
                 <div class="form-row">
                   <div class="form-group">
-                    <label class="label" for="email">Email</label>
+                    <label class="label" for="email">
+                      Email
+                      <span class="form-required-asterisk" aria-hidden="true">*</span>
+                      <span class="sr-only">(required)</span>
+                    </label>
                     <input
                       class="input"
                       type="email"
@@ -734,16 +756,22 @@
                     />
                   </div>
                   <div class="form-group">
-                    <label class="label" for="phone">Phone</label>
+                    <label class="label" for="phone">
+                      Phone
+                      <span class="form-required-asterisk" aria-hidden="true">*</span>
+                      <span class="sr-only">(required)</span>
+                    </label>
                     <input class="input" type="tel" id="phone" name="phone" required />
                   </div>
                 </div>
 
                 <div class="form-row">
                   <div class="form-dropdown">
-                    <label id="products-label" class="label"
-                      >Products of Interest</label
-                    >
+                    <label id="products-label" class="label">
+                      Products of Interest
+                      <span class="form-required-asterisk" aria-hidden="true">*</span>
+                      <span class="sr-only">(required)</span>
+                    </label>
                     <details
                       class="dropdown-multi"
                       aria-labelledby="products-label"
@@ -825,9 +853,11 @@
 
                 <div class="form-row">
                   <div class="form-dropdown">
-                    <label class="label" for="volume"
-                      >Annual Container Volume</label
-                    >
+                    <label class="label" for="volume">
+                      Annual Container Volume
+                      <span class="form-required-asterisk" aria-hidden="true">*</span>
+                      <span class="sr-only">(required)</span>
+                    </label>
                     <select class="input" id="volume" name="volume" required>
                       <option value="">Select range</option>
                       <option value="1">1 container</option>
