@@ -49,6 +49,41 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // ========== INLINE VALIDATION HELPERS ==========
+  function setFieldError(id, message) {
+    const field = document.getElementById(id);
+    if (!field) return;
+    field.classList.add("input--error");
+    let hint = field.parentElement.querySelector(".field-error");
+    if (!hint) {
+      hint = document.createElement("span");
+      hint.className = "field-error";
+      hint.setAttribute("role", "alert");
+      field.parentElement.appendChild(hint);
+    }
+    hint.textContent = message;
+    hint.hidden = false;
+  }
+
+  function clearFieldError(id) {
+    const field = document.getElementById(id);
+    if (!field) return;
+    field.classList.remove("input--error");
+    const hint = field.parentElement.querySelector(".field-error");
+    if (hint) hint.hidden = true;
+  }
+
+  function clearAllErrors() {
+    document.querySelectorAll(".input--error").forEach((el) => el.classList.remove("input--error"));
+    document.querySelectorAll(".field-error").forEach((el) => (el.hidden = true));
+  }
+
+  // Clear inline error on input
+  ["name", "title", "company", "email", "phone", "volume"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("input", () => clearFieldError(id));
+  });
+
   // ========== FORM SUCCESS SWAP (v1 Feature) ==========
   const contactForm = document.getElementById("contact__form");
   const successBlock = document.getElementById("form-success");
@@ -60,25 +95,74 @@ document.addEventListener("DOMContentLoaded", () => {
     contactForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const requiredFields = ["name", "title", "company", "email", "phone", "volume"];
-      const isEmpty = requiredFields.some(
-        (id) => !document.getElementById(id).value.trim(),
-      );
+      clearAllErrors();
+      errorBlock.hidden = true;
 
+      const requiredFields = [
+        { id: "name",    label: "Full name" },
+        { id: "title",   label: "Title" },
+        { id: "company", label: "Company" },
+        { id: "email",   label: "Email" },
+        { id: "phone",   label: "Phone" },
+        { id: "volume",  label: "Annual container volume" },
+      ];
+
+      let hasErrors = false;
+
+      // Per-field empty check
+      requiredFields.forEach(({ id, label }) => {
+        const el = document.getElementById(id);
+        if (!el || !el.value.trim()) {
+          setFieldError(id, `${label} is required.`);
+          hasErrors = true;
+        }
+      });
+
+      // Email format check
+      const emailEl = document.getElementById("email");
+      if (emailEl && emailEl.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())) {
+        setFieldError("email", "Please enter a valid email address.");
+        hasErrors = true;
+      }
+
+      // Products check
       const checkedProducts = document.querySelectorAll('input[name="products"]:checked');
       const hasProduct = checkedProducts.length > 0;
+      if (!hasProduct) {
+        // Attach error to the dropdown summary
+        const summary = document.querySelector(".dropdown-multi summary");
+        if (summary) {
+          summary.classList.add("input--error");
+          let hint = summary.parentElement.querySelector(".field-error");
+          if (!hint) {
+            hint = document.createElement("span");
+            hint.className = "field-error";
+            hint.setAttribute("role", "alert");
+            summary.parentElement.appendChild(hint);
+          }
+          hint.textContent = "Please select at least one product.";
+          hint.hidden = false;
+        }
+        hasErrors = true;
+      }
 
-      // If "Other" is checked, its text input must not be empty
+      // "Other" text check
       const otherChecked = document.getElementById("products-other-checkbox")?.checked;
       const otherValue = document.getElementById("products-other-input")?.value.trim();
       const otherInvalid = otherChecked && !otherValue;
+      if (otherInvalid) {
+        setFieldError("products-other-input", "Please specify the product.");
+        hasErrors = true;
+      }
 
-      if (isEmpty || !hasProduct || otherInvalid) {
+      if (hasErrors) {
+        // Scroll to first error
+        const firstError = contactForm.querySelector(".input--error");
+        if (firstError) firstError.scrollIntoView({ behavior: "smooth", block: "center" });
         return;
       }
 
       // Reset error state and set loading
-      errorBlock.hidden = true;
       submitBtn.disabled = true;
       submitBtn.textContent = "Sending...";
 
@@ -127,26 +211,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ========== SMOOTH SCROLLING FOR ANCHOR LINKS (v2 Feature) ==========
-  // SMOOTH SCROLLING FOR ANCHOR LINKS v2
   const anchorLinks = document.querySelectorAll('a[href^="#"]');
 
   if (anchorLinks && anchorLinks.length) {
     anchorLinks.forEach((anchor) => {
       anchor.addEventListener("click", function (e) {
-        // Use the event's currentTarget (the anchor element), not `this`
         const href = e.currentTarget.getAttribute("href");
-
-        // Ignore empty hashes
         if (!href || href === "#") return;
-
         const target = document.querySelector(href);
         if (!target) return;
-
         e.preventDefault();
-        target.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
       });
     });
   }
