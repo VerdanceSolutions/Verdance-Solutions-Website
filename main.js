@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
         otherInput.focus();
       } else {
         otherInput.value = "";
+        clearFieldError("products-other-input");
       }
     });
   }
@@ -73,6 +74,31 @@ document.addEventListener("DOMContentLoaded", () => {
     if (hint) hint.hidden = true;
   }
 
+  // Products dropdown uses <summary> instead of an input — separate helpers
+  function setProductsError(message) {
+    const details = document.querySelector(".dropdown-multi");
+    const summary = details ? details.querySelector("summary") : null;
+    if (!summary) return;
+    summary.classList.add("input--error");
+    let hint = details.querySelector(".field-error");
+    if (!hint) {
+      hint = document.createElement("span");
+      hint.className = "field-error";
+      hint.setAttribute("role", "alert");
+      details.appendChild(hint);
+    }
+    hint.textContent = message;
+    hint.hidden = false;
+  }
+
+  function clearProductsError() {
+    const details = document.querySelector(".dropdown-multi");
+    const summary = details ? details.querySelector("summary") : null;
+    if (summary) summary.classList.remove("input--error");
+    const hint = details ? details.querySelector(".field-error") : null;
+    if (hint) hint.hidden = true;
+  }
+
   function clearAllErrors() {
     document.querySelectorAll(".input--error").forEach((el) => el.classList.remove("input--error"));
     document.querySelectorAll(".field-error").forEach((el) => (el.hidden = true));
@@ -82,10 +108,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // ========== VALIDATION BANNER ==========
   const validationBanner = document.getElementById("form-validation-banner");
 
-  function showBanner(errorCount) {
+  function showBanner(message) {
     if (!validationBanner) return;
-    const noun = errorCount === 1 ? "field needs" : "fields need";
-    validationBanner.textContent = `Please complete all required fields before submitting — ${errorCount} ${noun} attention.`;
+    validationBanner.textContent = message;
     validationBanner.hidden = false;
   }
 
@@ -94,16 +119,47 @@ document.addEventListener("DOMContentLoaded", () => {
     validationBanner.hidden = true;
   }
 
-  // Clear inline error on input — also recounts and updates banner
+  // ========== LIVE ERROR CLEAR ON INPUT ==========
+  // Each field clears its own inline error as the user types/changes it.
+  // After clearing, recount remaining visible errors to keep the banner accurate.
+  function getRemainingErrorCount() {
+    return document.querySelectorAll(".field-error:not([hidden])").length;
+  }
+
+  function updateBannerAfterClear() {
+    const remaining = getRemainingErrorCount();
+    if (remaining === 0) {
+      hideBanner();
+    } else {
+      const noun = remaining === 1 ? "field needs" : "fields need";
+      showBanner(`${remaining} ${noun} attention before submitting.`);
+    }
+  }
+
   ["name", "title", "company", "email", "phone", "volume"].forEach((id) => {
     const el = document.getElementById(id);
-    if (el) el.addEventListener("input", () => clearFieldError(id));
+    if (el) {
+      el.addEventListener("input", () => {
+        clearFieldError(id);
+        updateBannerAfterClear();
+      });
+    }
   });
 
-  // Clear products-other inline error when user types
   if (otherInput) {
-    otherInput.addEventListener("input", () => clearFieldError("products-other-input"));
+    otherInput.addEventListener("input", () => {
+      clearFieldError("products-other-input");
+      updateBannerAfterClear();
+    });
   }
+
+  // Clear products error when any product checkbox changes
+  document.querySelectorAll('input[name="products"]').forEach((cb) => {
+    cb.addEventListener("change", () => {
+      clearProductsError();
+      updateBannerAfterClear();
+    });
+  });
 
   // ========== FORM SUCCESS SWAP (v1 Feature) ==========
   const contactForm = document.getElementById("contact__form");
@@ -111,7 +167,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const errorBlock = document.getElementById("form-error");
   const submitBtn = document.getElementById("form-submit-btn");
 
-  // Final Form Handler
   if (contactForm && successBlock) {
     contactForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -127,6 +182,22 @@ document.addEventListener("DOMContentLoaded", () => {
         { id: "phone",   label: "Phone" },
         { id: "volume",  label: "Annual container volume" },
       ];
+
+      // Check if the entire form is blank (all required fields empty + no products)
+      const allEmpty = requiredFields.every(({ id }) => {
+        const el = document.getElementById(id);
+        return !el || !el.value.trim();
+      });
+      const checkedProducts = document.querySelectorAll('input[name="products"]:checked');
+      const formIsBlank = allEmpty && checkedProducts.length === 0;
+
+      if (formIsBlank) {
+        showBanner("Please fill out the form to submit a request.");
+        if (validationBanner) {
+          validationBanner.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+        return;
+      }
 
       let errorCount = 0;
 
@@ -146,23 +217,20 @@ document.addEventListener("DOMContentLoaded", () => {
         errorCount++;
       }
 
+      // Phone format check — allows US/intl numbers, optional country code, dashes/dots/spaces/parens
+      const phoneEl = document.getElementById("phone");
+      if (phoneEl && phoneEl.value.trim()) {
+        const digits = phoneEl.value.replace(/\D/g, "");
+        if (digits.length < 7 || digits.length > 15) {
+          setFieldError("phone", "Please enter a valid phone number.");
+          errorCount++;
+        }
+      }
+
       // Products check
-      const checkedProducts = document.querySelectorAll('input[name="products"]:checked');
       const hasProduct = checkedProducts.length > 0;
       if (!hasProduct) {
-        const summary = document.querySelector(".dropdown-multi summary");
-        if (summary) {
-          summary.classList.add("input--error");
-          let hint = summary.parentElement.querySelector(".field-error");
-          if (!hint) {
-            hint = document.createElement("span");
-            hint.className = "field-error";
-            hint.setAttribute("role", "alert");
-            summary.parentElement.appendChild(hint);
-          }
-          hint.textContent = "Please select at least one product.";
-          hint.hidden = false;
-        }
+        setProductsError("Please select at least one product.");
         errorCount++;
       }
 
@@ -176,8 +244,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (errorCount > 0) {
-        showBanner(errorCount);
-        // Scroll to the banner at the top of the form
+        const noun = errorCount === 1 ? "field needs" : "fields need";
+        showBanner(`${errorCount} ${noun} attention before submitting.`);
         if (validationBanner) {
           validationBanner.scrollIntoView({ behavior: "smooth", block: "center" });
         } else {
@@ -187,12 +255,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Reset error state and set loading
+      // All good — lock the button and submit
       submitBtn.disabled = true;
       submitBtn.textContent = "Sending...";
 
-      const API_URL =
-        "https://verdance-server-production.up.railway.app/api/submit";
+      const API_URL = "https://verdance-server-production.up.railway.app/api/submit";
 
       const products = Array.from(checkedProducts)
         .map((cb) => cb.value === "other" ? `other: ${otherValue}` : cb.value)
@@ -221,7 +288,6 @@ document.addEventListener("DOMContentLoaded", () => {
           throw new Error("Server error");
         }
 
-        // UI success swap
         contactForm.style.display = "none";
         successBlock.style.display = "block";
         successBlock.hidden = false;
