@@ -76,13 +76,34 @@ document.addEventListener("DOMContentLoaded", () => {
   function clearAllErrors() {
     document.querySelectorAll(".input--error").forEach((el) => el.classList.remove("input--error"));
     document.querySelectorAll(".field-error").forEach((el) => (el.hidden = true));
+    hideBanner();
   }
 
-  // Clear inline error on input
+  // ========== VALIDATION BANNER ==========
+  const validationBanner = document.getElementById("form-validation-banner");
+
+  function showBanner(errorCount) {
+    if (!validationBanner) return;
+    const noun = errorCount === 1 ? "field needs" : "fields need";
+    validationBanner.textContent = `Please complete all required fields before submitting — ${errorCount} ${noun} attention.`;
+    validationBanner.hidden = false;
+  }
+
+  function hideBanner() {
+    if (!validationBanner) return;
+    validationBanner.hidden = true;
+  }
+
+  // Clear inline error on input — also recounts and updates banner
   ["name", "title", "company", "email", "phone", "volume"].forEach((id) => {
     const el = document.getElementById(id);
     if (el) el.addEventListener("input", () => clearFieldError(id));
   });
+
+  // Clear products-other inline error when user types
+  if (otherInput) {
+    otherInput.addEventListener("input", () => clearFieldError("products-other-input"));
+  }
 
   // ========== FORM SUCCESS SWAP (v1 Feature) ==========
   const contactForm = document.getElementById("contact__form");
@@ -107,29 +128,28 @@ document.addEventListener("DOMContentLoaded", () => {
         { id: "volume",  label: "Annual container volume" },
       ];
 
-      let hasErrors = false;
+      let errorCount = 0;
 
       // Per-field empty check
       requiredFields.forEach(({ id, label }) => {
         const el = document.getElementById(id);
         if (!el || !el.value.trim()) {
           setFieldError(id, `${label} is required.`);
-          hasErrors = true;
+          errorCount++;
         }
       });
 
-      // Email format check
+      // Email format check (only if not already flagged empty)
       const emailEl = document.getElementById("email");
       if (emailEl && emailEl.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())) {
         setFieldError("email", "Please enter a valid email address.");
-        hasErrors = true;
+        errorCount++;
       }
 
       // Products check
       const checkedProducts = document.querySelectorAll('input[name="products"]:checked');
       const hasProduct = checkedProducts.length > 0;
       if (!hasProduct) {
-        // Attach error to the dropdown summary
         const summary = document.querySelector(".dropdown-multi summary");
         if (summary) {
           summary.classList.add("input--error");
@@ -143,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
           hint.textContent = "Please select at least one product.";
           hint.hidden = false;
         }
-        hasErrors = true;
+        errorCount++;
       }
 
       // "Other" text check
@@ -152,13 +172,18 @@ document.addEventListener("DOMContentLoaded", () => {
       const otherInvalid = otherChecked && !otherValue;
       if (otherInvalid) {
         setFieldError("products-other-input", "Please specify the product.");
-        hasErrors = true;
+        errorCount++;
       }
 
-      if (hasErrors) {
-        // Scroll to first error
-        const firstError = contactForm.querySelector(".input--error");
-        if (firstError) firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+      if (errorCount > 0) {
+        showBanner(errorCount);
+        // Scroll to the banner at the top of the form
+        if (validationBanner) {
+          validationBanner.scrollIntoView({ behavior: "smooth", block: "center" });
+        } else {
+          const firstError = contactForm.querySelector(".input--error");
+          if (firstError) firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
         return;
       }
 
