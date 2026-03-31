@@ -91,6 +91,11 @@
   box-sizing: border-box;
 }
 
+/* Ensure hidden attribute is always respected, even when CSS sets display */
+[hidden] {
+  display: none !important;
+}
+
 /* Anchor scroll offset */
 [id] {
   scroll-margin-top: var(--nav-height);
