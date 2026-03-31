@@ -404,6 +404,7 @@ p {
   height: calc(var(--nav-height) - 0.75rem);
   width: auto;
   max-width: 200px;
+  aspect-ratio: 200 / 80;
 }
 
 .navbar__right {
