@@ -718,7 +718,8 @@ p {
   background-color: var(--color-surface-muted);
 }
 
-.section-heading__subtitle {
+.section-heading__subtitle,
+.section-heading__body {
   margin-bottom: var(--space-xl);
 }
 
@@ -1326,7 +1327,7 @@ textarea,
     display: none;
   }
 
-  .navbar--cta {
+  .navbar__cta {
     display: inline-flex;
   }
 
