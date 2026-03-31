@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Country search input — write typed/picked value through to #country hidden input
   if (countrySearchEl) {
-    const hiddenCountry = document.getElementById("country");
+    const hiddenCountry  = document.getElementById("country");
     const summaryLabelEl = countryDropdown
       ? countryDropdown.querySelector(".dropdown-select__label")
       : null;
@@ -136,17 +136,22 @@ document.addEventListener("DOMContentLoaded", () => {
     countrySearchEl.addEventListener("input", () => {
       const val = countrySearchEl.value.trim();
       if (hiddenCountry) {
-        // Write whatever is typed; PHONE_HINTS will use "Other" fallback for unknowns
         hiddenCountry.value = KNOWN_COUNTRIES.has(val) ? val : "Other";
         hiddenCountry.dispatchEvent(new Event("change", { bubbles: true }));
       }
-      // Update summary label to reflect the typed country
-      if (summaryLabelEl && val) {
-        summaryLabelEl.textContent = val;
+      if (summaryLabelEl && val) summaryLabelEl.textContent = val;
+    });
+
+    // Enter key — confirm selection, close dropdown, move focus
+    countrySearchEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        if (countryDropdown) countryDropdown.removeAttribute("open");
+        countrySearchEl.blur();
       }
     });
 
-    // On blur: if a valid country was typed/selected, update summary and lock it in
+    // On blur: lock in a valid country or reset if cleared
     countrySearchEl.addEventListener("blur", () => {
       const val = countrySearchEl.value.trim();
       if (KNOWN_COUNTRIES.has(val)) {
@@ -156,7 +161,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (summaryLabelEl) summaryLabelEl.textContent = val;
       } else if (!val) {
-        // Cleared — reset to placeholder state
         if (hiddenCountry) hiddenCountry.value = "";
         if (summaryLabelEl) {
           summaryLabelEl.textContent = "Select country";
