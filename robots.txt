@@ -2,5 +2,5 @@
 User-agent: *
 Allow: /
 
-# Direct search engines to your sitemap (if you create one later)
-# Sitemap: https://www.verdancesolutions.net
+# Sitemap
+Sitemap: https://www.verdancesolutions.net/sitemap.xml
