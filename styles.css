@@ -1416,6 +1416,7 @@ textarea,
     display: block;
     flex: 0 1 520px;
     max-width: 520px;
+    aspect-ratio: 4 / 5;
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-soft);
