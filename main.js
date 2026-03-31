@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // ========== MOBILE NAVIGATION TOGGLE (BEM header) ==========
+  // ========== MOBILE NAVIGATION TOGGLE ==========
   const navToggle = document.querySelector(".navbar__toggle");
   const navLinks = document.querySelector(".navbar__links");
 
@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const isOpen = navLinks.classList.toggle("navbar__links--open");
       navToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
     });
-
     navLinks.addEventListener("click", (e) => {
       if (e.target.tagName === "A") {
         navLinks.classList.remove("navbar__links--open");
@@ -17,15 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ========== FAQ ACCORDION (v2 Feature) ==========
-  const faqItems = document.querySelectorAll(".faq-item");
-
-  faqItems.forEach((item) => {
+  // ========== FAQ ACCORDION ==========
+  document.querySelectorAll(".faq-item").forEach((item) => {
     const question = item.querySelector(".faq-item__question");
     const answer = item.querySelector(".faq-item__answer");
-
     if (!question || !answer) return;
-
     question.addEventListener("click", () => {
       const isOpen = item.classList.toggle("active");
       question.setAttribute("aria-expanded", isOpen ? "true" : "false");
@@ -33,14 +28,51 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // ========== CUSTOM SELECT DROPDOWNS (Country & Volume) ==========
-  // Replaces native <select> behaviour with custom <details> dropdowns.
-  // Each .dropdown-select has a <summary> label and a .dropdown-select__options list.
+  // ========== CUSTOM SELECT DROPDOWNS (Country of Origin & Volume) ==========
+  // All world countries in the datalist — valid values for the country search input.
+  const KNOWN_COUNTRIES = new Set([
+    "Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda",
+    "Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain",
+    "Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan",
+    "Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria",
+    "Burkina Faso","Burundi","Cabo Verde","Cambodia","Cameroon","Canada",
+    "Central African Republic","Chad","Chile","China","Colombia","Comoros",
+    "Congo (Brazzaville)","Congo (Kinshasa)","Costa Rica","Croatia","Cuba",
+    "Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic",
+    "Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia",
+    "Eswatini","Ethiopia","Fiji","Finland","France","Gabon","Gambia","Georgia",
+    "Germany","Ghana","Greece","Grenada","Guatemala","Guinea","Guinea-Bissau",
+    "Guyana","Haiti","Honduras","Hungary","Iceland","India","Indonesia","Iran",
+    "Iraq","Ireland","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan",
+    "Kenya","Kiribati","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho",
+    "Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Madagascar",
+    "Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania",
+    "Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro",
+    "Morocco","Mozambique","Myanmar","Namibia","Nauru","Nepal","Netherlands",
+    "New Zealand","Nicaragua","Niger","Nigeria","North Korea","North Macedonia",
+    "Norway","Oman","Pakistan","Palau","Panama","Papua New Guinea","Paraguay",
+    "Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Rwanda",
+    "Saint Kitts and Nevis","Saint Lucia","Saint Vincent and the Grenadines",
+    "Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal",
+    "Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia",
+    "Solomon Islands","Somalia","South Africa","South Korea","South Sudan",
+    "Spain","Sri Lanka","Sudan","Suriname","Sweden","Switzerland","Syria",
+    "Taiwan","Tajikistan","Tanzania","Thailand","Timor-Leste","Togo","Tonga",
+    "Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Tuvalu","Uganda",
+    "Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay",
+    "Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Yemen",
+    "Zambia","Zimbabwe"
+  ]);
+
+  // Country of Origin — references for "Other" search behaviour
+  const countryDropdown   = document.querySelector(".dropdown-select[data-target='country']");
+  const countryOtherWrap  = document.getElementById("country-other-wrap");
+  const countrySearchEl   = document.getElementById("country-other-search");
 
   function initSelectDropdown(detailsEl) {
     if (!detailsEl) return;
-    const summary = detailsEl.querySelector("summary");
-    const options = detailsEl.querySelectorAll(".dropdown-select__option");
+    const summary     = detailsEl.querySelector("summary");
+    const options     = detailsEl.querySelectorAll(".dropdown-select__option");
     const hiddenInput = document.getElementById(detailsEl.dataset.target);
 
     options.forEach((opt) => {
@@ -48,16 +80,45 @@ document.addEventListener("DOMContentLoaded", () => {
         const value = opt.dataset.value;
         const label = opt.textContent.trim();
         const labelEl = summary.querySelector(".dropdown-select__label");
+
+        // Special case: "Other" on the country dropdown — show search input
+        if (value === "Other" && detailsEl === countryDropdown) {
+          if (labelEl) {
+            labelEl.textContent = "Other\u2026";
+            labelEl.classList.add("dropdown-select__label--selected");
+          }
+          options.forEach((o) => o.setAttribute("aria-selected", "false"));
+          opt.setAttribute("aria-selected", "true");
+          detailsEl.removeAttribute("open");
+          // Reveal the search input and set hidden value to "Other" as interim
+          if (countryOtherWrap) {
+            countryOtherWrap.hidden = false;
+            if (countrySearchEl) {
+              countrySearchEl.value = "";
+              countrySearchEl.focus();
+            }
+          }
+          if (hiddenInput) {
+            hiddenInput.value = "Other";
+            hiddenInput.dispatchEvent(new Event("change", { bubbles: true }));
+          }
+          return;
+        }
+
+        // Normal option selected — hide search input if it was open
+        if (detailsEl === countryDropdown && countryOtherWrap) {
+          countryOtherWrap.hidden = true;
+          if (countrySearchEl) countrySearchEl.value = "";
+        }
+
         if (labelEl) {
           labelEl.textContent = label;
           labelEl.classList.add("dropdown-select__label--selected");
         }
         if (hiddenInput) hiddenInput.value = value;
-        // Mark selected
         options.forEach((o) => o.setAttribute("aria-selected", "false"));
         opt.setAttribute("aria-selected", "true");
         detailsEl.removeAttribute("open");
-        // Trigger change event on hidden input so existing listeners fire
         if (hiddenInput) hiddenInput.dispatchEvent(new Event("change", { bubbles: true }));
       });
     });
@@ -65,23 +126,59 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll(".dropdown-select").forEach(initSelectDropdown);
 
+  // Country search input — write typed/picked value through to #country hidden input
+  if (countrySearchEl) {
+    const hiddenCountry = document.getElementById("country");
+    const summaryLabelEl = countryDropdown
+      ? countryDropdown.querySelector(".dropdown-select__label")
+      : null;
+
+    countrySearchEl.addEventListener("input", () => {
+      const val = countrySearchEl.value.trim();
+      if (hiddenCountry) {
+        // Write whatever is typed; PHONE_HINTS will use "Other" fallback for unknowns
+        hiddenCountry.value = KNOWN_COUNTRIES.has(val) ? val : "Other";
+        hiddenCountry.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      // Update summary label to reflect the typed country
+      if (summaryLabelEl && val) {
+        summaryLabelEl.textContent = val;
+      }
+    });
+
+    // On blur: if a valid country was typed/selected, update summary and lock it in
+    countrySearchEl.addEventListener("blur", () => {
+      const val = countrySearchEl.value.trim();
+      if (KNOWN_COUNTRIES.has(val)) {
+        if (hiddenCountry) {
+          hiddenCountry.value = val;
+          hiddenCountry.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+        if (summaryLabelEl) summaryLabelEl.textContent = val;
+      } else if (!val) {
+        // Cleared — reset to placeholder state
+        if (hiddenCountry) hiddenCountry.value = "";
+        if (summaryLabelEl) {
+          summaryLabelEl.textContent = "Select country";
+          summaryLabelEl.classList.remove("dropdown-select__label--selected");
+        }
+        if (countryOtherWrap) countryOtherWrap.hidden = true;
+      }
+    });
+  }
+
   // ========== CLICK OUTSIDE — COLLAPSE ALL OPEN DROPDOWNS ==========
-  // Uses mousedown instead of click so it fires before the <summary> toggle,
-  // letting us reliably detect "click on a different dropdown's summary" vs
-  // "click on this dropdown's own summary" (which the browser handles itself).
   document.addEventListener("mousedown", (e) => {
     document.querySelectorAll(".dropdown-multi[open], .dropdown-select[open]").forEach((dd) => {
-      // If the click is anywhere inside this open dropdown, leave it alone —
-      // the browser's native <details> toggle or our option handler will manage it.
       if (dd.contains(e.target)) return;
       dd.removeAttribute("open");
     });
   });
 
   // ========== PRODUCTS OTHER TOGGLE ==========
-  const otherCheckbox = document.getElementById("products-other-checkbox");
-  const otherInputWrap = document.getElementById("products-other-input-wrap");
-  const otherInput = document.getElementById("products-other-input");
+  const otherCheckbox    = document.getElementById("products-other-checkbox");
+  const otherInputWrap   = document.getElementById("products-other-input-wrap");
+  const otherInput       = document.getElementById("products-other-input");
 
   if (otherCheckbox && otherInputWrap && otherInput) {
     otherCheckbox.addEventListener("change", () => {
@@ -93,8 +190,6 @@ document.addEventListener("DOMContentLoaded", () => {
         clearFieldError("products-other-input");
       }
     });
-
-    // Enter in the other input collapses the dropdown instead of submitting
     otherInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
@@ -136,18 +231,13 @@ document.addEventListener("DOMContentLoaded", () => {
     "Other":         { placeholder: "Include country code", exact: null },
   };
 
-  // countryEl now points to the hidden input that the custom dropdown writes to
   const countryEl = document.getElementById("country");
   const phoneEl   = document.getElementById("phone");
 
   if (countryEl && phoneEl) {
     countryEl.addEventListener("change", () => {
       const hint = PHONE_HINTS[countryEl.value];
-      if (hint) {
-        phoneEl.placeholder = hint.placeholder;
-      } else {
-        phoneEl.placeholder = "";
-      }
+      phoneEl.placeholder = hint ? hint.placeholder : "Include country code";
     });
   }
 
@@ -175,7 +265,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (hint) hint.hidden = true;
   }
 
-  // Products dropdown uses <summary> instead of an input — separate helpers
   function setProductsError(message) {
     const details = document.querySelector(".dropdown-multi");
     const summary = details ? details.querySelector("summary") : null;
@@ -252,7 +341,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Clear products error when any product checkbox changes
   document.querySelectorAll('input[name="products"]').forEach((cb) => {
     cb.addEventListener("change", () => {
       clearProductsError();
@@ -260,16 +348,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // ========== FORM SUCCESS SWAP ==========
+  // ========== FORM SUBMIT ==========
   const contactForm = document.getElementById("contact__form");
   const successBlock = document.getElementById("form-success");
-  const errorBlock = document.getElementById("form-error");
-  const submitBtn = document.getElementById("form-submit-btn");
+  const errorBlock   = document.getElementById("form-error");
+  const submitBtn    = document.getElementById("form-submit-btn");
 
   if (contactForm && successBlock) {
     contactForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-
       clearAllErrors();
       errorBlock.hidden = true;
 
@@ -279,7 +366,6 @@ document.addEventListener("DOMContentLoaded", () => {
         { id: "phone", label: "Phone" },
       ];
 
-      // Blank form check — only required fields + products
       const allEmpty = requiredFields.every(({ id }) => {
         const el = document.getElementById(id);
         return !el || !el.value.trim();
@@ -289,15 +375,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (formIsBlank) {
         showBanner("Please fill out the form to submit a request.");
-        if (validationBanner) {
-          validationBanner.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
+        if (validationBanner) validationBanner.scrollIntoView({ behavior: "smooth", block: "center" });
         return;
       }
 
       let errorCount = 0;
 
-      // Per-field empty check
       requiredFields.forEach(({ id, label }) => {
         const el = document.getElementById(id);
         if (!el || !el.value.trim()) {
@@ -306,14 +389,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
 
-      // Email format check
       const emailEl = document.getElementById("email");
       if (emailEl && emailEl.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())) {
         setFieldError("email", "Please enter a valid email address.");
         errorCount++;
       }
 
-      // Phone format check — digit count varies by country
       const phoneElVal = phoneEl ? phoneEl.value.trim() : "";
       if (phoneElVal) {
         const digits = phoneElVal.replace(/\D/g, "");
@@ -328,18 +409,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      // Products check
       const hasProduct = checkedProducts.length > 0;
       if (!hasProduct) {
         setProductsError("Please select at least one product.");
         errorCount++;
       }
 
-      // "Other" text check
       const otherChecked = document.getElementById("products-other-checkbox")?.checked;
-      const otherValue = document.getElementById("products-other-input")?.value.trim();
-      const otherInvalid = otherChecked && !otherValue;
-      if (otherInvalid) {
+      const otherValue   = document.getElementById("products-other-input")?.value.trim();
+      if (otherChecked && !otherValue) {
         setFieldError("products-other-input", "Please specify the product.");
         errorCount++;
       }
@@ -356,25 +434,16 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // All good — lock the button and submit
       submitBtn.disabled = true;
       submitBtn.textContent = "Sending...";
 
-      // Silent fills for optional fields
       const titleEl   = document.getElementById("title");
       const companyEl = document.getElementById("company");
       const volumeEl  = document.getElementById("volume");
 
-      if (titleEl && titleEl.classList.contains("input--autofilled") && !titleEl.value.trim()) {
-        titleEl.value = "No title";
-      }
-      if (companyEl && companyEl.classList.contains("input--autofilled") && !companyEl.value.trim()) {
-        companyEl.value = "No company affiliation";
-      }
-      // volumeEl is now a hidden input — already has its value set by the custom dropdown
-      if (volumeEl && !volumeEl.value) {
-        volumeEl.value = "Not specified";
-      }
+      if (titleEl && titleEl.classList.contains("input--autofilled") && !titleEl.value.trim()) titleEl.value = "No title";
+      if (companyEl && companyEl.classList.contains("input--autofilled") && !companyEl.value.trim()) companyEl.value = "No company affiliation";
+      if (volumeEl && !volumeEl.value) volumeEl.value = "Not specified";
 
       const API_URL = "https://verdance-server-production.up.railway.app/api/submit";
 
@@ -382,14 +451,23 @@ document.addEventListener("DOMContentLoaded", () => {
         .map((cb) => cb.value === "other" ? otherValue : cb.value)
         .join(";");
 
+      // Resolve country: prefer the search input value if it's a known country
+      const countryValue = (() => {
+        if (countrySearchEl && !countryOtherWrap?.hidden) {
+          const searched = countrySearchEl.value.trim();
+          if (KNOWN_COUNTRIES.has(searched)) return searched;
+        }
+        return countryEl ? countryEl.value : "";
+      })();
+
       const payload = {
         fullName:    document.getElementById("name").value,
-        title:       titleEl ? titleEl.value : "",
+        title:       titleEl   ? titleEl.value   : "",
         company:     companyEl ? companyEl.value : "",
         email:       emailEl.value,
         phone:       phoneEl.value,
-        volume:      volumeEl ? volumeEl.value : "",
-        country:     countryEl ? countryEl.value : "",
+        volume:      volumeEl  ? volumeEl.value  : "",
+        country:     countryValue,
         description: document.getElementById("message").value,
         products,
       };
@@ -400,12 +478,10 @@ document.addEventListener("DOMContentLoaded", () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
-
         if (!response.ok) {
           console.error("Submit failed:", await response.text());
           throw new Error("Server error");
         }
-
         contactForm.style.display = "none";
         successBlock.style.display = "block";
         successBlock.hidden = false;
@@ -419,9 +495,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ========== SMOOTH SCROLLING FOR ANCHOR LINKS ==========
+  // ========== SMOOTH SCROLLING ==========
   const anchorLinks = document.querySelectorAll('a[href^="#"]');
-
   if (anchorLinks && anchorLinks.length) {
     anchorLinks.forEach((anchor) => {
       anchor.addEventListener("click", function (e) {
