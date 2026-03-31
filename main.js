@@ -29,8 +29,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ========== CUSTOM SELECT DROPDOWNS (Country of Origin & Volume) ==========
-  // All world countries in the datalist — valid values for the country search input.
-  const KNOWN_COUNTRIES = new Set([
+  // All world countries — valid values for the country search input.
+  const KNOWN_COUNTRIES = [
     "Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda",
     "Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain",
     "Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan",
@@ -62,12 +62,14 @@ document.addEventListener("DOMContentLoaded", () => {
     "Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay",
     "Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Yemen",
     "Zambia","Zimbabwe"
-  ]);
+  ];
+  const KNOWN_COUNTRIES_SET = new Set(KNOWN_COUNTRIES);
 
   // Country of Origin — references for "Other" search behaviour
   const countryDropdown   = document.querySelector(".dropdown-select[data-target='country']");
   const countryOtherWrap  = document.getElementById("country-other-wrap");
   const countrySearchEl   = document.getElementById("country-other-search");
+  const countrySuggestions = document.getElementById("country-suggestions");
 
   function initSelectDropdown(detailsEl) {
     if (!detailsEl) return;
@@ -90,7 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
           options.forEach((o) => o.setAttribute("aria-selected", "false"));
           opt.setAttribute("aria-selected", "true");
           detailsEl.removeAttribute("open");
-          // Reveal the search input and set hidden value to "Other" as interim
           if (countryOtherWrap) {
             countryOtherWrap.hidden = false;
             if (countrySearchEl) {
@@ -109,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (detailsEl === countryDropdown && countryOtherWrap) {
           countryOtherWrap.hidden = true;
           if (countrySearchEl) countrySearchEl.value = "";
+          closeSuggestions();
         }
 
         if (labelEl) {
@@ -126,7 +128,85 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll(".dropdown-select").forEach(initSelectDropdown);
 
-  // Country search input — write typed/picked value through to #country hidden input
+  // ========== CUSTOM COUNTRY SUGGESTION PANEL ==========
+  // Replaces the native <datalist>. Filters KNOWN_COUNTRIES by case-insensitive
+  // startsWith match, renders a custom <ul>, and handles full keyboard nav.
+
+  let activeSuggestionIndex = -1;
+
+  function openSuggestions(matches) {
+    if (!countrySuggestions || matches.length === 0) {
+      closeSuggestions();
+      return;
+    }
+    countrySuggestions.innerHTML = "";
+    activeSuggestionIndex = -1;
+    matches.forEach((country, idx) => {
+      const li = document.createElement("li");
+      li.className = "country-suggestion-item";
+      li.setAttribute("role", "option");
+      li.setAttribute("aria-selected", "false");
+      li.dataset.value = country;
+      li.id = "country-suggestion-" + idx;
+      li.textContent = country;
+      li.addEventListener("mousedown", (e) => {
+        // mousedown fires before blur — use it to prevent blur from hiding panel
+        e.preventDefault();
+      });
+      li.addEventListener("click", () => {
+        confirmCountry(country);
+      });
+      countrySuggestions.appendChild(li);
+    });
+    countrySuggestions.hidden = false;
+    if (countrySearchEl) {
+      countrySearchEl.setAttribute("aria-expanded", "true");
+    }
+  }
+
+  function closeSuggestions() {
+    if (!countrySuggestions) return;
+    countrySuggestions.hidden = true;
+    countrySuggestions.innerHTML = "";
+    activeSuggestionIndex = -1;
+    if (countrySearchEl) {
+      countrySearchEl.setAttribute("aria-expanded", "false");
+      countrySearchEl.removeAttribute("aria-activedescendant");
+    }
+  }
+
+  function setActiveItem(index) {
+    const items = countrySuggestions
+      ? countrySuggestions.querySelectorAll(".country-suggestion-item")
+      : [];
+    items.forEach((item, i) => {
+      const active = i === index;
+      item.setAttribute("aria-selected", active ? "true" : "false");
+      item.classList.toggle("country-suggestion-item--active", active);
+    });
+    if (index >= 0 && items[index]) {
+      countrySearchEl.setAttribute("aria-activedescendant", items[index].id);
+      items[index].scrollIntoView({ block: "nearest" });
+    } else {
+      countrySearchEl.removeAttribute("aria-activedescendant");
+    }
+  }
+
+  function confirmCountry(country) {
+    const hiddenCountry  = document.getElementById("country");
+    const summaryLabelEl = countryDropdown
+      ? countryDropdown.querySelector(".dropdown-select__label")
+      : null;
+    if (countrySearchEl) countrySearchEl.value = country;
+    if (hiddenCountry) {
+      hiddenCountry.value = country;
+      hiddenCountry.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    if (summaryLabelEl) summaryLabelEl.textContent = country;
+    if (countryOtherWrap) countryOtherWrap.hidden = true;
+    closeSuggestions();
+  }
+
   if (countrySearchEl) {
     const hiddenCountry  = document.getElementById("country");
     const summaryLabelEl = countryDropdown
@@ -135,49 +215,93 @@ document.addEventListener("DOMContentLoaded", () => {
 
     countrySearchEl.addEventListener("input", () => {
       const val = countrySearchEl.value.trim();
+      if (!val) {
+        closeSuggestions();
+        if (hiddenCountry) {
+          hiddenCountry.value = "Other";
+          hiddenCountry.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+        return;
+      }
+      const lower = val.toLowerCase();
+      const matches = KNOWN_COUNTRIES.filter((c) =>
+        c.toLowerCase().startsWith(lower)
+      );
+      openSuggestions(matches);
+      // Update hidden input live — exact match locks in the country, else stays "Other"
       if (hiddenCountry) {
-        hiddenCountry.value = KNOWN_COUNTRIES.has(val) ? val : "Other";
+        hiddenCountry.value = KNOWN_COUNTRIES_SET.has(val) ? val : "Other";
         hiddenCountry.dispatchEvent(new Event("change", { bubbles: true }));
       }
       if (summaryLabelEl && val) summaryLabelEl.textContent = val;
     });
 
-    // Enter key — confirm selection, close dropdown, move focus
     countrySearchEl.addEventListener("keydown", (e) => {
+      const items = countrySuggestions
+        ? countrySuggestions.querySelectorAll(".country-suggestion-item")
+        : [];
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        if (items.length === 0) return;
+        activeSuggestionIndex = Math.min(activeSuggestionIndex + 1, items.length - 1);
+        setActiveItem(activeSuggestionIndex);
+        return;
+      }
+
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        if (items.length === 0) return;
+        activeSuggestionIndex = Math.max(activeSuggestionIndex - 1, 0);
+        setActiveItem(activeSuggestionIndex);
+        return;
+      }
+
       if (e.key === "Enter") {
         e.preventDefault();
+        if (activeSuggestionIndex >= 0 && items[activeSuggestionIndex]) {
+          confirmCountry(items[activeSuggestionIndex].dataset.value);
+        } else {
+          // No suggestion highlighted — try exact match on typed value
+          const val = countrySearchEl.value.trim();
+          if (KNOWN_COUNTRIES_SET.has(val)) {
+            confirmCountry(val);
+          } else {
+            closeSuggestions();
+          }
+        }
+        countrySearchEl.blur();
+        return;
+      }
+
+      if (e.key === "Escape") {
+        closeSuggestions();
+        return;
+      }
+    });
+
+    // On blur: lock in a valid country or reset if cleared/invalid
+    countrySearchEl.addEventListener("blur", () => {
+      // Small timeout so mousedown+click on a suggestion can fire first
+      setTimeout(() => {
         const val = countrySearchEl.value.trim();
-        if (KNOWN_COUNTRIES.has(val)) {
+        if (KNOWN_COUNTRIES_SET.has(val)) {
           if (hiddenCountry) {
             hiddenCountry.value = val;
             hiddenCountry.dispatchEvent(new Event("change", { bubbles: true }));
           }
           if (summaryLabelEl) summaryLabelEl.textContent = val;
           if (countryOtherWrap) countryOtherWrap.hidden = true;
+        } else if (!val) {
+          if (hiddenCountry) hiddenCountry.value = "";
+          if (summaryLabelEl) {
+            summaryLabelEl.textContent = "Select country";
+            summaryLabelEl.classList.remove("dropdown-select__label--selected");
+          }
+          if (countryOtherWrap) countryOtherWrap.hidden = true;
         }
-        if (countryDropdown) countryDropdown.removeAttribute("open");
-        countrySearchEl.blur();
-      }
-    });
-
-    // On blur: lock in a valid country and collapse the wrap, or reset if cleared
-    countrySearchEl.addEventListener("blur", () => {
-      const val = countrySearchEl.value.trim();
-      if (KNOWN_COUNTRIES.has(val)) {
-        if (hiddenCountry) {
-          hiddenCountry.value = val;
-          hiddenCountry.dispatchEvent(new Event("change", { bubbles: true }));
-        }
-        if (summaryLabelEl) summaryLabelEl.textContent = val;
-        if (countryOtherWrap) countryOtherWrap.hidden = true;
-      } else if (!val) {
-        if (hiddenCountry) hiddenCountry.value = "";
-        if (summaryLabelEl) {
-          summaryLabelEl.textContent = "Select country";
-          summaryLabelEl.classList.remove("dropdown-select__label--selected");
-        }
-        if (countryOtherWrap) countryOtherWrap.hidden = true;
-      }
+        closeSuggestions();
+      }, 120);
     });
   }
 
@@ -187,6 +311,16 @@ document.addEventListener("DOMContentLoaded", () => {
       if (dd.contains(e.target)) return;
       dd.removeAttribute("open");
     });
+    // Close country suggestions if clicking outside the search wrap
+    if (
+      countrySuggestions &&
+      !countrySuggestions.hidden &&
+      countrySearchEl &&
+      !countrySearchEl.contains(e.target) &&
+      !countrySuggestions.contains(e.target)
+    ) {
+      closeSuggestions();
+    }
   });
 
   // ========== PRODUCTS OTHER TOGGLE ==========
@@ -469,7 +603,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const countryValue = (() => {
         if (countrySearchEl && !countryOtherWrap?.hidden) {
           const searched = countrySearchEl.value.trim();
-          if (KNOWN_COUNTRIES.has(searched)) return searched;
+          if (KNOWN_COUNTRIES_SET.has(searched)) return searched;
         }
         return countryEl ? countryEl.value : "";
       })();
