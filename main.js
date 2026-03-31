@@ -48,6 +48,16 @@ document.addEventListener("DOMContentLoaded", () => {
         clearFieldError("products-other-input");
       }
     });
+
+    // Enter in the other input collapses the dropdown instead of submitting
+    otherInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const dropdown = document.querySelector(".dropdown-multi");
+        if (dropdown) dropdown.removeAttribute("open");
+        otherInput.blur();
+      }
+    });
   }
 
   // ========== OPTIONAL FIELD AUTOFILL ON BLUR ==========
