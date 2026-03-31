@@ -687,6 +687,7 @@
                   <span class="sr-only">with an asterisk</span> are required.
                 </p>
 
+                <!-- Row 1: Name / Title / Company -->
                 <div class="form-row">
                   <div class="form-group">
                     <label class="label" for="name">
@@ -728,24 +729,7 @@
                   </div>
                 </div>
 
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="label" for="email">
-                      Email
-                      <span class="form-required-asterisk" aria-hidden="true">*</span>
-                      <span class="sr-only">(required)</span>
-                    </label>
-                    <input
-                      class="input"
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <!-- Country — custom dropdown (before phone so JS can adapt placeholder) -->
+                <!-- Row 2: Country — sits above email/phone so JS can set phone placeholder -->
                 <div class="form-row">
                   <div class="form-dropdown">
                     <span class="label" id="country-label">Country</span>
@@ -764,12 +748,26 @@
                         <li class="dropdown-select__option" data-value="Other" role="option" aria-selected="false">Other</li>
                       </ul>
                     </details>
-                    <!-- Hidden input carries the value for JS/submission -->
                     <input type="hidden" id="country" name="country" value="" />
                   </div>
                 </div>
 
+                <!-- Row 3: Email + Phone grouped -->
                 <div class="form-row">
+                  <div class="form-group">
+                    <label class="label" for="email">
+                      Email
+                      <span class="form-required-asterisk" aria-hidden="true">*</span>
+                      <span class="sr-only">(required)</span>
+                    </label>
+                    <input
+                      class="input"
+                      type="email"
+                      id="email"
+                      name="email"
+                      required
+                    />
+                  </div>
                   <div class="form-group">
                     <label class="label" for="phone">
                       Phone
@@ -780,6 +778,7 @@
                   </div>
                 </div>
 
+                <!-- Row 4: Products of Interest -->
                 <div class="form-row">
                   <div class="form-dropdown">
                     <label id="products-label" class="label">
@@ -866,7 +865,7 @@
                   </div>
                 </div>
 
-                <!-- Annual Container Volume — custom dropdown -->
+                <!-- Row 5: Annual Container Volume -->
                 <div class="form-row">
                   <div class="form-dropdown">
                     <span class="label" id="volume-label">Annual Container Volume</span>
@@ -884,11 +883,11 @@
                         <li class="dropdown-select__option" data-value="5+" role="option" aria-selected="false">5+ containers</li>
                       </ul>
                     </details>
-                    <!-- Hidden input carries the value for JS/submission -->
                     <input type="hidden" id="volume" name="volume" value="" />
                   </div>
                 </div>
 
+                <!-- Row 6: Message -->
                 <div class="form-row form-row--full">
                   <div class="form-group">
                     <label class="label" for="message"
