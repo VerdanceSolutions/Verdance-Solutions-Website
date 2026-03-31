@@ -1068,6 +1068,59 @@ textarea,
 }
 
 /* =========================
+   Country search suggestion panel
+   ========================= */
+
+.country-search-wrap {
+  position: relative;
+  margin-top: var(--space-xs);
+}
+
+/* The suggestion <ul> panel */
+.country-suggestions {
+  position: absolute;
+  top: calc(100% - 1px); /* flush under the input border */
+  left: 0;
+  right: 0;
+  background: var(--color-surface);
+  border: var(--border-subtle);
+  border-top: none;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  box-shadow: var(--shadow-soft);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 20;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Collapse input's bottom radius when panel is open */
+#country-other-search:not([aria-expanded="false"]) + .country-suggestions:not([hidden]),
+.country-search-wrap:has(.country-suggestions:not([hidden])) #country-other-search {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.country-suggestion-item {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-main);
+  transition: background var(--transition-fast);
+}
+
+.country-suggestion-item:hover {
+  background: var(--color-surface-muted);
+}
+
+.country-suggestion-item--active {
+  background: var(--color-primary-muted);
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+/* =========================
    14. Footer
    ========================= */
 
