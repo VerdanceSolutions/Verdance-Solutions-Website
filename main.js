@@ -47,7 +47,11 @@ document.addEventListener("DOMContentLoaded", () => {
       opt.addEventListener("click", () => {
         const value = opt.dataset.value;
         const label = opt.textContent.trim();
-        summary.querySelector(".dropdown-select__label").textContent = label;
+        const labelEl = summary.querySelector(".dropdown-select__label");
+        if (labelEl) {
+          labelEl.textContent = label;
+          labelEl.classList.add("dropdown-select__label--selected");
+        }
         if (hiddenInput) hiddenInput.value = value;
         // Mark selected
         options.forEach((o) => o.setAttribute("aria-selected", "false"));
@@ -62,11 +66,15 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".dropdown-select").forEach(initSelectDropdown);
 
   // ========== CLICK OUTSIDE — COLLAPSE ALL OPEN DROPDOWNS ==========
-  document.addEventListener("click", (e) => {
+  // Uses mousedown instead of click so it fires before the <summary> toggle,
+  // letting us reliably detect "click on a different dropdown's summary" vs
+  // "click on this dropdown's own summary" (which the browser handles itself).
+  document.addEventListener("mousedown", (e) => {
     document.querySelectorAll(".dropdown-multi[open], .dropdown-select[open]").forEach((dd) => {
-      if (!dd.contains(e.target)) {
-        dd.removeAttribute("open");
-      }
+      // If the click is anywhere inside this open dropdown, leave it alone —
+      // the browser's native <details> toggle or our option handler will manage it.
+      if (dd.contains(e.target)) return;
+      dd.removeAttribute("open");
     });
   });
 
