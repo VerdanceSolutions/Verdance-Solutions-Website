@@ -834,6 +834,8 @@ p {
   text-align: left;
   cursor: pointer;
   font: inherit;
+  /* Explicit color so browsers don't fall back to ButtonText system color in dark mode */
+  color: var(--color-text-main);
 }
 
 .faq-item__toggle {
