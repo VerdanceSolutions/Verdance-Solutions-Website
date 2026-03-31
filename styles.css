@@ -862,6 +862,7 @@ p {
   align-items: center;
   cursor: pointer;
   list-style: none;
+  user-select: none;
 }
 
 .dropdown-multi summary::-webkit-details-marker,
@@ -949,6 +950,21 @@ p {
   background: var(--color-primary-muted);
   color: var(--color-primary);
   font-weight: 500;
+}
+
+/*
+  Label span inside .dropdown-select summary.
+  Placeholder state: muted colour to match the Products summary.
+  Selected state (.dropdown-select__label--selected): switches to full text colour.
+*/
+.dropdown-select__label {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-base);
+  pointer-events: none; /* clicks pass through to the <summary> */
+}
+
+.dropdown-select__label--selected {
+  color: var(--color-text-main);
 }
 
 .label {
