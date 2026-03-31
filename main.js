@@ -322,7 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const API_URL = "https://verdance-server-production.up.railway.app/api/submit";
 
       const products = Array.from(checkedProducts)
-        .map((cb) => cb.value === "other" ? `other: ${otherValue}` : cb.value)
+        .map((cb) => cb.value === "other" ? otherValue : cb.value)
         .join(";");
 
       const payload = {
