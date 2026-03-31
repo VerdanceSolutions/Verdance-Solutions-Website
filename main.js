@@ -146,12 +146,21 @@ document.addEventListener("DOMContentLoaded", () => {
     countrySearchEl.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
+        const val = countrySearchEl.value.trim();
+        if (KNOWN_COUNTRIES.has(val)) {
+          if (hiddenCountry) {
+            hiddenCountry.value = val;
+            hiddenCountry.dispatchEvent(new Event("change", { bubbles: true }));
+          }
+          if (summaryLabelEl) summaryLabelEl.textContent = val;
+          if (countryOtherWrap) countryOtherWrap.hidden = true;
+        }
         if (countryDropdown) countryDropdown.removeAttribute("open");
         countrySearchEl.blur();
       }
     });
 
-    // On blur: lock in a valid country or reset if cleared
+    // On blur: lock in a valid country and collapse the wrap, or reset if cleared
     countrySearchEl.addEventListener("blur", () => {
       const val = countrySearchEl.value.trim();
       if (KNOWN_COUNTRIES.has(val)) {
@@ -160,6 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
           hiddenCountry.dispatchEvent(new Event("change", { bubbles: true }));
         }
         if (summaryLabelEl) summaryLabelEl.textContent = val;
+        if (countryOtherWrap) countryOtherWrap.hidden = true;
       } else if (!val) {
         if (hiddenCountry) hiddenCountry.value = "";
         if (summaryLabelEl) {
