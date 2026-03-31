@@ -33,6 +33,43 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // ========== CUSTOM SELECT DROPDOWNS (Country & Volume) ==========
+  // Replaces native <select> behaviour with custom <details> dropdowns.
+  // Each .dropdown-select has a <summary> label and a .dropdown-select__options list.
+
+  function initSelectDropdown(detailsEl) {
+    if (!detailsEl) return;
+    const summary = detailsEl.querySelector("summary");
+    const options = detailsEl.querySelectorAll(".dropdown-select__option");
+    const hiddenInput = document.getElementById(detailsEl.dataset.target);
+
+    options.forEach((opt) => {
+      opt.addEventListener("click", () => {
+        const value = opt.dataset.value;
+        const label = opt.textContent.trim();
+        summary.querySelector(".dropdown-select__label").textContent = label;
+        if (hiddenInput) hiddenInput.value = value;
+        // Mark selected
+        options.forEach((o) => o.setAttribute("aria-selected", "false"));
+        opt.setAttribute("aria-selected", "true");
+        detailsEl.removeAttribute("open");
+        // Trigger change event on hidden input so existing listeners fire
+        if (hiddenInput) hiddenInput.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+    });
+  }
+
+  document.querySelectorAll(".dropdown-select").forEach(initSelectDropdown);
+
+  // ========== CLICK OUTSIDE — COLLAPSE ALL OPEN DROPDOWNS ==========
+  document.addEventListener("click", (e) => {
+    document.querySelectorAll(".dropdown-multi[open], .dropdown-select[open]").forEach((dd) => {
+      if (!dd.contains(e.target)) {
+        dd.removeAttribute("open");
+      }
+    });
+  });
+
   // ========== PRODUCTS OTHER TOGGLE ==========
   const otherCheckbox = document.getElementById("products-other-checkbox");
   const otherInputWrap = document.getElementById("products-other-input-wrap");
@@ -91,6 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "Other":         { placeholder: "Include country code", exact: null },
   };
 
+  // countryEl now points to the hidden input that the custom dropdown writes to
   const countryEl = document.getElementById("country");
   const phoneEl   = document.getElementById("phone");
 
@@ -325,6 +363,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (companyEl && companyEl.classList.contains("input--autofilled") && !companyEl.value.trim()) {
         companyEl.value = "No company affiliation";
       }
+      // volumeEl is now a hidden input — already has its value set by the custom dropdown
       if (volumeEl && !volumeEl.value) {
         volumeEl.value = "Not specified";
       }

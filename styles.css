@@ -334,7 +334,7 @@ p {
 }
 
 .btn--wide {
-  min-width: 14rem; /* tweak to taste: 12–16rem */
+  min-width: 14rem;
   width: 100%;
   max-width: 20rem;
 }
@@ -855,39 +855,44 @@ p {
   gap: var(--space-2xs);
 }
 
-.dropdown-multi summary {
+/* ---- Shared <details>-based dropdown base styles ---- */
+.dropdown-multi summary,
+.dropdown-select summary {
   display: flex;
   align-items: center;
   cursor: pointer;
   list-style: none;
 }
 
-select,
-.dropdown-multi summary {
+.dropdown-multi summary::-webkit-details-marker,
+.dropdown-select summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Chevron via background-image on both dropdown types */
+.dropdown-multi summary,
+.dropdown-select summary {
   appearance: none;
   -webkit-appearance: none;
-  -moz-appearance: none;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='currentColor' d='M12 17l-7-7h14l-7 7z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.8rem center;
   padding-right: 2.5rem;
-  cursor: pointer;
 }
 
-.dropdown-multi[open] summary {
+.dropdown-multi[open] summary,
+.dropdown-select[open] summary {
   background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23555' d='M12 7l7 7H5l7-7z'/%3E%3C/svg%3E");
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-.dropdown-multi {
+.dropdown-multi,
+.dropdown-select {
   position: relative;
 }
 
-.dropdown-multi summary::-webkit-details-marker {
-  display: none;
-}
-
+/* ---- Products multi-select ---- */
 .dropdown-multi__options {
   position: absolute;
   width: 100%;
@@ -916,6 +921,36 @@ select,
   height: 1rem;
 }
 
+/* ---- Single-select custom dropdown ---- */
+.dropdown-select__options {
+  position: absolute;
+  width: 100%;
+  background: var(--color-surface);
+  border: var(--border-subtle);
+  border-top: none;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  z-index: 10;
+  box-shadow: var(--shadow-soft);
+}
+
+.dropdown-select__option {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-main);
+  transition: background var(--transition-fast);
+}
+
+.dropdown-select__option:hover {
+  background: var(--color-surface-muted);
+}
+
+.dropdown-select__option[aria-selected="true"] {
+  background: var(--color-primary-muted);
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
 .label {
   font-size: var(--font-size-xs);
   text-transform: uppercase;
@@ -930,7 +965,8 @@ textarea {
 
 .input,
 textarea,
-.dropdown-multi summary {
+.dropdown-multi summary,
+.dropdown-select summary {
   width: 100%;
   padding: 0.65rem 0.8rem;
   border-radius: var(--radius-sm);
@@ -1030,8 +1066,8 @@ textarea,
 .footer__inner {
   display: flex;
   flex-direction: column;
-  align-items: center; /* centers block items horizontally */
-  justify-content: center; /* optional: vertical centering if there's a fixed height */
+  align-items: center;
+  justify-content: center;
   gap: var(--space-sm);
 }
 
@@ -1070,7 +1106,7 @@ textarea,
    15. Media Queries (mobile-first)
    ========================= */
 
-/* ≥ 600px: small tablets / landscape phones */
+/* ≥ 535px: small tablets / landscape phones */
 @media (min-width: 535px) {
   .section {
     padding-block: var(--space-3xl);
@@ -1089,7 +1125,7 @@ textarea,
   }
 
   .contact-form__actions {
-    grid-column: 1 / -1; /* span across all grid columns */
+    grid-column: 1 / -1;
     display: flex;
     justify-content: center;
   }
@@ -1099,7 +1135,7 @@ textarea,
   }
 }
 
-/* ≤ 535px: mobile */
+/* ≤ 630px: mobile */
 @media (max-width: 630px) {
   .navbar {
     justify-content: center;
@@ -1119,7 +1155,6 @@ textarea,
     display: none;
   }
 
-  /* Optional: hero text adjustments for very small screens */
   .hero__copy {
     max-width: 100%;
   }
@@ -1132,21 +1167,19 @@ textarea,
     grid-template-columns: 1fr;
   }
 
-  /* Actions row still spans all columns (now just one) */
   .contact-form__actions {
     grid-column: 1 / -1;
     justify-content: center;
   }
 
-  /* Make submit button comfortably wide on small screens */
   .btn--wide {
     width: 100%;
-    min-width: 0; /* let it shrink with the viewport */
+    min-width: 0;
     max-width: none;
   }
 }
 
-/* ≥ 890px: large tablets */
+/* ≥ 982px: large tablets */
 @media (min-width: 982px) {
   .navbar__links {
     position: static;

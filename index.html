@@ -753,16 +753,27 @@
                   </div>
                 </div>
 
+                <!-- Country — custom dropdown -->
                 <div class="form-row">
                   <div class="form-dropdown">
-                    <label class="label" for="country">Country</label>
-                    <select class="input" id="country" name="country">
-                      <option value="">Select country</option>
-                      <option value="United States">United States</option>
-                      <option value="Canada">Canada</option>
-                      <option value="Mexico">Mexico</option>
-                      <option value="Other">Other</option>
-                    </select>
+                    <span class="label" id="country-label">Country</span>
+                    <details
+                      class="dropdown-select"
+                      aria-labelledby="country-label"
+                      data-target="country"
+                    >
+                      <summary>
+                        <span class="dropdown-select__label">Select country</span>
+                      </summary>
+                      <ul class="dropdown-select__options" role="listbox">
+                        <li class="dropdown-select__option" data-value="United States" role="option" aria-selected="false">United States</li>
+                        <li class="dropdown-select__option" data-value="Canada" role="option" aria-selected="false">Canada</li>
+                        <li class="dropdown-select__option" data-value="Mexico" role="option" aria-selected="false">Mexico</li>
+                        <li class="dropdown-select__option" data-value="Other" role="option" aria-selected="false">Other</li>
+                      </ul>
+                    </details>
+                    <!-- Hidden input carries the value for JS/submission -->
+                    <input type="hidden" id="country" name="country" value="" />
                   </div>
                 </div>
 
@@ -852,17 +863,26 @@
                   </div>
                 </div>
 
+                <!-- Annual Container Volume — custom dropdown -->
                 <div class="form-row">
                   <div class="form-dropdown">
-                    <label class="label" for="volume">
-                      Annual Container Volume
-                    </label>
-                    <select class="input" id="volume" name="volume">
-                      <option value="">Select range</option>
-                      <option value="1">1 container</option>
-                      <option value="2-4">2–4 containers</option>
-                      <option value="5+">5+ containers</option>
-                    </select>
+                    <span class="label" id="volume-label">Annual Container Volume</span>
+                    <details
+                      class="dropdown-select"
+                      aria-labelledby="volume-label"
+                      data-target="volume"
+                    >
+                      <summary>
+                        <span class="dropdown-select__label">Select range</span>
+                      </summary>
+                      <ul class="dropdown-select__options" role="listbox">
+                        <li class="dropdown-select__option" data-value="1" role="option" aria-selected="false">1 container</li>
+                        <li class="dropdown-select__option" data-value="2-4" role="option" aria-selected="false">2–4 containers</li>
+                        <li class="dropdown-select__option" data-value="5+" role="option" aria-selected="false">5+ containers</li>
+                      </ul>
+                    </details>
+                    <!-- Hidden input carries the value for JS/submission -->
+                    <input type="hidden" id="volume" name="volume" value="" />
                   </div>
                 </div>
 
