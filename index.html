@@ -105,7 +105,6 @@
             </a>
 
             <!-- Mobile toggle -->
-
             <button
               class="navbar__toggle"
               type="button"
@@ -397,7 +396,6 @@
             </article>
 
             <!-- Vanilla -->
-
             <article class="card origin-card">
               <div class="origin-card__media">
                 <picture>
@@ -456,7 +454,6 @@
             </article>
 
             <!-- Cacao -->
-
             <article class="card origin-card">
               <div class="origin-card__media">
                 <picture>
@@ -708,11 +705,7 @@
                     />
                   </div>
                   <div class="form-group">
-                    <label class="label" for="title">
-                      Title
-                      <span class="form-required-asterisk" aria-hidden="true">*</span>
-                      <span class="sr-only">(required)</span>
-                    </label>
+                    <label class="label" for="title">Title</label>
                     <input
                       class="input"
                       type="text"
@@ -720,15 +713,10 @@
                       name="title"
                       autocorrect="off"
                       spellcheck="false"
-                      required
                     />
                   </div>
                   <div class="form-group">
-                    <label class="label" for="company">
-                      Company
-                      <span class="form-required-asterisk" aria-hidden="true">*</span>
-                      <span class="sr-only">(required)</span>
-                    </label>
+                    <label class="label" for="company">Company</label>
                     <input
                       class="input"
                       type="text"
@@ -736,10 +724,10 @@
                       name="company"
                       autocorrect="off"
                       spellcheck="false"
-                      required
                     />
                   </div>
                 </div>
+
                 <div class="form-row">
                   <div class="form-group">
                     <label class="label" for="email">
@@ -762,6 +750,19 @@
                       <span class="sr-only">(required)</span>
                     </label>
                     <input class="input" type="tel" id="phone" name="phone" required />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-dropdown">
+                    <label class="label" for="country">Country</label>
+                    <select class="input" id="country" name="country">
+                      <option value="">Select country</option>
+                      <option value="United States">United States</option>
+                      <option value="Canada">Canada</option>
+                      <option value="Mexico">Mexico</option>
+                      <option value="Other">Other</option>
+                    </select>
                   </div>
                 </div>
 
@@ -855,10 +856,8 @@
                   <div class="form-dropdown">
                     <label class="label" for="volume">
                       Annual Container Volume
-                      <span class="form-required-asterisk" aria-hidden="true">*</span>
-                      <span class="sr-only">(required)</span>
                     </label>
-                    <select class="input" id="volume" name="volume" required>
+                    <select class="input" id="volume" name="volume">
                       <option value="">Select range</option>
                       <option value="1">1 container</option>
                       <option value="2-4">2–4 containers</option>
@@ -882,7 +881,7 @@
                   </div>
                 </div>
 
-                <!-- Validation banner: shown on submit with incomplete fields -->
+                <!-- Validation banner -->
                 <div
                   id="form-validation-banner"
                   class="form-validation-banner"
