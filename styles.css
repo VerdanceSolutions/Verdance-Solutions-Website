@@ -389,7 +389,7 @@ p {
 .navbar__brand {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-xs);
+  gap: var(--space-sm);
 }
 
 .navbar__title {
