@@ -514,19 +514,6 @@ document.addEventListener("DOMContentLoaded", () => {
         { id: "phone", label: "Phone" },
       ];
 
-      const allEmpty = requiredFields.every(({ id }) => {
-        const el = document.getElementById(id);
-        return !el || !el.value.trim();
-      });
-      const checkedProducts = document.querySelectorAll('input[name="products"]:checked');
-      const formIsBlank = allEmpty && checkedProducts.length === 0;
-
-      if (formIsBlank) {
-        showBanner("Please fill out the form to submit a request.");
-        if (validationBanner) validationBanner.scrollIntoView({ behavior: "smooth", block: "center" });
-        return;
-      }
-
       let errorCount = 0;
 
       requiredFields.forEach(({ id, label }) => {
@@ -557,6 +544,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
+      const checkedProducts = document.querySelectorAll('input[name="products"]:checked');
       const hasProduct = checkedProducts.length > 0;
       if (!hasProduct) {
         setProductsError("Please select at least one product.");
@@ -573,11 +561,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (errorCount > 0) {
         const noun = errorCount === 1 ? "field needs" : "fields need";
         showBanner(`${errorCount} ${noun} attention before submitting.`);
-        if (validationBanner) {
+        // Scroll to the first visible field error, fall back to the banner
+        const firstError = contactForm.querySelector(".input--error");
+        if (firstError) {
+          firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+        } else if (validationBanner) {
           validationBanner.scrollIntoView({ behavior: "smooth", block: "center" });
-        } else {
-          const firstError = contactForm.querySelector(".input--error");
-          if (firstError) firstError.scrollIntoView({ behavior: "smooth", block: "center" });
         }
         return;
       }
@@ -595,10 +584,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const API_URL = "https://verdance-server-production.up.railway.app/api/submit";
 
-      const products = Array.from(checkedProducts)
-        .map((cb) => cb.value === "other" ? otherValue : cb.value)
-        .join(";");
-
       // Resolve country: prefer the search input value if it's a known country
       const countryValue = (() => {
         if (countrySearchEl && !countryOtherWrap?.hidden) {
@@ -607,6 +592,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         return countryEl ? countryEl.value : "";
       })();
+
+      const products = Array.from(checkedProducts)
+        .map((cb) => cb.value === "other" ? otherValue : cb.value)
+        .join(";");
 
       const payload = {
         fullName:    document.getElementById("name").value,
