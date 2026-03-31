@@ -743,17 +743,9 @@
                       required
                     />
                   </div>
-                  <div class="form-group">
-                    <label class="label" for="phone">
-                      Phone
-                      <span class="form-required-asterisk" aria-hidden="true">*</span>
-                      <span class="sr-only">(required)</span>
-                    </label>
-                    <input class="input" type="tel" id="phone" name="phone" required />
-                  </div>
                 </div>
 
-                <!-- Country — custom dropdown -->
+                <!-- Country — custom dropdown (before phone so JS can adapt placeholder) -->
                 <div class="form-row">
                   <div class="form-dropdown">
                     <span class="label" id="country-label">Country</span>
@@ -774,6 +766,17 @@
                     </details>
                     <!-- Hidden input carries the value for JS/submission -->
                     <input type="hidden" id="country" name="country" value="" />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="label" for="phone">
+                      Phone
+                      <span class="form-required-asterisk" aria-hidden="true">*</span>
+                      <span class="sr-only">(required)</span>
+                    </label>
+                    <input class="input" type="tel" id="phone" name="phone" required />
                   </div>
                 </div>
 
