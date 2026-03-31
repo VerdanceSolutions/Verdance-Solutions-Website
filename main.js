@@ -50,6 +50,51 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // ========== OPTIONAL FIELD AUTOFILL ON BLUR ==========
+  const OPTIONAL_AUTOFILL = [
+    { id: "title",   fallback: "No title" },
+    { id: "company", fallback: "No company affiliation" },
+  ];
+
+  OPTIONAL_AUTOFILL.forEach(({ id, fallback }) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("blur", () => {
+      if (!el.value.trim()) {
+        el.value = fallback;
+        el.classList.add("input--autofilled");
+      }
+    });
+    el.addEventListener("focus", () => {
+      if (el.classList.contains("input--autofilled")) {
+        el.value = "";
+        el.classList.remove("input--autofilled");
+      }
+    });
+  });
+
+  // ========== COUNTRY-DRIVEN PHONE PLACEHOLDER ==========
+  const PHONE_HINTS = {
+    "United States": { placeholder: "(555) 555-5555", exact: 10 },
+    "Canada":        { placeholder: "(555) 555-5555", exact: 10 },
+    "Mexico":        { placeholder: "55 5555 5555",   exact: 10 },
+    "Other":         { placeholder: "Include country code", exact: null },
+  };
+
+  const countryEl = document.getElementById("country");
+  const phoneEl   = document.getElementById("phone");
+
+  if (countryEl && phoneEl) {
+    countryEl.addEventListener("change", () => {
+      const hint = PHONE_HINTS[countryEl.value];
+      if (hint) {
+        phoneEl.placeholder = hint.placeholder;
+      } else {
+        phoneEl.placeholder = "";
+      }
+    });
+  }
+
   // ========== INLINE VALIDATION HELPERS ==========
   function setFieldError(id, message) {
     const field = document.getElementById(id);
@@ -120,8 +165,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ========== LIVE ERROR CLEAR ON INPUT ==========
-  // Each field clears its own inline error as the user types/changes it.
-  // After clearing, recount remaining visible errors to keep the banner accurate.
   function getRemainingErrorCount() {
     return document.querySelectorAll(".field-error:not([hidden])").length;
   }
@@ -136,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  ["name", "title", "company", "email", "phone", "volume"].forEach((id) => {
+  ["name", "email", "phone"].forEach((id) => {
     const el = document.getElementById(id);
     if (el) {
       el.addEventListener("input", () => {
@@ -161,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // ========== FORM SUCCESS SWAP (v1 Feature) ==========
+  // ========== FORM SUCCESS SWAP ==========
   const contactForm = document.getElementById("contact__form");
   const successBlock = document.getElementById("form-success");
   const errorBlock = document.getElementById("form-error");
@@ -175,15 +218,12 @@ document.addEventListener("DOMContentLoaded", () => {
       errorBlock.hidden = true;
 
       const requiredFields = [
-        { id: "name",    label: "Full name" },
-        { id: "title",   label: "Title" },
-        { id: "company", label: "Company" },
-        { id: "email",   label: "Email" },
-        { id: "phone",   label: "Phone" },
-        { id: "volume",  label: "Annual container volume" },
+        { id: "name",  label: "Full name" },
+        { id: "email", label: "Email" },
+        { id: "phone", label: "Phone" },
       ];
 
-      // Check if the entire form is blank (all required fields empty + no products)
+      // Blank form check — only required fields + products
       const allEmpty = requiredFields.every(({ id }) => {
         const el = document.getElementById(id);
         return !el || !el.value.trim();
@@ -210,18 +250,23 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
 
-      // Email format check (only if not already flagged empty)
+      // Email format check
       const emailEl = document.getElementById("email");
       if (emailEl && emailEl.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())) {
         setFieldError("email", "Please enter a valid email address.");
         errorCount++;
       }
 
-      // Phone format check — allows US/intl numbers, optional country code, dashes/dots/spaces/parens
-      const phoneEl = document.getElementById("phone");
-      if (phoneEl && phoneEl.value.trim()) {
-        const digits = phoneEl.value.replace(/\D/g, "");
-        if (digits.length < 7 || digits.length > 15) {
+      // Phone format check — digit count varies by country
+      const phoneElVal = phoneEl ? phoneEl.value.trim() : "";
+      if (phoneElVal) {
+        const digits = phoneElVal.replace(/\D/g, "");
+        const selectedCountry = countryEl ? countryEl.value : "";
+        const hint = PHONE_HINTS[selectedCountry];
+        const isInvalid = hint?.exact
+          ? digits.length !== hint.exact
+          : digits.length < 7 || digits.length > 15;
+        if (isInvalid) {
           setFieldError("phone", "Please enter a valid phone number.");
           errorCount++;
         }
@@ -259,6 +304,21 @@ document.addEventListener("DOMContentLoaded", () => {
       submitBtn.disabled = true;
       submitBtn.textContent = "Sending...";
 
+      // Silent fills for optional fields
+      const titleEl   = document.getElementById("title");
+      const companyEl = document.getElementById("company");
+      const volumeEl  = document.getElementById("volume");
+
+      if (titleEl && titleEl.classList.contains("input--autofilled") && !titleEl.value.trim()) {
+        titleEl.value = "No title";
+      }
+      if (companyEl && companyEl.classList.contains("input--autofilled") && !companyEl.value.trim()) {
+        companyEl.value = "No company affiliation";
+      }
+      if (volumeEl && !volumeEl.value) {
+        volumeEl.value = "Not specified";
+      }
+
       const API_URL = "https://verdance-server-production.up.railway.app/api/submit";
 
       const products = Array.from(checkedProducts)
@@ -266,12 +326,13 @@ document.addEventListener("DOMContentLoaded", () => {
         .join(";");
 
       const payload = {
-        fullName: document.getElementById("name").value,
-        title: document.getElementById("title").value,
-        company: document.getElementById("company").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
-        volume: document.getElementById("volume").value,
+        fullName:    document.getElementById("name").value,
+        title:       titleEl ? titleEl.value : "",
+        company:     companyEl ? companyEl.value : "",
+        email:       emailEl.value,
+        phone:       phoneEl.value,
+        volume:      volumeEl ? volumeEl.value : "",
+        country:     countryEl ? countryEl.value : "",
         description: document.getElementById("message").value,
         products,
       };
@@ -301,7 +362,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ========== SMOOTH SCROLLING FOR ANCHOR LINKS (v2 Feature) ==========
+  // ========== SMOOTH SCROLLING FOR ANCHOR LINKS ==========
   const anchorLinks = document.querySelectorAll('a[href^="#"]');
 
   if (anchorLinks && anchorLinks.length) {
