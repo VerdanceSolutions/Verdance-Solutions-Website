@@ -551,6 +551,11 @@ p {
   padding-block: var(--space-2xl);
   color: var(--color-text-main);
   background-color: var(--color-hero-bg);
+  /* Fill the remaining viewport below the sticky nav on mobile/tablet/laptop */
+  min-height: calc(100dvh - var(--nav-height));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .hero__inner {
@@ -1370,7 +1375,7 @@ textarea,
   }
 }
 
-/* ≥ 1051px: desktops */
+/* ≥ 1051px: desktops — hero switches to padding-only layout, no min-height lock */
 @media (min-width: 1051px) {
   :root {
     --container-padding: 2rem;
@@ -1416,7 +1421,9 @@ textarea,
     display: none;
   }
 
-  .hero {
+  /* Desktop hero: release the viewport lock, use padding only */
+  #hero {
+    min-height: unset;
     padding-block: 4rem;
   }
 
