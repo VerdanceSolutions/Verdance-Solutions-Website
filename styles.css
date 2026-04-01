@@ -548,19 +548,21 @@ p {
    ========================= */
 
 #hero {
+  /*
+    Hero fills exactly the remaining viewport after the sticky nav.
+    height (not min-height) ensures the section never grows beyond one screen,
+    preventing the image from overflowing into scroll space.
+    On mobile (single-column, no image) the content stacks naturally inside
+    this fixed height with justify-content: center.
+  */
+  height: calc(100dvh - var(--nav-height));
   padding-block: var(--space-2xl);
   color: var(--color-text-main);
   background-color: var(--color-hero-bg);
-  /*
-    Accurate hero height for real-world MacBook viewports.
-    100dvh already excludes the browser chrome (tabs + address bar ~80px).
-    We subtract: sticky nav + macOS Dock (~70px) + menu bar (~24px) = ~90px total OS chrome.
-    clamp floors at 560px (small mobile) and caps at 900px (large desktop).
-  */
-  min-height: clamp(560px, calc(100dvh - var(--nav-height) - 90px), 900px);
   display: flex;
   flex-direction: column;
   justify-content: center;
+  overflow: hidden;
 }
 
 .hero__inner {
@@ -1371,7 +1373,7 @@ textarea,
 @media (min-width: 1024px) {
   :root {
     --container-padding: 2rem;
-    --nav-height: 4rem;
+    --nav-height: 4rem; /* 64px */
   }
 
   body {
@@ -1428,6 +1430,9 @@ textarea,
   .hero__copy {
     flex: 1 1 28rem;
     max-width: 28rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     text-align: left;
   }
 
@@ -1436,11 +1441,17 @@ textarea,
     justify-content: flex-start;
   }
 
+  /*
+    Image column: constrained to the hero height via align-items: stretch on
+    the parent row. aspect-ratio is dropped in favour of height: 100% so the
+    image fills the available vertical space without overflowing.
+  */
   .hero__media {
     display: block;
     flex: 0 1 460px;
     max-width: 460px;
-    aspect-ratio: 4 / 5;
+    height: 100%;
+    aspect-ratio: unset;
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-soft);
@@ -1483,16 +1494,12 @@ textarea,
    ===================================================== */
 @media (min-width: 1440px) {
   :root {
-    --nav-height: 4.5rem;
+    --nav-height: 4.5rem; /* 72px */
   }
 
   body {
     font-size: 1.125rem;
   }
-
-  /* #hero padding-block intentionally NOT overridden here.
-     The clamp() min-height in the base rule handles all viewport sizes.
-     Adding padding-block on top of it would push total height over 100dvh. */
 
   .section {
     padding-block: clamp(var(--space-3xl), 6vw, 5rem);
