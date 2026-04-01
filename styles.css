@@ -551,26 +551,17 @@ p {
   padding-block: var(--space-2xl);
   color: var(--color-text-main);
   background-color: var(--color-hero-bg);
-  /*
-    Tablet & below + laptop: fill remaining viewport height below sticky nav.
-    Released at the desktop breakpoint (1440px) where tall viewports have
-    plenty of room and padding-only is sufficient.
-  */
   min-height: calc(100dvh - var(--nav-height));
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-/*
-  Hero inner: NOT wrapped in .container on desktop — instead it uses its
-  own horizontal padding (matching --container-padding) and lets each
-  child grow to its natural width without a 1200px ceiling.
-*/
 .hero__inner {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
   gap: var(--space-2xl);
   width: 100%;
@@ -859,7 +850,6 @@ p {
   text-align: left;
   cursor: pointer;
   font: inherit;
-  /* Explicit color so browsers don't fall back to ButtonText system color in dark mode */
   color: var(--color-text-main);
 }
 
@@ -887,7 +877,6 @@ p {
   font-size: var(--font-size-sm);
 }
 
-/* about-cta-btn shares .btn--ghost — no separate hardcoded border needed */
 .about-cta-btn {
   background-color: transparent;
   color: var(--color-primary);
@@ -902,7 +891,6 @@ p {
   background-color: var(--color-surface);
 }
 
-/* Uses component token — adapts to dark automatically */
 .contact__card {
   border-radius: var(--radius-lg);
   padding: var(--space-xl) var(--space-lg);
@@ -957,7 +945,6 @@ p {
   display: none;
 }
 
-/* Chevron via background-image on both dropdown types */
 .dropdown-multi summary,
 .dropdown-select summary {
   appearance: none;
@@ -1039,15 +1026,10 @@ p {
   font-weight: 500;
 }
 
-/*
-  Label span inside .dropdown-select summary.
-  Placeholder state: muted colour to match the Products summary.
-  Selected state (.dropdown-select__label--selected): switches to full text colour.
-*/
 .dropdown-select__label {
   color: var(--color-text-muted);
   font-size: var(--font-size-base);
-  pointer-events: none; /* clicks pass through to the <summary> */
+  pointer-events: none;
 }
 
 .dropdown-select__label--selected {
@@ -1081,27 +1063,23 @@ textarea,
   box-sizing: border-box;
 }
 
-/* Required field marker */
 .form-required-asterisk {
   color: var(--color-error);
   margin-left: 0.2em;
   font-style: normal;
 }
 
-/* Required fields note above the form */
 .form-required-note {
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
   margin-bottom: 0;
 }
 
-/* Inline field error state */
 .input--error {
   border-color: var(--color-error) !important;
   outline-color: var(--color-error);
 }
 
-/* Per-field error hint text */
 .field-error {
   display: block;
   font-size: var(--font-size-xs);
@@ -1109,7 +1087,6 @@ textarea,
   margin-top: var(--space-2xs);
 }
 
-/* Top-of-form summary banner — uses component token, no separate dark @media needed */
 .form-validation-banner {
   display: flex;
   align-items: center;
@@ -1157,10 +1134,9 @@ textarea,
   margin-top: var(--space-xs);
 }
 
-/* The suggestion <ul> panel */
 .country-suggestions {
   position: absolute;
-  top: calc(100% - 1px); /* flush under the input border */
+  top: calc(100% - 1px);
   left: 0;
   right: 0;
   background: var(--color-surface);
@@ -1176,7 +1152,6 @@ textarea,
   padding: 0;
 }
 
-/* Collapse input's bottom radius when panel is open */
 .country-search-wrap:has(.country-suggestions:not([hidden]))
   #country-other-search {
   border-bottom-left-radius: 0;
@@ -1254,17 +1229,9 @@ textarea,
 
 /* =====================================================
    16. Media Queries
-
-   Breakpoint tiers:
-     Tablet & below  — 0–767px    (phones, portrait tablets)
-     Tablet mid      — 535px+     (landscape phones, small tablets)
-     Tablet large    — 768–982px  (large tablets)
-     Tablet nav      — 982–1023px (wide tablets — show desktop nav)
-     LAPTOP          — 1024–1439px (13–16" laptops incl. MacBook 15")
-     DESKTOP         — 1440px+    (external monitors, wide displays)
    ===================================================== */
 
-/* ≥ 535px: landscape phones / small tablets */
+/* ≥ 535px */
 @media (min-width: 535px) {
   .section {
     padding-block: var(--space-3xl);
@@ -1293,7 +1260,7 @@ textarea,
   }
 }
 
-/* ≤ 630px: narrow mobile layout adjustments */
+/* ≤ 630px */
 @media (max-width: 630px) {
   .navbar {
     justify-content: center;
@@ -1337,18 +1304,18 @@ textarea,
   }
 }
 
-/* ≥ 768px: mid-range gutter + body size step */
+/* ≥ 768px */
 @media (min-width: 768px) {
   :root {
     --container-padding: 1.75rem;
   }
 
   body {
-    font-size: 1.0625rem; /* 17px */
+    font-size: 1.0625rem;
   }
 }
 
-/* ≥ 982px: wide tablets — switch to desktop nav, multi-column grids */
+/* ≥ 982px */
 @media (min-width: 982px) {
   .navbar__links {
     position: static;
@@ -1394,31 +1361,25 @@ textarea,
 
 /* =====================================================
    LAPTOP — 1024px–1439px
-   13–16" laptops including MacBook 13", 14", 15", 16".
-   Viewport height is typically 768–900px so hero padding
-   is kept tight to avoid overflow with the viewport lock.
    ===================================================== */
 @media (min-width: 1024px) {
   :root {
     --container-padding: 2rem;
-    --nav-height: 4rem; /* 64px — slightly taller than mobile, shorter than desktop */
+    --nav-height: 4rem;
   }
 
   body {
-    font-size: 1.0625rem; /* 17px — readable but space-efficient on shorter viewports */
+    font-size: 1.0625rem;
   }
 
   h2 {
     margin-bottom: var(--space-md);
   }
 
-  /* Tighter section padding on laptop — preserves vertical rhythm
-     without eating into the limited ~800–900px viewport height */
   .section {
     padding-block: var(--space-2xl);
   }
 
-  /* Hero: tighter padding so content stays within viewport lock */
   #hero {
     padding-block: var(--space-lg);
   }
@@ -1447,14 +1408,13 @@ textarea,
     display: none;
   }
 
-  /* Two-column hero layout — inner uses its own padding, not .container */
+  /* Two-column hero — centered, no .container ceiling */
   .hero__inner {
     flex-direction: row;
     align-items: stretch;
     text-align: left;
-    justify-content: space-between;
+    justify-content: center;
     gap: 3rem;
-    /* Cap so it doesn't stretch absurdly wide on ultrawide monitors */
     max-width: 1400px;
     margin-inline: auto;
   }
@@ -1514,31 +1474,25 @@ textarea,
 
 /* =====================================================
    DESKTOP — 1440px+
-   External monitors, wide displays, 1440p+ screens.
-   Viewport height is typically 900px+ so we release
-   the hero viewport lock and use generous padding.
    ===================================================== */
 @media (min-width: 1440px) {
   :root {
-    --nav-height: 4.5rem; /* 72px — full desktop nav height */
+    --nav-height: 4.5rem;
   }
 
   body {
-    font-size: 1.125rem; /* 18px — full desktop reading size */
+    font-size: 1.125rem;
   }
 
-  /* Release hero viewport lock — tall monitors don't need it */
   #hero {
     min-height: unset;
     padding-block: var(--space-3xl);
   }
 
-  /* Generous section spacing now that we have room */
   .section {
     padding-block: clamp(var(--space-3xl), 6vw, 5rem);
   }
 
-  /* Slightly wider hero copy and media on large displays */
   .hero__copy {
     flex: 1 1 32rem;
     max-width: 32rem;
