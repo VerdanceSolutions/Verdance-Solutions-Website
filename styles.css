@@ -1315,10 +1315,11 @@ textarea,
   so the hamburger floats to the far right edge.
   .navbar__cta is forced hidden with !important to override the
   ≥860px block which sets display:inline-flex with no lower bound.
-  Hero: release the 100dvh height constraint and overflow:hidden so the
-  section sizes to its content. The viewport window naturally lands just
-  below .hero__subtitle on first paint, letting the rest of the copy
-  (meta, actions, note) breathe below the fold without being clipped.
+  Hero: height:auto + overflow:visible releases the 100dvh hard clamp
+  so the section grows with its content. The copy-stack gaps are widened
+  so that title + subtitle consume most of the viewport height on first
+  paint, pushing .hero__meta, .hero__actions, and .hero__note naturally
+  below the fold for the user to scroll into.
 */
 @media (max-width: 420px) {
   .navbar {
@@ -1351,12 +1352,25 @@ textarea,
     padding-block: var(--space-sm);
   }
 
+  /*
+    Push the copy block down from the top of the section so the title
+    doesn't sit flush against the nav. Then widen the gap after
+    .hero__subtitle so .hero__meta and everything below it starts well
+    past the bottom of the viewport on first paint.
+  */
+  .hero__inner {
+    justify-content: flex-start;
+    padding-top: var(--space-2xl);
+  }
+
   .hero__title {
     font-size: clamp(1.4rem, 5.5vw, 1.75rem);
+    margin-bottom: var(--space-lg);
   }
 
   .hero__subtitle {
     font-size: var(--font-size-base);
+    margin-bottom: var(--space-3xl);
   }
 
   .hero__actions {
