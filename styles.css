@@ -1309,12 +1309,14 @@ textarea,
 }
 
 /*
-  ≤ 420px — logo-only navbar.
-  flex + justify-content:center so the logo sits in the middle.
+  ≤ 420px — logo-only navbar + compressed hero.
+  Navbar: flex + justify-content:center so the logo sits in the middle.
   .navbar__title is hidden. .navbar__right gets margin-inline-start:auto
   so the hamburger floats to the far right edge.
   .navbar__cta is forced hidden with !important to override the
   ≥860px block which sets display:inline-flex with no lower bound.
+  Hero: reduce section padding, shrink heading floor and subtitle size
+  to prevent content overflow at narrow viewport widths.
 */
 @media (max-width: 420px) {
   .navbar {
@@ -1339,6 +1341,35 @@ textarea,
 
   .navbar__right {
     margin-inline-start: auto;
+  }
+
+  /*
+    Hero overflow fixes at ≤420px:
+    1. Tighten section padding so the copy column has more vertical room.
+    2. Lower the h1 floor from 1.75rem (28px) to 1.4rem (22.4px) — three
+       <br>-forced lines of the title compress significantly.
+    3. Drop .hero__subtitle from font-size-lg (18px) to font-size-base (16px).
+    4. Compress .hero__actions and .hero__meta margins to reclaim vertical space.
+  */
+  #hero {
+    padding-block: var(--space-sm);
+  }
+
+  .hero__title {
+    font-size: clamp(1.4rem, 5.5vw, 1.75rem);
+  }
+
+  .hero__subtitle {
+    font-size: var(--font-size-base);
+  }
+
+  .hero__actions {
+    margin-top: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .hero__meta {
+    margin-bottom: var(--space-xs);
   }
 }
 
