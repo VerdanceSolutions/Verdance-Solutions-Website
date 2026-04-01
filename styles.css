@@ -1309,12 +1309,41 @@ textarea,
 }
 
 /*
-  ≤ 630px — 3-column grid navbar: [logo] [title] [hamburger]
+  ≤ 420px — logo-only navbar.
+  flex + justify-content:center so the logo sits in the middle.
+  .navbar__title is hidden. .navbar__right gets margin-inline-start:auto
+  so the hamburger floats to the far right edge.
+*/
+@media (max-width: 420px) {
+  .navbar {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .navbar__brand {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    /* No flex:1 — hugs the logo only */
+  }
+
+  .navbar__title {
+    display: none;
+  }
+
+  .navbar__right {
+    margin-inline-start: auto;
+  }
+}
+
+/*
+  421px–630px — 3-column grid navbar: [logo] [title] [hamburger]
   .navbar__brand uses display:contents to dissolve itself so logo-link
   and title become direct grid children and land in separate columns.
   .navbar__right (col 3) holds only the hamburger at this width.
 */
-@media (max-width: 630px) {
+@media (min-width: 421px) and (max-width: 630px) {
   .navbar {
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -1380,8 +1409,8 @@ textarea,
 }
 
 /*
-  631px–859px — flex row restored: brand (flex:1) + right side
-  Undoes the grid rules applied at ≤630px.
+  631px+ — flex row restored: brand (flex:1) + right side.
+  Undoes any grid rules applied at ≤630px.
 */
 @media (min-width: 631px) {
   .navbar {
@@ -1403,6 +1432,7 @@ textarea,
 
   .navbar__right {
     grid-column: unset;
+    margin-inline-start: unset;
   }
 }
 
