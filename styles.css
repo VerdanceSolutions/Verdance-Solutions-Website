@@ -1324,9 +1324,15 @@ textarea,
   }
 }
 
-/* ≤ 630px — title hidden; only logo + hamburger remain */
+/*
+  ≤ 630px — CTA hidden; nav reads: logo | title | hamburger.
+  The title stays visible so the brand identity is preserved at all
+  mobile widths. The CTA drops off here because it was already hidden
+  below 860px — this rule simply makes the intent explicit and
+  reinforces display: none in case of specificity conflicts.
+*/
 @media (max-width: 630px) {
-  .navbar__title {
+  .navbar__cta {
     display: none;
   }
 
