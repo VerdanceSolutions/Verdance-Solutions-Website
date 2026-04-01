@@ -1313,6 +1313,8 @@ textarea,
   flex + justify-content:center so the logo sits in the middle.
   .navbar__title is hidden. .navbar__right gets margin-inline-start:auto
   so the hamburger floats to the far right edge.
+  .navbar__cta is forced hidden with !important to override the
+  ≥860px block which sets display:inline-flex with no lower bound.
 */
 @media (max-width: 420px) {
   .navbar {
@@ -1325,11 +1327,14 @@ textarea,
     display: flex;
     align-items: center;
     gap: 0;
-    /* No flex:1 — hugs the logo only */
   }
 
   .navbar__title {
     display: none;
+  }
+
+  .navbar__cta {
+    display: none !important;
   }
 
   .navbar__right {
