@@ -1490,9 +1490,9 @@ textarea,
     font-size: 1.125rem;
   }
 
-  #hero {
-    padding-block: var(--space-3xl);
-  }
+  /* #hero padding-block intentionally NOT overridden here.
+     The clamp() min-height in the base rule handles all viewport sizes.
+     Adding padding-block on top of it would push total height over 100dvh. */
 
   .section {
     padding-block: clamp(var(--space-3xl), 6vw, 5rem);
