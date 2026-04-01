@@ -480,9 +480,9 @@ p {
   top: 6px;
 }
 
-/* CTA button in header */
+/* CTA button in header — hidden on mobile; shown from 768px+ */
 .navbar__cta {
-  display: none; /* hidden on mobile; appears on larger screens */
+  display: none;
 }
 
 /* =========================
@@ -1312,7 +1312,7 @@ textarea,
   }
 }
 
-/* ≥ 768px */
+/* ≥ 768px — show CTA button, keep hamburger for nav links */
 @media (min-width: 768px) {
   :root {
     --container-padding: 1.75rem;
@@ -1321,10 +1321,26 @@ textarea,
   body {
     font-size: 1.0625rem;
   }
+
+  /*
+    Show the CTA button as soon as there is enough room for it alongside
+    the hamburger. The nav links still collapse into the hamburger until
+    1120px — only the button is pinned here.
+  */
+  .navbar__cta {
+    display: inline-flex;
+    /*
+      Fixed width + nowrap: the button will never shrink or wrap its text
+      regardless of how much the nav links or logo compete for space.
+    */
+    width: 168px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
 }
 
-/* ≥ 982px */
-@media (min-width: 982px) {
+/* ≥ 1120px — hamburger folds away; nav links appear inline */
+@media (min-width: 1120px) {
   .navbar__links {
     position: static;
     display: flex !important;
@@ -1334,6 +1350,7 @@ textarea,
     padding: 0;
     border: none;
     background-color: transparent;
+    margin-inline: 0;
   }
 
   .navbar__links a {
@@ -1398,18 +1415,8 @@ textarea,
     gap: var(--space-xs);
   }
 
-  .navbar__links {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-  }
-
   .navbar__cta {
     margin-left: var(--space-sm);
-  }
-
-  .navbar__toggle {
-    display: none;
   }
 
   /* Two-column hero — centered, no .container ceiling */
