@@ -1515,8 +1515,13 @@ textarea,
     max-width: 520px;
   }
 
+  /*
+    Reduce gap at 1440px+ so the copy and image have room to breathe
+    within the fixed hero height. 2rem gives comfortable separation
+    without cramping the vertical padding on either side.
+  */
   .hero__inner {
-    gap: 4rem;
+    gap: 2rem;
     max-width: 1400px;
   }
 }
