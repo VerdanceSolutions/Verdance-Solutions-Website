@@ -881,6 +881,15 @@ p {
   gap: var(--space-sm);
 }
 
+/*
+  The FAQ section heading has no subtitle or body text beneath it,
+  so the h2 needs explicit bottom margin to create breathing room
+  before the accordion list begins.
+*/
+#faq .section-heading__title {
+  margin-bottom: var(--space-lg);
+}
+
 .faq-item {
   border-radius: var(--radius-md);
   border: var(--border-subtle);
@@ -1096,6 +1105,14 @@ textarea {
   resize: vertical;
 }
 
+/*
+  The Sourcing Priorities & Constraints textarea needs extra height
+  so its two-line placeholder fits without clipping.
+*/
+#message {
+  min-height: 160px;
+}
+
 .input,
 textarea,
 .dropdown-multi summary,
@@ -1309,31 +1326,15 @@ textarea,
 }
 
 /*
-  ≤ 420px — logo-only navbar + free-height hero.
-  Navbar: flex + justify-content:center so the logo sits in the middle.
-  .navbar__title is hidden. .navbar__right gets margin-inline-start:auto
-  so the hamburger floats to the far right edge.
+  ≤ 420px — logo-left navbar + free-height hero.
+  Navbar: space-between keeps logo pinned left and hamburger pinned right,
+  matching the base navbar layout. Title is hidden at this width.
   .navbar__cta is forced hidden with !important to override the
   ≥860px block which sets display:inline-flex with no lower bound.
   Hero: height:auto + overflow:visible releases the 100dvh hard clamp
-  so the section grows with its content. The copy-stack gaps are widened
-  so that title + subtitle consume most of the viewport height on first
-  paint, pushing .hero__meta, .hero__actions, and .hero__note naturally
-  below the fold for the user to scroll into.
+  so the section grows with its content.
 */
 @media (max-width: 420px) {
-  .navbar {
-    display: flex;
-    justify-content: center;
-    gap: 0;
-  }
-
-  .navbar__brand {
-    display: flex;
-    align-items: center;
-    gap: 0;
-  }
-
   .navbar__title {
     display: none;
   }
@@ -1342,22 +1343,12 @@ textarea,
     display: none !important;
   }
 
-  .navbar__right {
-    margin-inline-start: auto;
-  }
-
   #hero {
     height: auto;
     overflow: visible;
     padding-block: var(--space-sm);
   }
 
-  /*
-    Push the copy block down from the top of the section so the title
-    doesn't sit flush against the nav. Then widen the gap after
-    .hero__subtitle so .hero__meta and everything below it starts well
-    past the bottom of the viewport on first paint.
-  */
   .hero__inner {
     justify-content: flex-start;
     padding-top: var(--space-2xl);
