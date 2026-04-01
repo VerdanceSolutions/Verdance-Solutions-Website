@@ -480,7 +480,7 @@ p {
   top: 6px;
 }
 
-/* CTA button in header — hidden on mobile; shown from 768px+ */
+/* CTA button in header — hidden on mobile; shown from 860px+ */
 .navbar__cta {
   display: none;
 }
@@ -1312,8 +1312,8 @@ textarea,
   }
 }
 
-/* ≥ 768px — show CTA button, keep hamburger for nav links */
-@media (min-width: 768px) {
+/* ≥ 860px — show CTA button, keep hamburger for nav links */
+@media (min-width: 860px) {
   :root {
     --container-padding: 1.75rem;
   }
@@ -1323,16 +1323,12 @@ textarea,
   }
 
   /*
-    Show the CTA button as soon as there is enough room for it alongside
-    the hamburger. The nav links still collapse into the hamburger until
-    1120px — only the button is pinned here.
+    Show the CTA button from 860px where there is comfortable room
+    alongside the logo + hamburger. Nav links stay in the hamburger
+    until 1120px.
   */
   .navbar__cta {
     display: inline-flex;
-    /*
-      Fixed width + nowrap: the button will never shrink or wrap its text
-      regardless of how much the nav links or logo compete for space.
-    */
     width: 168px;
     white-space: nowrap;
     flex-shrink: 0;
