@@ -71,7 +71,7 @@
   /* Layout */
   --container-max: 1200px;
   --container-padding: 1.25rem; /* 20px mobile */
-  --nav-height: 3.5rem; /* 56px — mobile default */
+  --nav-height: 3.5rem; /* 56px — mobile/tablet default */
 
   /* Radius + shadow */
   --radius-sm: 6px;
@@ -551,7 +551,11 @@ p {
   padding-block: var(--space-2xl);
   color: var(--color-text-main);
   background-color: var(--color-hero-bg);
-  /* Fill the remaining viewport below the sticky nav on all screens up to 1440px */
+  /*
+    Tablet & below + laptop: fill remaining viewport height below sticky nav.
+    Released at the desktop breakpoint (1440px) where tall viewports have
+    plenty of room and padding-only is sufficient.
+  */
   min-height: calc(100dvh - var(--nav-height));
   display: flex;
   flex-direction: column;
@@ -1241,11 +1245,19 @@ textarea,
   margin: 0;
 }
 
-/* =========================
-   16. Media Queries (mobile-first)
-   ========================= */
+/* =====================================================
+   16. Media Queries
 
-/* ≥ 535px: small tablets / landscape phones */
+   Breakpoint tiers:
+     Tablet & below  — 0–767px    (phones, portrait tablets)
+     Tablet mid      — 535px+     (landscape phones, small tablets)
+     Tablet large    — 768–982px  (large tablets)
+     Tablet nav      — 982–1023px (wide tablets — show desktop nav)
+     LAPTOP          — 1024–1439px (13–16" laptops incl. MacBook 15")
+     DESKTOP         — 1440px+    (external monitors, wide displays)
+   ===================================================== */
+
+/* ≥ 535px: landscape phones / small tablets */
 @media (min-width: 535px) {
   .section {
     padding-block: var(--space-3xl);
@@ -1274,7 +1286,7 @@ textarea,
   }
 }
 
-/* ≤ 630px: mobile */
+/* ≤ 630px: narrow mobile layout adjustments */
 @media (max-width: 630px) {
   .navbar {
     justify-content: center;
@@ -1318,7 +1330,7 @@ textarea,
   }
 }
 
-/* ≥ 768px: mid-range gutter step */
+/* ≥ 768px: mid-range gutter + body size step */
 @media (min-width: 768px) {
   :root {
     --container-padding: 1.75rem;
@@ -1329,7 +1341,7 @@ textarea,
   }
 }
 
-/* ≥ 982px: large tablets */
+/* ≥ 982px: wide tablets — switch to desktop nav, multi-column grids */
 @media (min-width: 982px) {
   .navbar__links {
     position: static;
@@ -1373,23 +1385,35 @@ textarea,
   }
 }
 
-/* ≥ 1051px: two-column hero layout, font/spacing bumps */
-@media (min-width: 1051px) {
+/* =====================================================
+   LAPTOP — 1024px–1439px
+   13–16" laptops including MacBook 13", 14", 15", 16".
+   Viewport height is typically 768–900px so hero padding
+   is kept tight to avoid overflow with the viewport lock.
+   ===================================================== */
+@media (min-width: 1024px) {
   :root {
     --container-padding: 2rem;
-    --nav-height: 4.5rem; /* 72px — desktop only; mobile keeps 3.5rem */
+    --nav-height: 4rem; /* 64px — slightly taller than mobile, shorter than desktop */
   }
 
   body {
-    font-size: 1.125rem; /* 18px */
+    font-size: 1.0625rem; /* 17px — readable but space-efficient on shorter viewports */
   }
 
   h2 {
     margin-bottom: var(--space-md);
   }
 
+  /* Tighter section padding on laptop — preserves vertical rhythm
+     without eating into the limited ~800–900px viewport height */
   .section {
-    padding-block: clamp(var(--space-3xl), 6vw, 5rem);
+    padding-block: var(--space-2xl);
+  }
+
+  /* Hero: tighter padding so content stays within viewport lock */
+  #hero {
+    padding-block: var(--space-lg);
   }
 
   .navbar {
@@ -1423,12 +1447,12 @@ textarea,
     align-items: stretch;
     text-align: left;
     justify-content: space-between;
-    gap: 4rem;
+    gap: 3rem;
   }
 
   .hero__copy {
-    flex: 1 1 32rem;
-    max-width: 32rem;
+    flex: 1 1 28rem;
+    max-width: 28rem;
     text-align: left;
   }
 
@@ -1439,8 +1463,8 @@ textarea,
 
   .hero__media {
     display: block;
-    flex: 0 1 520px;
-    max-width: 520px;
+    flex: 0 1 460px;
+    max-width: 460px;
     aspect-ratio: 4 / 5;
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -1479,12 +1503,44 @@ textarea,
   }
 }
 
-/* ≥ 1440px: wide desktop — release hero viewport lock, use padding only.
-   MacBook 15" (Pro/Air) sits at 1440px CSS width, so the full-screen
-   lock above covers all laptop-and-below viewports as intended. */
+/* =====================================================
+   DESKTOP — 1440px+
+   External monitors, wide displays, 1440p+ screens.
+   Viewport height is typically 900px+ so we release
+   the hero viewport lock and use generous padding.
+   ===================================================== */
 @media (min-width: 1440px) {
+  :root {
+    --nav-height: 4.5rem; /* 72px — full desktop nav height */
+  }
+
+  body {
+    font-size: 1.125rem; /* 18px — full desktop reading size */
+  }
+
+  /* Release hero viewport lock — tall monitors don't need it */
   #hero {
     min-height: unset;
-    padding-block: 4rem;
+    padding-block: var(--space-3xl);
+  }
+
+  /* Generous section spacing now that we have room */
+  .section {
+    padding-block: clamp(var(--space-3xl), 6vw, 5rem);
+  }
+
+  /* Slightly wider hero copy and media on large displays */
+  .hero__copy {
+    flex: 1 1 32rem;
+    max-width: 32rem;
+  }
+
+  .hero__media {
+    flex: 0 1 520px;
+    max-width: 520px;
+  }
+
+  .hero__inner {
+    gap: 4rem;
   }
 }
