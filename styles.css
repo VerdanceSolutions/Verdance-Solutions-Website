@@ -551,7 +551,13 @@ p {
   padding-block: var(--space-2xl);
   color: var(--color-text-main);
   background-color: var(--color-hero-bg);
-  min-height: calc(100dvh - var(--nav-height));
+  /*
+    Accurate hero height for real-world MacBook viewports.
+    100dvh already excludes the browser chrome (tabs + address bar ~80px).
+    We subtract: sticky nav + macOS Dock (~70px) + menu bar (~24px) = ~90px total OS chrome.
+    clamp floors at 560px (small mobile) and caps at 900px (large desktop).
+  */
+  min-height: clamp(560px, calc(100dvh - var(--nav-height) - 90px), 900px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1485,7 +1491,6 @@ textarea,
   }
 
   #hero {
-    min-height: unset;
     padding-block: var(--space-3xl);
   }
 
