@@ -408,7 +408,7 @@ p {
 }
 
 /*
-  Brand column: logo + title as independent siblings.
+  Brand column: logo link and title are independent siblings.
   No fixed width — hugs its content naturally.
   At ≥ 860px (CTA visible): both columns share space via space-between.
   At < 860px (CTA hidden): brand gets flex: 1 so the title absorbs
@@ -1309,29 +1309,48 @@ textarea,
 }
 
 /*
-  < 860px — 3-column mode: logo | title (flex: 1) | hamburger
-  CTA is hidden, so .navbar__brand expands to absorb the freed space.
-  The title uses the extra room naturally via its parent's flex growth.
-*/
-@media (max-width: 859px) {
-  .navbar__brand {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .navbar__title {
-    flex: 1;
-  }
-}
-
-/*
-  ≤ 630px — CTA hidden; nav reads: logo | title | hamburger.
-  The title stays visible so the brand identity is preserved at all
-  mobile widths. The CTA drops off here because it was already hidden
-  below 860px — this rule simply makes the intent explicit and
-  reinforces display: none in case of specificity conflicts.
+  ≤ 630px — 3-column grid navbar: [logo] [title] [hamburger]
+  .navbar__brand uses display:contents to dissolve itself so logo-link
+  and title become direct grid children and land in separate columns.
+  .navbar__right (col 3) holds only the hamburger at this width.
 */
 @media (max-width: 630px) {
+  .navbar {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0;
+  }
+
+  /*
+    display:contents removes .navbar__brand as a box, promoting its
+    children (logo-link and title) directly into the grid.
+  */
+  .navbar__brand {
+    display: contents;
+  }
+
+  /* Col 1: logo */
+  .navbar__logo-link {
+    grid-column: 1;
+    padding-inline-end: var(--space-xs);
+  }
+
+  /* Col 2: title centered in its 1fr column */
+  .navbar__title {
+    grid-column: 2;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Col 3: right slot — only hamburger visible (CTA already display:none) */
+  .navbar__right {
+    grid-column: 3;
+    padding-inline-start: var(--space-xs);
+  }
+
   .navbar__cta {
     display: none;
   }
@@ -1357,6 +1376,49 @@ textarea,
     width: 100%;
     min-width: 0;
     max-width: none;
+  }
+}
+
+/*
+  631px–859px — flex row restored: brand (flex:1) + right side
+  Undoes the grid rules applied at ≤630px.
+*/
+@media (min-width: 631px) {
+  .navbar {
+    display: flex;
+  }
+
+  .navbar__brand {
+    display: flex;
+  }
+
+  .navbar__logo-link {
+    grid-column: unset;
+  }
+
+  .navbar__title {
+    grid-column: unset;
+    text-align: unset;
+  }
+
+  .navbar__right {
+    grid-column: unset;
+  }
+}
+
+/*
+  < 860px — 3-column mode: logo | title (flex: 1) | hamburger
+  CTA is hidden, so .navbar__brand expands to absorb the freed space.
+  The title uses the extra room naturally via its parent's flex growth.
+*/
+@media (max-width: 859px) {
+  .navbar__brand {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .navbar__title {
+    flex: 1;
   }
 }
 
