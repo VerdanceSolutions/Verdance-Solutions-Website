@@ -399,12 +399,16 @@ p {
   text-transform: uppercase;
 }
 
+/* Logo: let aspect-ratio + max-width drive sizing naturally.
+   No explicit height — the nav flex container already constrains vertical space
+   via align-items: center, so the logo simply fills to its natural proportions. */
 .navbar__logo {
   display: block;
-  height: calc(var(--nav-height) - 0.75rem);
   width: auto;
   max-width: 200px;
+  max-height: calc(var(--nav-height) - 0.75rem);
   aspect-ratio: 200 / 80;
+  object-fit: contain;
 }
 
 .navbar__right {
