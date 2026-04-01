@@ -883,11 +883,14 @@ p {
 
 /*
   The FAQ section heading has no subtitle or body text beneath it,
-  so the h2 needs explicit bottom margin to create breathing room
-  before the accordion list begins.
+  so the h2 needs explicit bottom margin before the accordion list.
+  !important overrides the bare `h2 { margin-bottom: var(--space-md) }`
+  rule inside @media (min-width: 1024px), which would otherwise reset
+  this to a smaller value and also never fires on mobile (< 1024px),
+  leaving margin-bottom at 0 from the CSS reset on small screens.
 */
 #faq .section-heading__title {
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-lg) !important;
 }
 
 .faq-item {
@@ -1106,11 +1109,11 @@ textarea {
 }
 
 /*
-  The Sourcing Priorities & Constraints textarea needs extra height
-  so its two-line placeholder fits without clipping.
+  The Sourcing Priorities & Constraints textarea needs a touch of extra
+  height so its two-line placeholder fits without clipping.
 */
 #message {
-  min-height: 160px;
+  min-height: 140px;
 }
 
 .input,
