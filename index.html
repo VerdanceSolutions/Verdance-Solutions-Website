@@ -271,6 +271,29 @@
                   </div>
                 </div>
 
+                <!-- Row 1b: Industry -->
+                <div class="form-row">
+                  <div class="form-dropdown">
+                    <label id="industry-label" class="label">Industry</label>
+                    <details class="dropdown-multi" aria-labelledby="industry-label" id="industry-dropdown">
+                      <summary>Select industries</summary>
+                      <ul class="dropdown-multi__options">
+                        <li><label><input type="checkbox" name="industry" value="cpg-manufacturing" autocomplete="off" /> CPG Manufacturing</label></li>
+                        <li><label><input type="checkbox" name="industry" value="hospitality" autocomplete="off" /> Hospitality</label></li>
+                        <li><label><input type="checkbox" name="industry" value="food-beverage" autocomplete="off" /> Food &amp; Beverage</label></li>
+                        <li><label><input type="checkbox" name="industry" value="retail-distribution" autocomplete="off" /> Retail &amp; Distribution</label></li>
+                        <li><label><input type="checkbox" name="industry" value="food-service-catering" autocomplete="off" /> Food Service &amp; Catering</label></li>
+                        <li><label><input type="checkbox" name="industry" value="health-wellness" autocomplete="off" /> Health &amp; Wellness</label></li>
+                        <li><label><input type="checkbox" name="industry" value="corporate-events" autocomplete="off" /> Corporate &amp; Events</label></li>
+                        <li><label><input type="checkbox" name="industry" id="industry-other-checkbox" value="other" autocomplete="off" /> Other</label></li>
+                        <li id="industry-other-input-wrap" hidden>
+                          <input class="input" type="text" id="industry-other-input" name="industry-other" placeholder="Please specify" autocomplete="off" autocorrect="on" spellcheck="true" />
+                        </li>
+                      </ul>
+                    </details>
+                  </div>
+                </div>
+
                 <!-- Row 2: Country of Origin -->
                 <div class="form-row">
                   <div class="form-dropdown">

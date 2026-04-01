@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ========== CUSTOM SELECT DROPDOWNS (Country of Origin & Volume) ==========
-  // All world countries — valid values for the country search input.
   const KNOWN_COUNTRIES = [
     "Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda",
     "Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain",
@@ -65,7 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
   const KNOWN_COUNTRIES_SET = new Set(KNOWN_COUNTRIES);
 
-  // Country of Origin — references for "Other" search behaviour
   const countryDropdown   = document.querySelector(".dropdown-select[data-target='country']");
   const countryOtherWrap  = document.getElementById("country-other-wrap");
   const countrySearchEl   = document.getElementById("country-other-search");
@@ -83,7 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const label = opt.textContent.trim();
         const labelEl = summary.querySelector(".dropdown-select__label");
 
-        // Special case: "Other" on the country dropdown — show search input
         if (value === "Other" && detailsEl === countryDropdown) {
           if (labelEl) {
             labelEl.textContent = "Other\u2026";
@@ -106,7 +103,6 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-        // Normal option selected — hide search input if it was open
         if (detailsEl === countryDropdown && countryOtherWrap) {
           countryOtherWrap.hidden = true;
           if (countrySearchEl) countrySearchEl.value = "";
@@ -129,9 +125,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".dropdown-select").forEach(initSelectDropdown);
 
   // ========== CUSTOM COUNTRY SUGGESTION PANEL ==========
-  // Replaces the native <datalist>. Filters KNOWN_COUNTRIES by case-insensitive
-  // startsWith match, renders a custom <ul>, and handles full keyboard nav.
-
   let activeSuggestionIndex = -1;
 
   function openSuggestions(matches) {
@@ -149,19 +142,12 @@ document.addEventListener("DOMContentLoaded", () => {
       li.dataset.value = country;
       li.id = "country-suggestion-" + idx;
       li.textContent = country;
-      li.addEventListener("mousedown", (e) => {
-        // mousedown fires before blur — use it to prevent blur from hiding panel
-        e.preventDefault();
-      });
-      li.addEventListener("click", () => {
-        confirmCountry(country);
-      });
+      li.addEventListener("mousedown", (e) => { e.preventDefault(); });
+      li.addEventListener("click", () => { confirmCountry(country); });
       countrySuggestions.appendChild(li);
     });
     countrySuggestions.hidden = false;
-    if (countrySearchEl) {
-      countrySearchEl.setAttribute("aria-expanded", "true");
-    }
+    if (countrySearchEl) countrySearchEl.setAttribute("aria-expanded", "true");
   }
 
   function closeSuggestions() {
@@ -224,11 +210,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
       const lower = val.toLowerCase();
-      const matches = KNOWN_COUNTRIES.filter((c) =>
-        c.toLowerCase().startsWith(lower)
-      );
+      const matches = KNOWN_COUNTRIES.filter((c) => c.toLowerCase().startsWith(lower));
       openSuggestions(matches);
-      // Update hidden input live — exact match locks in the country, else stays "Other"
       if (hiddenCountry) {
         hiddenCountry.value = KNOWN_COUNTRIES_SET.has(val) ? val : "Other";
         hiddenCountry.dispatchEvent(new Event("change", { bubbles: true }));
@@ -240,7 +223,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const items = countrySuggestions
         ? countrySuggestions.querySelectorAll(".country-suggestion-item")
         : [];
-
       if (e.key === "ArrowDown") {
         e.preventDefault();
         if (items.length === 0) return;
@@ -248,7 +230,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setActiveItem(activeSuggestionIndex);
         return;
       }
-
       if (e.key === "ArrowUp") {
         e.preventDefault();
         if (items.length === 0) return;
@@ -256,33 +237,22 @@ document.addEventListener("DOMContentLoaded", () => {
         setActiveItem(activeSuggestionIndex);
         return;
       }
-
       if (e.key === "Enter") {
         e.preventDefault();
         if (activeSuggestionIndex >= 0 && items[activeSuggestionIndex]) {
           confirmCountry(items[activeSuggestionIndex].dataset.value);
         } else {
-          // No suggestion highlighted — try exact match on typed value
           const val = countrySearchEl.value.trim();
-          if (KNOWN_COUNTRIES_SET.has(val)) {
-            confirmCountry(val);
-          } else {
-            closeSuggestions();
-          }
+          if (KNOWN_COUNTRIES_SET.has(val)) confirmCountry(val);
+          else closeSuggestions();
         }
         countrySearchEl.blur();
         return;
       }
-
-      if (e.key === "Escape") {
-        closeSuggestions();
-        return;
-      }
+      if (e.key === "Escape") { closeSuggestions(); return; }
     });
 
-    // On blur: lock in a valid country or reset if cleared/invalid
     countrySearchEl.addEventListener("blur", () => {
-      // Small timeout so mousedown+click on a suggestion can fire first
       setTimeout(() => {
         const val = countrySearchEl.value.trim();
         if (KNOWN_COUNTRIES_SET.has(val)) {
@@ -311,7 +281,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (dd.contains(e.target)) return;
       dd.removeAttribute("open");
     });
-    // Close country suggestions if clicking outside the search wrap
     if (
       countrySuggestions &&
       !countrySuggestions.hidden &&
@@ -344,6 +313,31 @@ document.addEventListener("DOMContentLoaded", () => {
         const dropdown = document.querySelector(".dropdown-multi");
         if (dropdown) dropdown.removeAttribute("open");
         otherInput.blur();
+      }
+    });
+  }
+
+  // ========== INDUSTRY OTHER TOGGLE ==========
+  const industryOtherCheckbox  = document.getElementById("industry-other-checkbox");
+  const industryOtherInputWrap = document.getElementById("industry-other-input-wrap");
+  const industryOtherInput     = document.getElementById("industry-other-input");
+
+  if (industryOtherCheckbox && industryOtherInputWrap && industryOtherInput) {
+    industryOtherCheckbox.addEventListener("change", () => {
+      industryOtherInputWrap.hidden = !industryOtherCheckbox.checked;
+      if (industryOtherCheckbox.checked) {
+        industryOtherInput.focus();
+      } else {
+        industryOtherInput.value = "";
+        clearFieldError("industry-other-input");
+      }
+    });
+    industryOtherInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const dropdown = document.getElementById("industry-dropdown");
+        if (dropdown) dropdown.removeAttribute("open");
+        industryOtherInput.blur();
       }
     });
   }
@@ -464,9 +458,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateBannerAfterClear() {
     const remaining = getRemainingErrorCount();
-    if (remaining === 0) {
-      hideBanner();
-    } else {
+    if (remaining === 0) hideBanner();
+    else {
       const noun = remaining === 1 ? "field needs" : "fields need";
       showBanner(`${remaining} ${noun} attention before submitting.`);
     }
@@ -489,6 +482,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  if (industryOtherInput) {
+    industryOtherInput.addEventListener("input", () => {
+      clearFieldError("industry-other-input");
+      updateBannerAfterClear();
+    });
+  }
+
   document.querySelectorAll('input[name="products"]').forEach((cb) => {
     cb.addEventListener("change", () => {
       clearProductsError();
@@ -497,7 +497,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ========== FORM SUBMIT ==========
-  const contactForm = document.getElementById("contact__form");
+  const contactForm  = document.getElementById("contact__form");
   const successBlock = document.getElementById("form-success");
   const errorBlock   = document.getElementById("form-error");
   const submitBtn    = document.getElementById("form-submit-btn");
@@ -545,8 +545,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const checkedProducts = document.querySelectorAll('input[name="products"]:checked');
-      const hasProduct = checkedProducts.length > 0;
-      if (!hasProduct) {
+      if (checkedProducts.length === 0) {
         setProductsError("Please select at least one product.");
         errorCount++;
       }
@@ -558,10 +557,16 @@ document.addEventListener("DOMContentLoaded", () => {
         errorCount++;
       }
 
+      const industryOtherChecked = document.getElementById("industry-other-checkbox")?.checked;
+      const industryOtherValue   = document.getElementById("industry-other-input")?.value.trim();
+      if (industryOtherChecked && !industryOtherValue) {
+        setFieldError("industry-other-input", "Please specify your industry.");
+        errorCount++;
+      }
+
       if (errorCount > 0) {
         const noun = errorCount === 1 ? "field needs" : "fields need";
         showBanner(`${errorCount} ${noun} attention before submitting.`);
-        // Scroll to the first visible field error, fall back to the banner
         const firstError = contactForm.querySelector(".input--error");
         if (firstError) {
           firstError.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -584,7 +589,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const API_URL = "https://verdance-server-production.up.railway.app/api/submit";
 
-      // Resolve country: prefer the search input value if it's a known country
       const countryValue = (() => {
         if (countrySearchEl && !countryOtherWrap?.hidden) {
           const searched = countrySearchEl.value.trim();
@@ -597,10 +601,17 @@ document.addEventListener("DOMContentLoaded", () => {
         .map((cb) => cb.value === "other" ? otherValue : cb.value)
         .join(";");
 
+      const checkedIndustries = document.querySelectorAll('input[name="industry"]:checked');
+      const industries = Array.from(checkedIndustries)
+        .map((cb) => cb.value === "other" ? industryOtherValue : cb.value)
+        .filter(Boolean)
+        .join(";");
+
       const payload = {
         fullName:    document.getElementById("name").value,
         title:       titleEl   ? titleEl.value   : "",
         company:     companyEl ? companyEl.value : "",
+        industry:    industries,
         email:       emailEl.value,
         phone:       phoneEl.value,
         volume:      volumeEl  ? volumeEl.value  : "",
