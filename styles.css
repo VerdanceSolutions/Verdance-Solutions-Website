@@ -321,21 +321,26 @@ h4 {
   color: var(--color-text-main);
 }
 
+/*
+  Fluid headings: scale continuously from mobile to desktop.
+  clamp(min, preferred, max) — preferred uses vw so it grows with viewport.
+  This replaces the static px overrides previously in the ≥ 1051px breakpoint.
+*/
 h1 {
-  font-size: var(--font-size-3xl);
+  font-size: clamp(1.75rem, 3.5vw, 2.6rem); /* 28px → 41.6px */
 }
 
 h2 {
-  font-size: var(--font-size-2xl);
+  font-size: clamp(1.5rem, 2.5vw, 2rem); /* 24px → 32px */
 }
 
 h3 {
-  font-size: var(--font-size-xl);
+  font-size: clamp(1.2rem, 1.8vw, 1.625rem); /* 19px → 26px */
   margin-bottom: var(--space-md);
 }
 
 h4 {
-  font-size: var(--font-size-lg);
+  font-size: clamp(1rem, 1.2vw, 1.25rem); /* 16px → 20px */
 }
 
 p {
@@ -1310,6 +1315,19 @@ textarea,
   }
 }
 
+/* ≥ 768px: mid-range gutter step
+   Bridges the gap between 1.25rem mobile and 2rem desktop gutters.
+   Also bumps body font to 17px for more comfortable reading at tablet+ widths. */
+@media (min-width: 768px) {
+  :root {
+    --container-padding: 1.75rem;
+  }
+
+  body {
+    font-size: 1.0625rem; /* 17px */
+  }
+}
+
 /* ≥ 982px: large tablets */
 @media (min-width: 982px) {
   .navbar__links {
@@ -1360,13 +1378,19 @@ textarea,
     --container-padding: 2rem;
   }
 
-  h1 {
-    font-size: 2.6rem;
+  /* Body text bumps to 18px on full desktop for comfortable long-form reading */
+  body {
+    font-size: 1.125rem; /* 18px */
   }
 
+  /* h2 bottom margin — fluid size handled by clamp() on the element itself */
   h2 {
-    font-size: 2rem;
     margin-bottom: var(--space-md);
+  }
+
+  /* Section vertical padding gets an extra boost on desktop */
+  .section {
+    padding-block: clamp(var(--space-3xl), 6vw, 5rem);
   }
 
   .navbar {
