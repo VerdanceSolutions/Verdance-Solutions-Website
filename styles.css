@@ -71,7 +71,7 @@
   /* Layout */
   --container-max: 1200px;
   --container-padding: 1.25rem; /* 20px mobile */
-  --nav-height: 3.5rem;
+  --nav-height: 4.5rem; /* 72px — roomy enough for a detailed horizontal logo */
 
   /* Radius + shadow */
   --radius-sm: 6px;
@@ -324,7 +324,6 @@ h4 {
 /*
   Fluid headings: scale continuously from mobile to desktop.
   clamp(min, preferred, max) — preferred uses vw so it grows with viewport.
-  This replaces the static px overrides previously in the ≥ 1051px breakpoint.
 */
 h1 {
   font-size: clamp(1.75rem, 3.5vw, 2.6rem); /* 28px → 41.6px */
@@ -404,14 +403,13 @@ p {
   text-transform: uppercase;
 }
 
-/* Logo: let aspect-ratio + max-width drive sizing naturally.
-   No explicit height — the nav flex container already constrains vertical space
-   via align-items: center, so the logo simply fills to its natural proportions. */
+/* Logo: fills up to (nav-height - 1rem) vertically so it has
+   comfortable top/bottom breathing room in the taller 72px bar. */
 .navbar__logo {
   display: block;
   width: auto;
   max-width: 200px;
-  max-height: calc(var(--nav-height) - 0.75rem);
+  max-height: calc(var(--nav-height) - 1rem);
   aspect-ratio: 200 / 80;
   object-fit: contain;
 }
