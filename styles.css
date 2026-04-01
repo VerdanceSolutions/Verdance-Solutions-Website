@@ -71,7 +71,7 @@
   /* Layout */
   --container-max: 1200px;
   --container-padding: 1.25rem; /* 20px mobile */
-  --nav-height: 4.5rem; /* 72px — roomy enough for a detailed horizontal logo */
+  --nav-height: 3.5rem; /* 56px — mobile default */
 
   /* Radius + shadow */
   --radius-sm: 6px;
@@ -404,7 +404,7 @@ p {
 }
 
 /* Logo: fills up to (nav-height - 1rem) vertically so it has
-   comfortable top/bottom breathing room in the taller 72px bar. */
+   comfortable top/bottom breathing room in the bar. */
 .navbar__logo {
   display: block;
   width: auto;
@@ -1374,6 +1374,7 @@ textarea,
 @media (min-width: 1051px) {
   :root {
     --container-padding: 2rem;
+    --nav-height: 4.5rem; /* 72px — desktop only; mobile keeps 3.5rem */
   }
 
   /* Body text bumps to 18px on full desktop for comfortable long-form reading */
