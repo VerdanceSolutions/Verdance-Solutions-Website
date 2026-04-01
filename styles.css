@@ -1427,9 +1427,9 @@ textarea,
     margin-inline: auto;
   }
 
+  /* Both children grow equally to fill available space */
   .hero__copy {
-    flex: 1 1 28rem;
-    max-width: 28rem;
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1441,15 +1441,11 @@ textarea,
     justify-content: flex-start;
   }
 
-  /*
-    Image column: constrained to the hero height via align-items: stretch on
-    the parent row. aspect-ratio is dropped in favour of height: 100% so the
-    image fills the available vertical space without overflowing.
-  */
+  /* Image column also flex: 1 — grows equally alongside copy.
+     height: 100% fills the hero container via align-items: stretch. */
   .hero__media {
     display: block;
-    flex: 0 1 460px;
-    max-width: 460px;
+    flex: 1;
     height: 100%;
     aspect-ratio: unset;
     border-radius: var(--radius-lg);
@@ -1505,21 +1501,7 @@ textarea,
     padding-block: clamp(var(--space-3xl), 6vw, 5rem);
   }
 
-  .hero__copy {
-    flex: 1 1 32rem;
-    max-width: 32rem;
-  }
-
-  .hero__media {
-    flex: 0 1 520px;
-    max-width: 520px;
-  }
-
-  /*
-    Reduce gap at 1440px+ so the copy and image have room to breathe
-    within the fixed hero height. 2rem gives comfortable separation
-    without cramping the vertical padding on either side.
-  */
+  /* Gap reduced at 1440px+ so copy and image breathe within the fixed height */
   .hero__inner {
     gap: 2rem;
     max-width: 1400px;
