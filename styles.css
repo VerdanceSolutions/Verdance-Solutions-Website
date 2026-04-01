@@ -562,12 +562,19 @@ p {
   justify-content: center;
 }
 
+/*
+  Hero inner: NOT wrapped in .container on desktop — instead it uses its
+  own horizontal padding (matching --container-padding) and lets each
+  child grow to its natural width without a 1200px ceiling.
+*/
 .hero__inner {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   gap: var(--space-2xl);
+  width: 100%;
+  padding-inline: var(--container-padding);
 }
 
 .hero__copy {
@@ -1440,14 +1447,16 @@ textarea,
     display: none;
   }
 
-  /* Two-column hero layout */
+  /* Two-column hero layout — inner uses its own padding, not .container */
   .hero__inner {
-    display: flex;
     flex-direction: row;
     align-items: stretch;
     text-align: left;
     justify-content: space-between;
     gap: 3rem;
+    /* Cap so it doesn't stretch absurdly wide on ultrawide monitors */
+    max-width: 1400px;
+    margin-inline: auto;
   }
 
   .hero__copy {
@@ -1542,5 +1551,6 @@ textarea,
 
   .hero__inner {
     gap: 4rem;
+    max-width: 1400px;
   }
 }
