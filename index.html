@@ -62,27 +62,36 @@
     <div class="page-main">
       <!-- Header Navigation -->
       <header class="site-header">
-        <div class="container navbar">
-          <a href="#top" class="navbar__brand">
-            <picture>
-              <source srcset="assets/verdance-logo-200.webp 200w, assets/verdance-logo-350.webp 350w, assets/verdance-logo-500.webp 500w" sizes="(min-width: 1051px) 200px, 140px" type="image/webp" />
-              <img src="assets/verdance-logo.png" srcset="assets/verdance-logo-200.webp 200w, assets/verdance-logo-350.webp 350w, assets/verdance-logo-500.webp 500w" sizes="(min-width: 1051px) 200px, 140px" alt="Verdance Trade Solutions home" class="navbar__logo" loading="lazy" width="200" height="80" />
-            </picture>
-            <span class="navbar__title">Verdance Trade Solutions</span>
-          </a>
-          <div class="navbar__right">
-            <nav class="navbar__links" id="primary-nav">
-              <a href="#problems">Problems</a>
-              <a href="#solutions">Solutions</a>
-              <a href="#products">Products</a>
-              <a href="#faq">FAQ</a>
-              <a href="#about">About</a>
-              <a href="#contact">Contact</a>
-            </nav>
-            <a href="#contact" class="btn btn--primary navbar__cta">Schedule a lane review</a>
-            <button class="navbar__toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation">
-              <span class="navbar__toggle-line"></span>
-            </button>
+        <div class="container">
+          <div class="navbar">
+
+            <!-- Brand: logo link and title are independent elements -->
+            <div class="navbar__brand">
+              <a href="#top" class="navbar__logo-link" aria-label="Verdance Trade Solutions — home">
+                <picture>
+                  <source srcset="assets/verdance-logo-200.webp 200w, assets/verdance-logo-350.webp 350w, assets/verdance-logo-500.webp 500w" sizes="(min-width: 1024px) 200px, 140px" type="image/webp" />
+                  <img src="assets/verdance-logo.png" srcset="assets/verdance-logo-200.webp 200w, assets/verdance-logo-350.webp 350w, assets/verdance-logo-500.webp 500w" sizes="(min-width: 1024px) 200px, 140px" alt="" class="navbar__logo" loading="lazy" width="200" height="80" />
+                </picture>
+              </a>
+              <span class="navbar__title" aria-hidden="true">Verdance Trade Solutions</span>
+            </div>
+
+            <!-- Right side: nav links, CTA, hamburger -->
+            <div class="navbar__right">
+              <nav class="navbar__links" id="primary-nav">
+                <a href="#problems">Problems</a>
+                <a href="#solutions">Solutions</a>
+                <a href="#products">Products</a>
+                <a href="#faq">FAQ</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+              </nav>
+              <a href="#contact" class="btn btn--primary navbar__cta">Schedule a lane review</a>
+              <button class="navbar__toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation">
+                <span class="navbar__toggle-line"></span>
+              </button>
+            </div>
+
           </div>
         </div>
       </header>

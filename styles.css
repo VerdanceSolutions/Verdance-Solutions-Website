@@ -73,6 +73,16 @@
   --container-padding: 1.25rem; /* 20px mobile */
   --nav-height: 3.5rem; /* 56px — mobile/tablet default */
 
+  /*
+    Logo size tokens.
+    --logo-size-sm: natural hug size at mobile/mid widths (140px).
+    --logo-size-lg: grows at desktop where the taller nav bar has room (200px).
+    The <img> uses width: auto + max-height so it scales with the nav height;
+    these tokens cap the rendered width so it never overflows.
+  */
+  --logo-size-sm: 140px;
+  --logo-size-lg: 200px;
+
   /* Radius + shadow */
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -383,17 +393,32 @@ p {
   border-bottom: var(--border-subtle);
 }
 
+/*
+  .navbar is now a flex row inside .container.
+  Two columns: .navbar__brand (left) and .navbar__right (right).
+  At all widths: brand takes only as much space as its content needs;
+  right side takes the rest.
+*/
 .navbar {
   height: var(--nav-height);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-md);
 }
 
+/*
+  Brand column: logo + title as independent siblings.
+  No fixed width — hugs its content naturally.
+  At ≥ 860px (CTA visible): both columns share space via space-between.
+  At < 860px (CTA hidden): brand gets flex: 1 so the title absorbs
+  the freed space without any explicit width on the title itself.
+*/
 .navbar__brand {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: var(--space-lg);
+  gap: var(--space-sm);
+  min-width: 0;
 }
 
 .navbar__title {
@@ -401,23 +426,42 @@ p {
   font-size: var(--font-size-base);
   letter-spacing: var(--letter-spacing-wide);
   text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
-/* Logo: fills up to (nav-height - 1rem) vertically so it has
-   comfortable top/bottom breathing room in the bar. */
+/*
+  Logo link wraps only the <picture> element.
+  Logo image: width auto so it hugs the natural rendered width.
+  max-width uses --logo-size-sm (140px) at mobile/mid breakpoints;
+  upgrades to --logo-size-lg (200px) at the 1024px desktop nav.
+  max-height constrains it to the nav bar with breathing room.
+*/
+.navbar__logo-link {
+  display: block;
+  flex-shrink: 0;
+}
+
 .navbar__logo {
   display: block;
   width: auto;
-  max-width: 200px;
+  max-width: var(--logo-size-sm);
   max-height: calc(var(--nav-height) - 1rem);
-  aspect-ratio: 200 / 80;
+  height: auto;
   object-fit: contain;
 }
 
+/*
+  Right column: nav links + CTA + hamburger.
+  flex-shrink: 0 keeps it from compressing below its content size.
+*/
 .navbar__right {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
+  flex-shrink: 0;
 }
 
 .navbar__links {
@@ -480,7 +524,10 @@ p {
   top: 6px;
 }
 
-/* CTA button in header — hidden on mobile; shown from 860px+ */
+/*
+  CTA button: hidden by default (mobile).
+  Shown from 860px+ where there is room alongside logo + title + hamburger.
+*/
 .navbar__cta {
   display: none;
 }
@@ -548,13 +595,6 @@ p {
    ========================= */
 
 #hero {
-  /*
-    Hero fills exactly the remaining viewport after the sticky nav.
-    height (not min-height) ensures the section never grows beyond one screen,
-    preventing the image from overflowing into scroll space.
-    On mobile (single-column, no image) the content stacks naturally inside
-    this fixed height with justify-content: center.
-  */
   height: calc(100dvh - var(--nav-height));
   padding-block: var(--space-2xl);
   color: var(--color-text-main);
@@ -1268,23 +1308,25 @@ textarea,
   }
 }
 
-/* ≤ 630px */
-@media (max-width: 630px) {
-  .navbar {
-    justify-content: center;
-  }
-
+/*
+  < 860px — 3-column mode: logo | title (flex: 1) | hamburger
+  CTA is hidden, so .navbar__brand expands to absorb the freed space.
+  The title uses the extra room naturally via its parent's flex growth.
+*/
+@media (max-width: 859px) {
   .navbar__brand {
-    justify-content: center;
-    width: 100%;
+    flex: 1;
+    min-width: 0;
   }
 
   .navbar__title {
     flex: 1;
-    text-align: center;
   }
+}
 
-  .navbar__cta {
+/* ≤ 630px — title hidden; only logo + hamburger remain */
+@media (max-width: 630px) {
+  .navbar__title {
     display: none;
   }
 
@@ -1312,7 +1354,12 @@ textarea,
   }
 }
 
-/* ≥ 860px — show CTA button, keep hamburger for nav links */
+/*
+  ≥ 860px — 4-element, 2-column mode:
+  [ logo | title ]   [ CTA | hamburger ]
+  Brand hugs its content; right side is flex-shrink: 0.
+  CTA becomes visible.
+*/
 @media (min-width: 860px) {
   :root {
     --container-padding: 1.75rem;
@@ -1322,14 +1369,13 @@ textarea,
     font-size: 1.0625rem;
   }
 
-  /*
-    Show the CTA button from 860px where there is comfortable room
-    alongside the logo + hamburger. Nav links stay in the hamburger
-    until 1120px.
-  */
+  .navbar__brand {
+    /* Reset: no longer flex: 1 — hugs content, right side handles balance */
+    flex: 0 0 auto;
+  }
+
   .navbar__cta {
     display: inline-flex;
-    width: 168px;
     white-space: nowrap;
     flex-shrink: 0;
   }
@@ -1383,6 +1429,12 @@ textarea,
   :root {
     --container-padding: 2rem;
     --nav-height: 4rem; /* 64px */
+    /*
+      Logo grows at the desktop nav height.
+      max-width upgrades from --logo-size-sm (140px) to --logo-size-lg (200px)
+      by overriding the token at this breakpoint.
+    */
+    --logo-size-sm: var(--logo-size-lg);
   }
 
   body {
@@ -1401,13 +1453,7 @@ textarea,
     padding-block: var(--space-lg);
   }
 
-  .navbar {
-    justify-content: space-between;
-  }
-
   .navbar__right {
-    display: flex;
-    align-items: center;
     gap: var(--space-xs);
   }
 
@@ -1426,12 +1472,6 @@ textarea,
     margin-inline: auto;
   }
 
-  /*
-    Both children grow equally to fill available space.
-    min-width: 0 is required on flex children with rich content —
-    without it, the browser uses the item's max-content width as the
-    floor, causing the copy column to inflate beyond its flex share.
-  */
   .hero__copy {
     flex: 1;
     min-width: 0;
@@ -1446,10 +1486,6 @@ textarea,
     justify-content: flex-start;
   }
 
-  /*
-    Image column also flex: 1 with min-width: 0 — grows equally alongside
-    copy. height: 100% fills the hero container via align-items: stretch.
-  */
   .hero__media {
     display: block;
     flex: 1;
@@ -1509,7 +1545,6 @@ textarea,
     padding-block: clamp(var(--space-3xl), 6vw, 5rem);
   }
 
-  /* Gap reduced at 1440px+ so copy and image breathe within the fixed height */
   .hero__inner {
     gap: 2rem;
     max-width: 1400px;
