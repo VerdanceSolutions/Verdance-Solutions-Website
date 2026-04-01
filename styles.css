@@ -1344,10 +1344,6 @@ textarea,
     display: none;
   }
 
-  .navbar__cta {
-    display: inline-flex;
-  }
-
   .problems__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1427,9 +1423,15 @@ textarea,
     margin-inline: auto;
   }
 
-  /* Both children grow equally to fill available space */
+  /*
+    Both children grow equally to fill available space.
+    min-width: 0 is required on flex children with rich content —
+    without it, the browser uses the item's max-content width as the
+    floor, causing the copy column to inflate beyond its flex share.
+  */
   .hero__copy {
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1441,11 +1443,14 @@ textarea,
     justify-content: flex-start;
   }
 
-  /* Image column also flex: 1 — grows equally alongside copy.
-     height: 100% fills the hero container via align-items: stretch. */
+  /*
+    Image column also flex: 1 with min-width: 0 — grows equally alongside
+    copy. height: 100% fills the hero container via align-items: stretch.
+  */
   .hero__media {
     display: block;
     flex: 1;
+    min-width: 0;
     height: 100%;
     aspect-ratio: unset;
     border-radius: var(--radius-lg);
