@@ -1336,6 +1336,10 @@ textarea,
   ≥860px block which sets display:inline-flex with no lower bound.
   Hero: height:auto + overflow:visible releases the 100dvh hard clamp
   so the section grows with its content.
+
+  Buttons: every .btn outside the navbar becomes full-width at this size.
+  Groups (.hero__actions, .contact-form__actions) stack into a column
+  so buttons never sit side-by-side on a narrow screen.
 */
 @media (max-width: 420px) {
   .navbar__title {
@@ -1374,6 +1378,31 @@ textarea,
 
   .hero__meta {
     margin-bottom: var(--space-xs);
+  }
+
+  /*
+    Full-width buttons — applies to every .btn that is NOT inside
+    .site-header (the navbar CTA is already hidden above, but this
+    guard keeps things safe if the DOM ever changes).
+  */
+  :not(.site-header) > .btn,
+  :not(.site-header) .btn {
+    width: 100%;
+    max-width: none;
+  }
+
+  /*
+    Button groups: collapse side-by-side rows into a single column
+    so stacked full-width buttons don't fight for row space.
+  */
+  .hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .contact-form__actions {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 
