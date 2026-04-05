@@ -1,0 +1,1874 @@
+/* =========================
+   1. CSS Reset + Base Setup
+   ========================= */
+
+/* Root tokens: colors, typography, spacing, layout */
+:root {
+  /* Color palette */
+  --color-bg-light: #fdfaf5;
+  --color-bg-dark: #0b0b09;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f3eee5;
+
+  --color-text-main: #17130f;
+  --color-text-muted: #5f564b;
+  --color-text-inverse: #fdfaf5;
+
+  --color-primary: #355834; /* Verdance green */
+  --color-primary-soft: #4b7a4a;
+  --color-primary-muted: #d9e3d8;
+  --color-accent-gold: #c29b4f;
+  --color-accent-rust: #b0563b;
+
+  --color-border-subtle: #e1d7c7;
+  --color-border-strong: #b39c7b;
+  --color-badge-bg: #efe4cf;
+
+  /* Feedback */
+  --color-success: #2f855a;
+  --color-warning: #dd6b20;
+  --color-error: #c53030;
+
+  /* Component-specific tokens that must adapt to dark mode */
+  --color-hero-bg: #e4eee4;
+  --color-hero-scrim: rgba(53, 88, 52, 0.52);
+  --color-contact-card-bg: radial-gradient(circle at 0% 0%, #f5e5c4, #fdfaf5);
+  --color-btn-ghost-border: rgba(53, 88, 52, 0.4);
+  --color-btn-ghost-hover: rgba(53, 88, 52, 0.06);
+  --color-validation-banner-bg: rgba(197, 48, 48, 0.06);
+  --color-navbar-bg: rgba(253, 250, 245, 0.96);
+
+  /* Typography */
+  --font-family-base:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-family-heading:
+    "FKGroteskNeue", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+
+  --font-size-xs: 0.8125rem; /* 13px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-base: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.375rem; /* 22px */
+  --font-size-2xl: 1.75rem; /* 28px */
+  --font-size-3xl: 2.25rem; /* 36px */
+
+  --line-height-normal: 1.6;
+  --line-height-heading: 1.2;
+
+  --letter-spacing-tight: -0.01em;
+  --letter-spacing-wide: 0.12em;
+
+  /* Spacing scale */
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* Layout */
+  --container-max: 1200px;
+  --container-padding: 1.25rem; /* 20px mobile */
+  --nav-height: 3.5rem; /* 56px — mobile/tablet default */
+
+  /*
+    Logo size tokens.
+    --logo-size-sm: natural hug size at mobile/mid widths (140px).
+    --logo-size-lg: grows at desktop where the taller nav bar has room (200px).
+    The <img> uses width: auto + max-height so it scales with the nav height;
+    these tokens cap the rendered width so it never overflows.
+  */
+  --logo-size-sm: 140px;
+  --logo-size-lg: 200px;
+
+  /* Radius + shadow */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-soft: 0 14px 30px rgba(15, 23, 15, 0.12);
+
+  /* Borders */
+  --border-subtle: 1px solid var(--color-border-subtle);
+  --border-strong: 1px solid var(--color-border-strong);
+
+  /* Focus */
+  --focus-outline: 2px solid var(--color-accent-gold);
+
+  /* Transitions */
+  --transition-fast: 150ms ease-out;
+  --transition-base: 200ms ease-out;
+}
+
+/* =========================
+   Dark mode tokens
+   — system preference (no JS needed)
+   — manual [data-color-scheme="dark"] on <html> overrides system
+   ========================= */
+
+/* System preference */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg-light: #050605;
+    --color-bg-dark: #050605;
+    --color-surface: #151713;
+    --color-surface-muted: #1a1c18;
+
+    --color-text-main: #f6efe5;
+    --color-text-muted: #ccc0b2;
+    --color-text-inverse: #050605;
+
+    --color-primary: #7cc58a;
+    --color-primary-soft: #5ea56b;
+    --color-primary-muted: #283429;
+    --color-accent-gold: #e1bd6b;
+    --color-accent-rust: #e27c5b;
+
+    --color-border-subtle: #32352b;
+    --color-border-strong: #5b5f4a;
+    --color-badge-bg: #2b3023;
+
+    --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.45);
+
+    /* Component tokens */
+    --color-hero-bg: #111a11;
+    --color-hero-scrim: rgba(124, 197, 138, 0.18);
+    --color-contact-card-bg: radial-gradient(circle at 0% 0%, #1e2a1a, #0e110e);
+    --color-btn-ghost-border: rgba(124, 197, 138, 0.35);
+    --color-btn-ghost-hover: rgba(124, 197, 138, 0.08);
+    --color-validation-banner-bg: rgba(197, 48, 48, 0.12);
+    --color-navbar-bg: rgba(5, 6, 5, 0.96);
+  }
+}
+
+/* Manual dark override — set data-color-scheme="dark" on <html> */
+[data-color-scheme="dark"] {
+  --color-bg-light: #050605;
+  --color-bg-dark: #050605;
+  --color-surface: #151713;
+  --color-surface-muted: #1a1c18;
+
+  --color-text-main: #f6efe5;
+  --color-text-muted: #ccc0b2;
+  --color-text-inverse: #050605;
+
+  --color-primary: #7cc58a;
+  --color-primary-soft: #5ea56b;
+  --color-primary-muted: #283429;
+  --color-accent-gold: #e1bd6b;
+  --color-accent-rust: #e27c5b;
+
+  --color-border-subtle: #32352b;
+  --color-border-strong: #5b5f4a;
+  --color-badge-bg: #2b3023;
+
+  --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.45);
+
+  /* Component tokens */
+  --color-hero-bg: #111a11;
+  --color-hero-scrim: rgba(124, 197, 138, 0.18);
+  --color-contact-card-bg: radial-gradient(circle at 0% 0%, #1e2a1a, #0e110e);
+  --color-btn-ghost-border: rgba(124, 197, 138, 0.35);
+  --color-btn-ghost-hover: rgba(124, 197, 138, 0.08);
+  --color-validation-banner-bg: rgba(197, 48, 48, 0.12);
+  --color-navbar-bg: rgba(5, 6, 5, 0.96);
+}
+
+/* Manual light override — set data-color-scheme="light" on <html>
+   Restores all light defaults so system-dark users can force light. */
+[data-color-scheme="light"] {
+  --color-bg-light: #fdfaf5;
+  --color-bg-dark: #0b0b09;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f3eee5;
+
+  --color-text-main: #17130f;
+  --color-text-muted: #5f564b;
+  --color-text-inverse: #fdfaf5;
+
+  --color-primary: #355834;
+  --color-primary-soft: #4b7a4a;
+  --color-primary-muted: #d9e3d8;
+  --color-accent-gold: #c29b4f;
+  --color-accent-rust: #b0563b;
+
+  --color-border-subtle: #e1d7c7;
+  --color-border-strong: #b39c7b;
+  --color-badge-bg: #efe4cf;
+
+  --shadow-soft: 0 14px 30px rgba(15, 23, 15, 0.12);
+
+  /* Component tokens */
+  --color-hero-bg: #e4eee4;
+  --color-hero-scrim: rgba(53, 88, 52, 0.52);
+  --color-contact-card-bg: radial-gradient(circle at 0% 0%, #f5e5c4, #fdfaf5);
+  --color-btn-ghost-border: rgba(53, 88, 52, 0.4);
+  --color-btn-ghost-hover: rgba(53, 88, 52, 0.06);
+  --color-validation-banner-bg: rgba(197, 48, 48, 0.06);
+  --color-navbar-bg: rgba(253, 250, 245, 0.96);
+}
+
+/* =========================
+   Base resets
+   ========================= */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Ensure hidden attribute is always respected */
+[hidden] {
+  display: none !important;
+}
+
+/* Anchor scroll offset */
+[id] {
+  scroll-margin-top: var(--nav-height);
+}
+
+/* Base HTML/body */
+html {
+  font-size: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-main);
+  background-color: var(--color-bg-light);
+}
+
+/* Accessibility focus */
+:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 3px;
+}
+
+/* Links */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:focus-visible {
+  outline-offset: 3px;
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Lists */
+ul,
+ol {
+  list-style: none;
+}
+
+/* =========================
+   2. Layout Helpers
+   ========================= */
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-inline: var(--container-padding);
+}
+
+.section {
+  padding-block: var(--space-2xl);
+}
+
+.section--tight {
+  padding-block: var(--space-xl);
+}
+
+/* Flex helpers */
+.flex {
+  display: flex;
+}
+
+.flex--center {
+  justify-content: center;
+  align-items: center;
+}
+
+.flex--between {
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Grid helper for cards */
+.grid {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: var(--border-subtle);
+  box-shadow: 0 10px 24px rgba(17, 24, 17, 0.06);
+  padding: var(--space-lg);
+}
+
+/* =========================
+   3. Typography
+   ========================= */
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-family-heading);
+  line-height: var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--color-text-main);
+}
+
+/*
+  Fluid headings: scale continuously from mobile to desktop.
+  clamp(min, preferred, max) — preferred uses vw so it grows with viewport.
+*/
+h1 {
+  font-size: clamp(1.75rem, 3.5vw, 2.6rem); /* 28px → 41.6px */
+}
+
+h2 {
+  font-size: clamp(1.5rem, 2.5vw, 2rem); /* 24px → 32px */
+}
+
+h3 {
+  font-size: clamp(1.2rem, 1.8vw, 1.625rem); /* 19px → 26px */
+  margin-bottom: var(--space-md);
+}
+
+h4 {
+  font-size: clamp(1rem, 1.2vw, 1.25rem); /* 16px → 20px */
+}
+
+p {
+  margin-bottom: var(--space-sm);
+  color: var(--color-text-muted);
+}
+
+.lead {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-main);
+}
+
+/* Small, meta text */
+.text-sm {
+  font-size: var(--font-size-sm);
+}
+
+/* Screen-reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* =========================
+   4. Navbar (mobile-first)
+   ========================= */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: var(--color-navbar-bg);
+  backdrop-filter: blur(10px);
+  border-bottom: var(--border-subtle);
+}
+
+/*
+  .navbar is now a flex row inside .container.
+  Two columns: .navbar__brand (left) and .navbar__right (right).
+  At all widths: brand takes only as much space as its content needs;
+  right side takes the rest.
+*/
+.navbar {
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+/*
+  Brand column: logo link and title are independent siblings.
+  No fixed width — hugs its content naturally.
+  At >= 860px (CTA visible): both columns share space via space-between.
+  At < 860px (CTA hidden): brand gets flex: 1 so the title absorbs
+  the freed space without any explicit width on the title itself.
+*/
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-width: 0;
+}
+
+.navbar__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-base);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/*
+  Logo link wraps only the <picture> element.
+  Logo image: width auto so it hugs the natural rendered width.
+  max-width uses --logo-size-sm (140px) at mobile/mid breakpoints;
+  upgrades to --logo-size-lg (200px) at the 1024px desktop nav.
+  max-height constrains it to the nav bar with breathing room.
+*/
+.navbar__logo-link {
+  display: block;
+  flex-shrink: 0;
+}
+
+.navbar__logo {
+  display: block;
+  width: auto;
+  max-width: var(--logo-size-sm);
+  max-height: calc(var(--nav-height) - 1rem);
+  height: auto;
+  object-fit: contain;
+}
+
+/*
+  Right column: nav links + CTA + hamburger.
+  flex-shrink: 0 keeps it from compressing below its content size.
+*/
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.navbar__links {
+  position: fixed;
+  inset-inline: 0;
+  top: var(--nav-height);
+  background-color: var(--color-surface);
+  border-bottom: var(--border-subtle);
+  display: none;
+  flex-direction: column;
+  padding: var(--space-md) var(--container-padding) var(--space-lg);
+  gap: var(--space-md);
+  margin-inline: var(--space-md);
+}
+
+.navbar__links a {
+  padding-block: var(--space-xs);
+  font-size: var(--font-size-sm);
+}
+
+.navbar__links--open {
+  display: flex;
+}
+
+/* Hamburger button */
+.navbar__toggle {
+  background: none;
+  border: none;
+  padding: var(--space-xs);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.navbar__toggle-line {
+  width: 20px;
+  height: 2px;
+  border-radius: 999px;
+  background-color: var(--color-text-main);
+  position: relative;
+}
+
+.navbar__toggle-line::before,
+.navbar__toggle-line::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  border-radius: 999px;
+  background-color: var(--color-text-main);
+  left: 0;
+}
+
+.navbar__toggle-line::before {
+  top: -6px;
+}
+
+.navbar__toggle-line::after {
+  top: 6px;
+}
+
+/*
+  CTA button: hidden by default (mobile).
+  Shown from 860px+ where there is room alongside logo + title + hamburger.
+*/
+.navbar__cta {
+  display: none;
+}
+
+/* =========================
+   5. Buttons & Badges
+   ========================= */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  gap: var(--space-xs);
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  padding: 0.6rem 1.3rem;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.btn--primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  box-shadow: 0 10px 22px rgba(53, 88, 52, 0.4);
+}
+
+.btn--wide {
+  min-width: 14rem;
+  width: 100%;
+  max-width: 20rem;
+}
+
+/* Smaller shadow for header CTA */
+.site-header .navbar__cta.btn.btn--primary {
+  box-shadow: 0 4px 10px rgba(53, 88, 52, 0.25) !important;
+}
+
+.btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(53, 88, 52, 0.5);
+  background-color: var(--color-primary-soft);
+}
+
+/* Ghost button — uses component tokens so border/hover adapt to dark */
+.btn--ghost {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-btn-ghost-border);
+}
+
+.btn--ghost:hover {
+  background-color: var(--color-btn-ghost-hover);
+}
+
+/* =========================
+   6. Hero (mobile-first)
+   ========================= */
+
+#hero {
+  height: calc(100dvh - var(--nav-height));
+  padding-block: var(--space-2xl);
+  color: var(--color-text-main);
+  background-color: var(--color-hero-bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-2xl);
+  width: 100%;
+  padding-inline: var(--container-padding);
+}
+
+.hero__copy {
+  width: 100%;
+  max-width: 34rem;
+}
+
+.hero__title {
+  margin-bottom: var(--space-sm);
+}
+
+.hero__subtitle {
+  margin-bottom: var(--space-md);
+}
+
+.hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.hero__meta-item {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.hero__note {
+  margin-bottom: 0;
+}
+
+/* Hero actions */
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.hero__meta,
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Hero media (image) */
+.hero__media {
+  display: none;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  background: radial-gradient(circle at 0% 0%, #f5e5c4, #1d2a1c);
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.hero__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* =========================
+   7. Who For
+   ========================= */
+
+#who-for {
+  text-align: center;
+  margin-top: 0;
+  padding-block: var(--space-2xl);
+  color: var(--color-text-main);
+}
+
+#who-for > .container {
+  max-width: 40rem;
+  margin-inline: auto;
+  padding-inline: var(--container-padding);
+}
+
+.who-for-wrapper {
+  max-width: 40rem;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: var(--border-subtle);
+  box-shadow: var(--shadow-soft);
+  padding: var(--space-xl);
+}
+
+.who-for-inner {
+  max-width: 60rem;
+  padding: 0;
+  text-align: left;
+}
+
+.who-for__title {
+  margin-bottom: var(--space-md);
+}
+
+.who-for__list {
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+
+.who-for__item {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-main);
+}
+
+/* =========================
+   8. Problems
+   ========================= */
+
+#problems {
+  background-color: var(--color-surface-muted);
+}
+
+.problem-card {
+  min-height: 150px;
+}
+
+.problem-card__title {
+  margin-bottom: var(--space-xs);
+}
+
+.problem-card__body {
+  font-size: var(--font-size-sm);
+}
+
+/* =========================
+   9. Solutions
+   ========================= */
+
+.solutions {
+  background-color: var(--color-surface);
+}
+
+.solutions__grid {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.solution-card {
+  min-height: 150px;
+}
+
+.solution-card__title {
+  margin-bottom: var(--space-xs);
+}
+
+.solution-card__body {
+  font-size: var(--font-size-sm);
+}
+
+/* =========================
+   10. Product cards / Origins
+   ========================= */
+
+.origins {
+  background-color: var(--color-surface-muted);
+}
+
+.section-heading__subtitle,
+.section-heading__body {
+  margin-bottom: var(--space-xl);
+}
+
+.origins__grid {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.origin-card {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.origin-card__media {
+  position: relative;
+  padding-top: 60%; /* aspect ratio */
+  background: radial-gradient(circle at 0% 0%, #f5e5c4, #1d2a1c);
+}
+
+.origin-card__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.origin-card__body {
+  padding: var(--space-md);
+}
+
+.origin-card__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--color-accent-gold);
+  margin-bottom: var(--space-xs);
+}
+
+.origin-card__title {
+  margin-bottom: var(--space-xs);
+}
+
+.origin-card__meta {
+  font-size: var(--font-size-md);
+  margin-bottom: var(--space-sm);
+}
+
+/* =========================
+   11. Stats / Credibility strip
+   ========================= */
+
+.stats {
+  background-color: var(--color-bg-light);
+}
+
+.stats__strip {
+  display: grid;
+  gap: var(--space-lg);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  border: var(--border-subtle);
+  background: linear-gradient(
+    135deg,
+    rgba(194, 155, 79, 0.06),
+    rgba(53, 88, 52, 0.03)
+  );
+}
+
+.stats__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.stats__value {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-2xl);
+  color: var(--color-primary);
+}
+
+.stats__label {
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* =========================
+   12. FAQ
+   ========================= */
+
+.faq__list {
+  gap: var(--space-sm);
+}
+
+/*
+  The FAQ section heading has no subtitle or body text beneath it,
+  so the h2 needs explicit bottom margin before the accordion list.
+  !important overrides the bare `h2 { margin-bottom: var(--space-md) }`
+  rule inside @media (min-width: 1024px), which would otherwise reset
+  this to a smaller value and also never fires on mobile (< 1024px),
+  leaving margin-bottom at 0 from the CSS reset on small screens.
+*/
+#faq .section-heading__title {
+  margin-bottom: var(--space-lg) !important;
+}
+
+.faq-item {
+  border-radius: var(--radius-md);
+  border: var(--border-subtle);
+  background-color: var(--color-surface);
+}
+
+.faq-item__question {
+  width: 100%;
+  padding: var(--space-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: var(--color-text-main);
+}
+
+.faq-item__toggle {
+  font-size: var(--font-size-sm);
+}
+
+.faq-item__answer {
+  padding: var(--space-md) var(--space-md);
+  border-top: var(--border-subtle);
+  font-size: var(--font-size-sm);
+}
+
+.faq-item__answer p {
+  margin: 0;
+}
+
+/* =========================
+   13. About
+   ========================= */
+
+.about__content {
+  gap: var(--space-sm);
+  max-width: 40rem;
+  font-size: var(--font-size-sm);
+}
+
+.about-cta-btn {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-btn-ghost-border);
+}
+
+/* =========================
+   14. Contact / Lead capture
+   ========================= */
+
+.contact {
+  background-color: var(--color-surface);
+}
+
+.contact__card {
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl) var(--space-lg);
+  background: var(--color-contact-card-bg);
+}
+
+.contact__form-wrapper {
+  margin-top: var(--space-md);
+}
+
+#contact__form {
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.form-row {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.form-row--full {
+  grid-column: 1 / -1;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.form-dropdown {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-2xs);
+}
+
+/* ---- Shared <details>-based dropdown base styles ---- */
+.dropdown-multi summary,
+.dropdown-select summary {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.dropdown-multi summary::-webkit-details-marker,
+.dropdown-select summary::-webkit-details-marker {
+  display: none;
+}
+
+.dropdown-multi summary,
+.dropdown-select summary {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='currentColor' d='M12 17l-7-7h14l-7 7z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
+  padding-right: 2.5rem;
+}
+
+.dropdown-multi[open] summary,
+.dropdown-select[open] summary {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23555' d='M12 7l7 7H5l7-7z'/%3E%3C/svg%3E");
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.dropdown-multi,
+.dropdown-select {
+  position: relative;
+}
+
+/* ---- Products multi-select ---- */
+.dropdown-multi__options {
+  position: absolute;
+  width: 100%;
+  background: var(--color-surface);
+  border: var(--border-subtle);
+  border-top: none;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  z-index: 10;
+}
+
+.dropdown-multi__options label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.dropdown-multi__options label:hover {
+  background: var(--color-surface-muted);
+}
+
+.dropdown-multi__options input[type="checkbox"] {
+  accent-color: var(--color-primary);
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ---- Single-select custom dropdown ---- */
+.dropdown-select__options {
+  position: absolute;
+  width: 100%;
+  background: var(--color-surface);
+  border: var(--border-subtle);
+  border-top: none;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  z-index: 10;
+  box-shadow: var(--shadow-soft);
+}
+
+.dropdown-select__option {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-main);
+  transition: background var(--transition-fast);
+}
+
+.dropdown-select__option:hover {
+  background: var(--color-surface-muted);
+}
+
+.dropdown-select__option[aria-selected="true"] {
+  background: var(--color-primary-muted);
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.dropdown-select__label {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.dropdown-select__label--selected {
+  color: var(--color-text-main);
+}
+
+.label {
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--color-text-muted);
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/*
+  The Sourcing Priorities & Constraints textarea needs a touch of extra
+  height so its two-line placeholder fits without clipping.
+*/
+#message {
+  min-height: 140px;
+}
+
+.input,
+textarea,
+.dropdown-multi summary,
+.dropdown-select summary {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border-radius: var(--radius-sm);
+  border: var(--border-subtle);
+  font: inherit;
+  background-color: var(--color-surface);
+  color: var(--color-text-main);
+  min-height: 3rem;
+  box-sizing: border-box;
+}
+
+.form-required-asterisk {
+  color: var(--color-error);
+  margin-left: 0.2em;
+  font-style: normal;
+}
+
+.form-required-note {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-bottom: 0;
+}
+
+.input--error {
+  border-color: var(--color-error) !important;
+  outline-color: var(--color-error);
+}
+
+.field-error {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--color-error);
+  margin-top: var(--space-2xs);
+}
+
+.form-validation-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-error);
+  background-color: var(--color-validation-banner-bg);
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.form-validation-banner::before {
+  content: "\26A0";
+  flex-shrink: 0;
+  font-size: var(--font-size-base);
+}
+
+.contact-success {
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: var(--border-subtle);
+  background-color: var(--color-surface-muted);
+  font-size: var(--font-size-sm);
+}
+
+.form-error {
+  margin-top: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-error);
+  background-color: var(--color-validation-banner-bg);
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+}
+
+/* =========================
+   Country search suggestion panel
+   ========================= */
+
+.country-search-wrap {
+  position: relative;
+  margin-top: var(--space-xs);
+}
+
+.country-suggestions {
+  position: absolute;
+  top: calc(100% - 1px);
+  left: 0;
+  right: 0;
+  background: var(--color-surface);
+  border: var(--border-subtle);
+  border-top: none;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  box-shadow: var(--shadow-soft);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 20;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.country-search-wrap:has(.country-suggestions:not([hidden]))
+  #country-other-search {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.country-suggestion-item {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-main);
+  transition: background var(--transition-fast);
+}
+
+.country-suggestion-item:hover {
+  background: var(--color-surface-muted);
+}
+
+.country-suggestion-item--active {
+  background: var(--color-primary-muted);
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+/* =========================
+   15. Footer
+   ========================= */
+
+.site-footer {
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-inverse);
+  padding-block: var(--space-xl);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+.footer__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+.site-footer__top {
+  margin-bottom: var(--space-lg);
+}
+
+.site-footer__brand {
+  max-width: 22rem;
+}
+
+.site-footer__logo {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-base);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.site-footer__tagline {
+  margin-top: var(--space-xs);
+  color: rgba(250, 243, 230, 0.85);
+}
+
+.site-footer__bottom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  color: rgba(250, 243, 230, 0.7);
+}
+
+.site-footer__meta {
+  margin: 0;
+}
+
+/* =====================================================
+   16. Media Queries
+   ===================================================== */
+
+/* >= 535px */
+@media (min-width: 535px) {
+  .section {
+    padding-block: var(--space-3xl);
+  }
+
+  .hero {
+    padding-top: var(--space-3xl);
+  }
+
+  .stats__strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .contact__form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .contact-form__actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+  }
+
+  .form-row--full {
+    grid-column: 1 / -1;
+  }
+}
+
+/*
+  <= 420px — logo-left navbar + free-height hero.
+  Navbar: space-between keeps logo pinned left and hamburger pinned right,
+  matching the base navbar layout. Title is hidden at this width.
+  .navbar__cta is forced hidden with !important to override the
+  >=860px block which sets display:inline-flex with no lower bound.
+  Hero: height:auto + overflow:visible releases the 100dvh hard clamp
+  so the section grows with its content.
+
+  Buttons: every .btn outside the navbar becomes full-width at this size.
+  Groups (.hero__actions, .contact-form__actions) stack into a column
+  so buttons never sit side-by-side on a narrow screen.
+*/
+@media (max-width: 420px) {
+  .navbar__title {
+    display: none;
+  }
+
+  .navbar__cta {
+    display: none !important;
+  }
+
+  #hero {
+    height: auto;
+    overflow: visible;
+    padding-block: var(--space-sm);
+  }
+
+  .hero__inner {
+    justify-content: flex-start;
+    padding-top: var(--space-2xl);
+  }
+
+  .hero__title {
+    font-size: clamp(1.4rem, 5.5vw, 1.75rem);
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero__subtitle {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .hero__actions {
+    margin-top: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .hero__meta {
+    margin-bottom: var(--space-xs);
+  }
+
+  /*
+    Full-width buttons — applies to every .btn that is NOT inside
+    .site-header (the navbar CTA is already hidden above, but this
+    guard keeps things safe if the DOM ever changes).
+  */
+  :not(.site-header) > .btn,
+  :not(.site-header) .btn {
+    width: 100%;
+    max-width: none;
+  }
+
+  /*
+    Button groups: collapse side-by-side rows into a single column
+    so stacked full-width buttons don't fight for row space.
+  */
+  .hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .contact-form__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/*
+  421px-630px — 3-column grid navbar: [logo] [title] [hamburger]
+  .navbar__brand uses display:contents to dissolve itself so logo-link
+  and title become direct grid children and land in separate columns.
+  .navbar__right (col 3) holds only the hamburger at this width.
+*/
+@media (min-width: 421px) and (max-width: 630px) {
+  .navbar {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0;
+  }
+
+  /*
+    display:contents removes .navbar__brand as a box, promoting its
+    children (logo-link and title) directly into the grid.
+  */
+  .navbar__brand {
+    display: contents;
+  }
+
+  /* Col 1: logo */
+  .navbar__logo-link {
+    grid-column: 1;
+    padding-inline-end: var(--space-xs);
+  }
+
+  /* Col 2: title centered in its 1fr column */
+  .navbar__title {
+    grid-column: 2;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Col 3: right slot — only hamburger visible (CTA already display:none) */
+  .navbar__right {
+    grid-column: 3;
+    padding-inline-start: var(--space-xs);
+  }
+
+  .navbar__cta {
+    display: none;
+  }
+
+  .hero__copy {
+    max-width: 100%;
+  }
+
+  .hero__title {
+    font-size: clamp(1.75rem, 5vw, 2.25rem);
+  }
+
+  .contact-form {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-form__actions {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+
+  .btn--wide {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+  }
+}
+
+/*
+  631px+ — flex row restored: brand (flex:1) + right side.
+  Undoes any grid rules applied at <=630px.
+*/
+@media (min-width: 631px) {
+  .navbar {
+    display: flex;
+  }
+
+  .navbar__brand {
+    display: flex;
+  }
+
+  .navbar__logo-link {
+    grid-column: unset;
+  }
+
+  .navbar__title {
+    grid-column: unset;
+    text-align: unset;
+  }
+
+  .navbar__right {
+    grid-column: unset;
+    margin-inline-start: unset;
+  }
+}
+
+/*
+  < 860px — 3-column mode: logo | title (flex: 1) | hamburger
+  CTA is hidden, so .navbar__brand expands to absorb the freed space.
+  The title uses the extra room naturally via its parent's flex growth.
+*/
+@media (max-width: 859px) {
+  .navbar__brand {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .navbar__title {
+    flex: 1;
+  }
+}
+
+/*
+  >= 860px — 4-element, 2-column mode:
+  [ logo | title ]   [ CTA | hamburger ]
+  Brand hugs its content; right side is flex-shrink: 0.
+  CTA becomes visible.
+*/
+@media (min-width: 860px) {
+  :root {
+    --container-padding: 1.75rem;
+  }
+
+  body {
+    font-size: 1.0625rem;
+  }
+
+  .navbar__brand {
+    /* Reset: no longer flex: 1 — hugs content, right side handles balance */
+    flex: 0 0 auto;
+  }
+
+  .navbar__cta {
+    display: inline-flex;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}
+
+/* >= 1120px — hamburger folds away; nav links appear inline */
+@media (min-width: 1120px) {
+  .navbar__links {
+    position: static;
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-md);
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    margin-inline: 0;
+  }
+
+  .navbar__links a {
+    font-size: var(--font-size-sm);
+  }
+
+  .navbar__toggle {
+    display: none;
+  }
+
+  .problems__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .origins__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .site-footer__top {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  }
+
+  .site-footer__bottom {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+/* =====================================================
+   LAPTOP — 1024px-1439px
+   ===================================================== */
+@media (min-width: 1024px) {
+  :root {
+    --container-padding: 2rem;
+    --nav-height: 4rem; /* 64px */
+    /*
+      Logo grows at the desktop nav height.
+      max-width upgrades from --logo-size-sm (140px) to --logo-size-lg (200px)
+      by overriding the token at this breakpoint.
+    */
+    --logo-size-sm: var(--logo-size-lg);
+  }
+
+  body {
+    font-size: 1.0625rem;
+  }
+
+  h2 {
+    margin-bottom: var(--space-md);
+  }
+
+  .section {
+    padding-block: var(--space-2xl);
+  }
+
+  #hero {
+    padding-block: var(--space-lg);
+  }
+
+  .navbar__right {
+    gap: var(--space-xs);
+  }
+
+  .navbar__cta {
+    margin-left: var(--space-sm);
+  }
+
+  /* Two-column hero — centered, no .container ceiling */
+  .hero__inner {
+    flex-direction: row;
+    align-items: stretch;
+    text-align: left;
+    justify-content: center;
+    gap: 3rem;
+    max-width: 1400px;
+    margin-inline: auto;
+  }
+
+  .hero__copy {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+  }
+
+  .hero__meta,
+  .hero__actions {
+    justify-content: flex-start;
+  }
+
+  .hero__media {
+    display: block;
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    aspect-ratio: unset;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    background: radial-gradient(circle at 0% 0%, #f5e5c4, #1d2a1c);
+    position: relative;
+  }
+
+  .hero__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .who-for {
+    color: var(--color-text-main);
+    text-align: center;
+    margin-top: 0;
+  }
+
+  .who-for > .container {
+    margin-inline: auto;
+    padding-inline: var(--container-padding);
+    max-width: 60rem;
+  }
+
+  .who-for-wrapper {
+    max-width: 52rem;
+    margin-inline: auto;
+  }
+
+  .origins__grid {
+    gap: var(--space-xl);
+  }
+}
+
+/* =====================================================
+   DESKTOP — 1440px+
+   ===================================================== */
+@media (min-width: 1440px) {
+  :root {
+    --nav-height: 4.5rem; /* 72px */
+  }
+
+  body {
+    font-size: 1.125rem;
+  }
+
+  .section {
+    padding-block: clamp(var(--space-3xl), 6vw, 5rem);
+  }
+
+  .hero__inner {
+    gap: 2rem;
+    max-width: 1400px;
+  }
+}
+
+/* =====================================================
+   PHONE LANDSCAPE — max-height: 500px + orientation: landscape + max-width: 900px
+   Targets short-viewport landscape phones (~310px usable height after nav).
+   Excludes landscape laptops (their height > 500px at typical resolutions).
+   ===================================================== */
+@media (max-height: 500px) and (orientation: landscape) and (max-width: 900px) {
+  /*
+    Section padding: var(--space-2xl)/var(--space-3xl) is far too tall for
+    ~310px of usable height. Compress to var(--space-lg) so sections don't
+    eat the entire viewport on their own.
+  */
+  .section {
+    padding-block: var(--space-lg);
+  }
+
+  /*
+    Hero: release the 100dvh hard clamp (which crushes content to ~310px),
+    switch to auto height so the section grows with its content.
+    Reduce vertical padding to keep the first fold tight.
+    overflow: visible lets any decorative overflow escape the box.
+  */
+  #hero {
+    height: auto;
+    overflow: visible;
+    padding-block: var(--space-md);
+  }
+
+  /*
+    Hero inner: switch to a horizontal split (copy left, media right)
+    so text is not forced to scroll past a tall image column.
+    Tighten the gap and cap the max-width so it doesn't over-stretch
+    on wide landscape phones (e.g. 844px wide).
+  */
+  .hero__inner {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: var(--space-lg);
+    justify-content: center;
+    padding-top: 0;
+  }
+
+  .hero__copy {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    max-width: none;
+  }
+
+  /*
+    Scale hero title down so it doesn't consume most of the short viewport.
+  */
+  .hero__title {
+    font-size: clamp(1.1rem, 3.5vw, 1.5rem);
+    margin-bottom: var(--space-xs);
+  }
+
+  .hero__subtitle {
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .hero__actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: var(--space-sm);
+    margin-bottom: var(--space-sm);
+    justify-content: flex-start;
+  }
+
+  .hero__meta {
+    margin-bottom: var(--space-xs);
+    justify-content: flex-start;
+  }
+
+  /*
+    Hero media: show a compact side panel. Keep aspect-ratio unset so it
+    fills the available column height, but cap width so copy gets room.
+  */
+  .hero__media {
+    display: block;
+    flex: 0 0 38%;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-md);
+  }
+
+  /*
+    Navbar: the base sticky navbar is fine at 56px (--nav-height).
+    No layout changes needed — just ensure title stays visible.
+    At 421px-630px the grid navbar fires; at 631px+ flex is restored.
+    Both hold up cleanly in landscape without intervention.
+  */
+}
+
+/* =====================================================
+   TABLET / PORTRAIT PHONE — max-width: 1023px
+   At this width, .hero__media stays display:none (default).
+   The hero image is applied as a CSS background-image on #hero
+   with a linear-gradient scrim layered on top for copy legibility.
+   ===================================================== */
+@media (max-width: 1023px) {
+  #hero {
+    /*
+      Apply the hero image as a CSS background so it shows on mobile/tablet
+      where .hero__media (the <picture> element) is hidden.
+      image-set() provides WebP with JPEG fallback.
+    */
+    background-image:
+      linear-gradient(
+        to bottom,
+        var(--color-hero-scrim),
+        var(--color-hero-scrim)
+      ),
+      image-set(
+        url("/assets/compressed/vanilla-opulent.webp") 1x,
+        url("/assets/compressed/vanilla-opulent.webp") 2x
+      ),
+      image-set(
+        url("/assets/compressed/vanilla-opulent.jpg") 1x,
+        url("/assets/compressed/vanilla-opulent.jpg") 2x
+      );
+    background-size: cover;
+    background-position: center;
+
+    /*
+      Switch copy text to inverse color so it reads over the image.
+    */
+    color: var(--color-text-inverse);
+  }
+
+  /*
+    Ensure heading and paragraph colours inherit the inverse override
+    set on #hero above, so they remain legible over the background image.
+  */
+  #hero h1,
+  #hero h2,
+  #hero h3,
+  #hero p,
+  .hero__title,
+  .hero__subtitle,
+  .hero__meta-item,
+  .hero__note {
+    color: var(--color-text-inverse);
+  }
+}
