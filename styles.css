@@ -1832,7 +1832,6 @@ textarea,
     /*
       Apply the hero image as a CSS background so it shows on mobile/tablet
       where .hero__media (the <picture> element) is hidden.
-      image-set() provides WebP with JPEG fallback.
     */
     background-image:
       linear-gradient(
@@ -1840,14 +1839,7 @@ textarea,
         var(--color-hero-scrim),
         var(--color-hero-scrim)
       ),
-      image-set(
-        url("/assets/compressed/vanilla-opulent.webp") 1x,
-        url("/assets/compressed/vanilla-opulent.webp") 2x
-      ),
-      image-set(
-        url("/assets/compressed/vanilla-opulent.jpg") 1x,
-        url("/assets/compressed/vanilla-opulent.jpg") 2x
-      );
+      url("assets/compressed/verdance-hero-768.jpg");
     background-size: cover;
     background-position: center;
 
