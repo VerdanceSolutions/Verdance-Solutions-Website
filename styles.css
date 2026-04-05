@@ -31,7 +31,7 @@
 
   /* Component-specific tokens that must adapt to dark mode */
   --color-hero-bg: #e4eee4;
-  --color-hero-scrim: rgba(53, 88, 52, 0.52);
+  --color-hero-scrim: rgba(53, 88, 52, 0.72);
   --color-contact-card-bg: radial-gradient(circle at 0% 0%, #f5e5c4, #fdfaf5);
   --color-btn-ghost-border: rgba(53, 88, 52, 0.4);
   --color-btn-ghost-hover: rgba(53, 88, 52, 0.06);
@@ -202,7 +202,7 @@
 
   /* Component tokens */
   --color-hero-bg: #e4eee4;
-  --color-hero-scrim: rgba(53, 88, 52, 0.52);
+  --color-hero-scrim: rgba(53, 88, 52, 0.72);
   --color-contact-card-bg: radial-gradient(circle at 0% 0%, #f5e5c4, #fdfaf5);
   --color-btn-ghost-border: rgba(53, 88, 52, 0.4);
   --color-btn-ghost-hover: rgba(53, 88, 52, 0.06);
@@ -1832,6 +1832,7 @@ textarea,
     /*
       Apply the hero image as a CSS background so it shows on mobile/tablet
       where .hero__media (the <picture> element) is hidden.
+      Scrim opacity bumped to 0.72 for stronger darkening over the image.
     */
     background-image:
       linear-gradient(
@@ -1843,15 +1844,13 @@ textarea,
     background-size: cover;
     background-position: center;
 
-    /*
-      Switch copy text to inverse color so it reads over the image.
-    */
-    color: var(--color-text-inverse);
+    /* Pure white text for maximum legibility over the darkened image */
+    color: #ffffff;
   }
 
   /*
-    Ensure heading and paragraph colours inherit the inverse override
-    set on #hero above, so they remain legible over the background image.
+    All hero copy elements forced to pure white.
+    More vertical breathing room between title and subtitle.
   */
   #hero h1,
   #hero h2,
@@ -1861,6 +1860,14 @@ textarea,
   .hero__subtitle,
   .hero__meta-item,
   .hero__note {
-    color: var(--color-text-inverse);
+    color: #ffffff;
+  }
+
+  .hero__title {
+    margin-bottom: var(--space-xl);
+  }
+
+  .hero__subtitle {
+    margin-bottom: var(--space-lg);
   }
 }
