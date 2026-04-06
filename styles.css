@@ -1379,7 +1379,14 @@ textarea,
   }
 
   .hero__title {
-    font-size: clamp(1.4rem, 5.5vw, 1.75rem);
+    /*
+      Aligned to base h1 slope (3.5vw) so the fluid curve is continuous
+      with the global h1 rule and the 421px-630px breakpoint below.
+      At 375px: 3.5 * 3.75 = 13.125px preferred → clamps to 1.4rem (22.4px) min.
+      At 420px: 3.5 * 4.20 = 14.7px preferred → clamps to 1.4rem (22.4px) min.
+      Min is effectively always active at these tiny widths, which is correct.
+    */
+    font-size: clamp(1.4rem, 3.5vw, 1.75rem);
     margin-bottom: var(--space-lg);
   }
 
@@ -1475,7 +1482,14 @@ textarea,
   }
 
   .hero__title {
-    font-size: clamp(1.75rem, 5vw, 2.25rem);
+    /*
+      Aligned to base h1 slope (3.5vw) — was 5vw which caused an upward
+      spike in the fluid curve right at the 421px boundary.
+      At 421px: 3.5 * 4.21 = 14.7px preferred → clamps to 1.75rem (28px) min.
+      At 630px: 3.5 * 6.30 = 22.1px preferred → clamps to 1.75rem (28px) min.
+      Min is active across most of this range, capped at 2.25rem (36px) max.
+    */
+    font-size: clamp(1.75rem, 3.5vw, 2.25rem);
   }
 
   .contact-form {
