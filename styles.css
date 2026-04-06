@@ -31,7 +31,7 @@
 
   /* Component-specific tokens that must adapt to dark mode */
   --color-hero-bg: #e4eee4;
-  --color-hero-scrim: rgba(0, 0, 0, 0.72);
+  --color-hero-scrim: rgba(0, 0, 0, 0.80);
   --color-contact-card-bg: radial-gradient(circle at 0% 0%, #f5e5c4, #fdfaf5);
   --color-btn-ghost-border: rgba(53, 88, 52, 0.4);
   --color-btn-ghost-hover: rgba(53, 88, 52, 0.06);
@@ -202,7 +202,7 @@
 
   /* Component tokens */
   --color-hero-bg: #e4eee4;
-  --color-hero-scrim: rgba(0, 0, 0, 0.72);
+  --color-hero-scrim: rgba(0, 0, 0, 0.80);
   --color-contact-card-bg: radial-gradient(circle at 0% 0%, #f5e5c4, #fdfaf5);
   --color-btn-ghost-border: rgba(53, 88, 52, 0.4);
   --color-btn-ghost-hover: rgba(53, 88, 52, 0.06);
@@ -1832,7 +1832,7 @@ textarea,
     /*
       Apply the hero image as a CSS background so it shows on mobile/tablet
       where .hero__media (the <picture> element) is hidden.
-      Neutral black scrim — no color tint, opacity preserved at 0.72.
+      Neutral black scrim — no color tint, opacity 0.80.
     */
     background-image:
       linear-gradient(
