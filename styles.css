@@ -32,6 +32,7 @@
   /* Component-specific tokens that must adapt to dark mode */
   --color-hero-bg: #e4eee4;
   --color-hero-scrim: rgba(0, 0, 0, 0.40);
+  --color-about-bg: #e4eee4;
   --color-contact-card-bg: radial-gradient(circle at 0% 0%, #f5e5c4, #fdfaf5);
   --color-btn-ghost-text: var(--color-primary);
   --color-btn-ghost-bg: transparent;
@@ -137,6 +138,7 @@
     /* Component tokens */
     --color-hero-bg: #111a11;
     --color-hero-scrim: rgba(0, 0, 0, 0.18);
+    /* --color-about-bg intentionally omitted — inherits --color-bg-light in dark mode */
     --color-contact-card-bg: radial-gradient(circle at 0% 0%, #1e2a1a, #0e110e);
     --color-btn-ghost-text: var(--color-primary);
     --color-btn-ghost-bg: transparent;
@@ -173,6 +175,7 @@
   /* Component tokens */
   --color-hero-bg: #111a11;
   --color-hero-scrim: rgba(0, 0, 0, 0.18);
+  /* --color-about-bg intentionally omitted — inherits --color-bg-light in dark mode */
   --color-contact-card-bg: radial-gradient(circle at 0% 0%, #1e2a1a, #0e110e);
   --color-btn-ghost-text: var(--color-primary);
   --color-btn-ghost-bg: transparent;
@@ -209,6 +212,7 @@
   /* Component tokens */
   --color-hero-bg: #e4eee4;
   --color-hero-scrim: rgba(0, 0, 0, 0.40);
+  --color-about-bg: #e4eee4;
   --color-contact-card-bg: radial-gradient(circle at 0% 0%, #f5e5c4, #fdfaf5);
   --color-btn-ghost-text: var(--color-primary);
   --color-btn-ghost-bg: transparent;
@@ -947,6 +951,10 @@ p {
 /* =========================
    13. About
    ========================= */
+
+#about {
+  background-color: var(--color-about-bg);
+}
 
 .about__content {
   gap: var(--space-sm);
