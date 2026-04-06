@@ -31,7 +31,7 @@
 
   /* Component-specific tokens that must adapt to dark mode */
   --color-hero-bg: #e4eee4;
-  --color-hero-scrim: rgba(53, 88, 52, 0.72);
+  --color-hero-scrim: rgba(0, 0, 0, 0.72);
   --color-contact-card-bg: radial-gradient(circle at 0% 0%, #f5e5c4, #fdfaf5);
   --color-btn-ghost-border: rgba(53, 88, 52, 0.4);
   --color-btn-ghost-hover: rgba(53, 88, 52, 0.06);
@@ -134,7 +134,7 @@
 
     /* Component tokens */
     --color-hero-bg: #111a11;
-    --color-hero-scrim: rgba(124, 197, 138, 0.18);
+    --color-hero-scrim: rgba(0, 0, 0, 0.18);
     --color-contact-card-bg: radial-gradient(circle at 0% 0%, #1e2a1a, #0e110e);
     --color-btn-ghost-border: rgba(124, 197, 138, 0.35);
     --color-btn-ghost-hover: rgba(124, 197, 138, 0.08);
@@ -168,7 +168,7 @@
 
   /* Component tokens */
   --color-hero-bg: #111a11;
-  --color-hero-scrim: rgba(124, 197, 138, 0.18);
+  --color-hero-scrim: rgba(0, 0, 0, 0.18);
   --color-contact-card-bg: radial-gradient(circle at 0% 0%, #1e2a1a, #0e110e);
   --color-btn-ghost-border: rgba(124, 197, 138, 0.35);
   --color-btn-ghost-hover: rgba(124, 197, 138, 0.08);
@@ -202,7 +202,7 @@
 
   /* Component tokens */
   --color-hero-bg: #e4eee4;
-  --color-hero-scrim: rgba(53, 88, 52, 0.72);
+  --color-hero-scrim: rgba(0, 0, 0, 0.72);
   --color-contact-card-bg: radial-gradient(circle at 0% 0%, #f5e5c4, #fdfaf5);
   --color-btn-ghost-border: rgba(53, 88, 52, 0.4);
   --color-btn-ghost-hover: rgba(53, 88, 52, 0.06);
@@ -1832,7 +1832,7 @@ textarea,
     /*
       Apply the hero image as a CSS background so it shows on mobile/tablet
       where .hero__media (the <picture> element) is hidden.
-      Scrim opacity bumped to 0.72 for stronger darkening over the image.
+      Neutral black scrim — no color tint, opacity preserved at 0.72.
     */
     background-image:
       linear-gradient(
