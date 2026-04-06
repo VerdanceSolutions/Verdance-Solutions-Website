@@ -1377,9 +1377,12 @@ textarea,
       so the subject fills the frame instead of drifting to the edge.
       150% keeps the most important area visible while cropping
       the distracting outer edges.
+      background-repeat: no-repeat prevents the image from tiling when
+      background-size is set to a percentage value instead of `cover`.
     */
     background-size: 150% auto;
     background-position: center 62%;
+    background-repeat: no-repeat;
   }
 
   .hero__inner {
@@ -1870,6 +1873,11 @@ textarea,
       where .hero__media (the <picture> element) is hidden.
       Neutral black scrim — no color tint, opacity 0.40.
 
+      background-repeat: no-repeat is critical here: when the inner
+      breakpoints (421px-630px and <=420px) override background-size from
+      `cover` to a percentage value (130%/150%), the browser would otherwise
+      tile the image to fill the remaining space. no-repeat suppresses that.
+
       Background position and size start at `cover / center` at wider
       breakpoints (631px–1023px) where the full composition reads well.
       As the viewport narrows below 560px, inner breakpoints gradually
@@ -1886,6 +1894,7 @@ textarea,
       url("assets/compressed/verdance-hero-768.jpg");
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
 
     /* Pure white text for maximum legibility over the darkened image */
     color: #ffffff;
@@ -1934,10 +1943,12 @@ textarea,
   a modest zoom (130%) and a small downward nudge (60%) keep the
   focal point visible while the edges are softly cropped.
   This overrides the `cover / center` set in the 1023px block above.
+  background-repeat: no-repeat prevents tiling when size is a percentage.
 */
 @media (min-width: 421px) and (max-width: 630px) {
   #hero {
     background-size: 130% auto;
     background-position: center 60%;
+    background-repeat: no-repeat;
   }
 }
