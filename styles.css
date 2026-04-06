@@ -33,6 +33,8 @@
   --color-hero-bg: #e4eee4;
   --color-hero-scrim: rgba(0, 0, 0, 0.40);
   --color-contact-card-bg: radial-gradient(circle at 0% 0%, #f5e5c4, #fdfaf5);
+  --color-btn-ghost-text: var(--color-primary);
+  --color-btn-ghost-bg: transparent;
   --color-btn-ghost-border: rgba(53, 88, 52, 0.4);
   --color-btn-ghost-hover: rgba(53, 88, 52, 0.06);
   --color-validation-banner-bg: rgba(197, 48, 48, 0.06);
@@ -136,6 +138,8 @@
     --color-hero-bg: #111a11;
     --color-hero-scrim: rgba(0, 0, 0, 0.18);
     --color-contact-card-bg: radial-gradient(circle at 0% 0%, #1e2a1a, #0e110e);
+    --color-btn-ghost-text: var(--color-primary);
+    --color-btn-ghost-bg: transparent;
     --color-btn-ghost-border: rgba(124, 197, 138, 0.35);
     --color-btn-ghost-hover: rgba(124, 197, 138, 0.08);
     --color-validation-banner-bg: rgba(197, 48, 48, 0.12);
@@ -170,6 +174,8 @@
   --color-hero-bg: #111a11;
   --color-hero-scrim: rgba(0, 0, 0, 0.18);
   --color-contact-card-bg: radial-gradient(circle at 0% 0%, #1e2a1a, #0e110e);
+  --color-btn-ghost-text: var(--color-primary);
+  --color-btn-ghost-bg: transparent;
   --color-btn-ghost-border: rgba(124, 197, 138, 0.35);
   --color-btn-ghost-hover: rgba(124, 197, 138, 0.08);
   --color-validation-banner-bg: rgba(197, 48, 48, 0.12);
@@ -204,6 +210,8 @@
   --color-hero-bg: #e4eee4;
   --color-hero-scrim: rgba(0, 0, 0, 0.40);
   --color-contact-card-bg: radial-gradient(circle at 0% 0%, #f5e5c4, #fdfaf5);
+  --color-btn-ghost-text: var(--color-primary);
+  --color-btn-ghost-bg: transparent;
   --color-btn-ghost-border: rgba(53, 88, 52, 0.4);
   --color-btn-ghost-hover: rgba(53, 88, 52, 0.06);
   --color-validation-banner-bg: rgba(197, 48, 48, 0.06);
@@ -583,10 +591,15 @@ p {
   background-color: var(--color-primary-soft);
 }
 
-/* Ghost button — uses component tokens so border/hover adapt to dark */
+/*
+  Ghost button — uses component tokens so colors adapt to context.
+  Default (off-image): primary green text, transparent bg, green border.
+  Over hero image (see @media max-width: 1023px): tokens are overridden
+  to white text + semi-white bg for contrast against the darkened photo.
+*/
 .btn--ghost {
-  background-color: transparent;
-  color: var(--color-primary);
+  background-color: var(--color-btn-ghost-bg);
+  color: var(--color-btn-ghost-text);
   border: 1px solid var(--color-btn-ghost-border);
 }
 
@@ -1872,10 +1885,15 @@ textarea,
   }
 
   /*
-    Ghost button border is slightly thicker over the hero image
-    for better visibility against the darkened background.
+    Ghost button over hero image: switch to white text + semi-white
+    background so the button reads clearly against the darkened photo.
+    Border also switches to a white alpha so it remains visible.
+    Hover darkens the fill slightly for feedback.
   */
-  .btn--ghost {
-    border-width: 1.5px;
+  #hero .btn--ghost {
+    --color-btn-ghost-text: #ffffff;
+    --color-btn-ghost-bg: rgba(255, 255, 255, 0.15);
+    --color-btn-ghost-border: rgba(255, 255, 255, 0.55);
+    --color-btn-ghost-hover: rgba(255, 255, 255, 0.25);
   }
 }
