@@ -1314,6 +1314,17 @@ textarea,
 
 /* =====================================================
    16. Media Queries
+   =====================================================
+
+   CASCADE ORDER IS INTENTIONAL — do not reorder these blocks.
+
+   Hero background zoom works via cascade:
+     1. @media (max-width: 1023px)  — sets background-image + cover baseline (FIRST)
+     2. @media (max-width: 630px)   — overrides with zoom tier 1 (115% height)
+     3. @media (max-width: 420px)   — overrides with zoom tier 2 (130% height)
+
+   Each narrower block appears AFTER the wider one so it wins the cascade
+   for #hero background-size / background-position at its viewport range.
    ===================================================== */
 
 /* >= 535px */
@@ -1345,113 +1356,83 @@ textarea,
   }
 }
 
-/*
-  <= 420px — logo-left navbar + free-height hero.
-  Navbar: space-between keeps logo pinned left and hamburger pinned right,
-  matching the base navbar layout. Title is hidden at this width.
-  .navbar__cta is forced hidden with !important to override the
-  >=860px block which sets display:inline-flex with no lower bound.
-  Hero: height:auto + overflow:visible releases the 100dvh hard clamp
-  so the section grows with its content.
-
-  Buttons: every .btn outside the navbar becomes full-width at this size.
-  Groups (.hero__actions, .contact-form__actions) stack into a column
-  so buttons never sit side-by-side on a narrow screen.
-*/
-@media (max-width: 420px) {
-  .navbar__title {
-    display: none;
-  }
-
-  .navbar__cta {
-    display: none !important;
-  }
-
+/* =====================================================
+   TABLET / PORTRAIT PHONE — max-width: 1023px
+   Sits FIRST among the hero-zoom cascade so that the narrower
+   blocks below (<=630px, <=420px) can override background-size
+   and background-position via normal cascade order.
+   ===================================================== */
+@media (max-width: 1023px) {
   #hero {
-    height: auto;
-    overflow: visible;
-    padding-block: var(--space-sm);
     /*
-      Zoom tier 2 (<=420px): deepest zoom, anchored just below centre.
+      Apply the hero image as a CSS background so it shows on mobile/tablet
+      where .hero__media (the <picture> element) is hidden.
+      Neutral black scrim — no color tint, opacity 0.40.
 
-      background-size: auto 130% forces the image to be 130% of the
-      element HEIGHT — this guarantees the image always fills the full
-      frame in portrait mode (tall viewports) regardless of aspect ratio,
-      because on a phone the element height is the constraining dimension.
+      background-size: cover is the baseline for 631px–1023px.
+      The full composition reads well at these wider widths so no zoom
+      is needed here — cover handles centering automatically.
 
-      background-position: center 60% nudges the anchor point below the
-      vertical midpoint so the focal subject stays centred in the frame
-      as the wide-angle edges are cropped away.
-
-      background-repeat: no-repeat prevents tiling.
+      The narrower blocks below (421px–630px and <=420px) appear LATER
+      in the file and therefore override background-size / background-position
+      for #hero at those viewport ranges.
     */
-    background-size: auto 130%;
-    background-position: center 60%;
+    background-image:
+      linear-gradient(
+        to bottom,
+        var(--color-hero-scrim),
+        var(--color-hero-scrim)
+      ),
+      url("assets/compressed/verdance-hero-768.jpg");
+    background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
+
+    /* Pure white text for maximum legibility over the darkened image */
+    color: #ffffff;
   }
 
-  .hero__inner {
-    justify-content: flex-start;
-    padding-top: var(--space-2xl);
+  /*
+    All hero copy elements forced to pure white.
+    More vertical breathing room between title and subtitle.
+  */
+  #hero h1,
+  #hero h2,
+  #hero h3,
+  #hero p,
+  .hero__title,
+  .hero__subtitle,
+  .hero__meta-item,
+  .hero__note {
+    color: #ffffff;
   }
 
   .hero__title {
-    /*
-      Aligned to base h1 slope (3.5vw) so the fluid curve is continuous
-      with the global h1 rule and the 421px-630px breakpoint below.
-      At 375px: 3.5 * 3.75 = 13.125px preferred → clamps to 1.4rem (22.4px) min.
-      At 420px: 3.5 * 4.20 = 14.7px preferred → clamps to 1.4rem (22.4px) min.
-      Min is effectively always active at these tiny widths, which is correct.
-    */
-    font-size: clamp(1.4rem, 3.5vw, 1.75rem);
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-xl);
   }
 
   .hero__subtitle {
-    font-size: var(--font-size-base);
-    margin-bottom: var(--space-2xl);
-  }
-
-  .hero__actions {
-    margin-top: var(--space-md);
-    margin-bottom: var(--space-md);
-  }
-
-  .hero__meta {
-    margin-bottom: var(--space-xs);
+    margin-bottom: var(--space-lg);
   }
 
   /*
-    Full-width buttons — applies to every .btn that is NOT inside
-    .site-header (the navbar CTA is already hidden above, but this
-    guard keeps things safe if the DOM ever changes).
+    Ghost button over hero image: switch to white text + semi-white
+    background so the button reads clearly against the darkened photo.
+    Border also switches to a white alpha so it remains visible.
+    Hover darkens the fill slightly for feedback.
   */
-  :not(.site-header) > .btn,
-  :not(.site-header) .btn {
-    width: 100%;
-    max-width: none;
-  }
-
-  /*
-    Button groups: collapse side-by-side rows into a single column
-    so stacked full-width buttons don't fight for row space.
-  */
-  .hero__actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .contact-form__actions {
-    flex-direction: column;
-    align-items: stretch;
+  #hero .btn--ghost {
+    --color-btn-ghost-text: #ffffff;
+    --color-btn-ghost-bg: rgba(255, 255, 255, 0.15);
+    --color-btn-ghost-border: rgba(255, 255, 255, 0.55);
+    --color-btn-ghost-hover: rgba(255, 255, 255, 0.25);
   }
 }
 
 /*
   421px-630px — 3-column grid navbar: [logo] [title] [hamburger]
-  .navbar__brand uses display:contents to dissolve itself so logo-link
-  and title become direct grid children and land in separate columns.
-  .navbar__right (col 3) holds only the hamburger at this width.
+  Also: Hero zoom tier 1 — overrides the cover baseline set above.
+  Appears AFTER @media (max-width: 1023px) so it wins the cascade.
 */
 @media (min-width: 421px) and (max-width: 630px) {
   .navbar {
@@ -1461,21 +1442,15 @@ textarea,
     gap: 0;
   }
 
-  /*
-    display:contents removes .navbar__brand as a box, promoting its
-    children (logo-link and title) directly into the grid.
-  */
   .navbar__brand {
     display: contents;
   }
 
-  /* Col 1: logo */
   .navbar__logo-link {
     grid-column: 1;
     padding-inline-end: var(--space-xs);
   }
 
-  /* Col 2: title centered in its 1fr column */
   .navbar__title {
     grid-column: 2;
     text-align: center;
@@ -1484,7 +1459,6 @@ textarea,
     white-space: nowrap;
   }
 
-  /* Col 3: right slot — only hamburger visible (CTA already display:none) */
   .navbar__right {
     grid-column: 3;
     padding-inline-start: var(--space-xs);
@@ -1499,32 +1473,15 @@ textarea,
   }
 
   .hero__title {
-    /*
-      Aligned to base h1 slope (3.5vw) — was 5vw which caused an upward
-      spike in the fluid curve right at the 421px boundary.
-      At 421px: 3.5 * 4.21 = 14.7px preferred → clamps to 1.75rem (28px) min.
-      At 630px: 3.5 * 6.30 = 22.1px preferred → clamps to 1.75rem (28px) min.
-      Min is active across most of this range, capped at 2.25rem (36px) max.
-    */
     font-size: clamp(1.75rem, 3.5vw, 2.25rem);
   }
 
   /*
-    Zoom tier 1 (421px–560px): gradual zoom begins as the wide-angle
-    composition starts to feel tight.
-
-    background-size: auto 115% scales the image to 115% of the element
-    HEIGHT — the constraining dimension in portrait orientation — so the
-    image always overfills the frame and the zoom is measured in real
-    screen pixels rather than element-width percentages.
-
-    background-position: center 58% anchors the focal point slightly
-    below the vertical centre so the subject stays front-and-centre
-    as the outer edges of the wide-angle shot are cropped.
-
-    This block fires for the full 421px–630px navbar-grid range, but the
-    visual zoom only matters below ~560px; above that the cover baseline
-    (set in the 1023px block) already shows the full composition well.
+    Zoom tier 1 (421px–630px): gentle zoom, anchor just below centre.
+    background-size: auto 115% — image height = 115% of element height,
+    guaranteeing the frame is always filled in portrait orientation.
+    background-position: center 58% — focal point slightly below centre.
+    This rule appears after @media (max-width: 1023px) so it wins cascade.
   */
   #hero {
     background-size: auto 115%;
@@ -1545,6 +1502,77 @@ textarea,
     width: 100%;
     min-width: 0;
     max-width: none;
+  }
+}
+
+/*
+  <= 420px — logo-left navbar + free-height hero.
+  Also: Hero zoom tier 2 (deepest) — overrides both the cover baseline
+  and zoom tier 1. Appears LAST so it wins the cascade at <=420px.
+*/
+@media (max-width: 420px) {
+  .navbar__title {
+    display: none;
+  }
+
+  .navbar__cta {
+    display: none !important;
+  }
+
+  #hero {
+    height: auto;
+    overflow: visible;
+    padding-block: var(--space-sm);
+    /*
+      Zoom tier 2 (<=420px): deepest zoom, anchored just below centre.
+      background-size: auto 130% — image height = 130% of element height.
+      background-position: center 60% — focal point below vertical midpoint.
+      This rule appears after both the 1023px and 421px-630px blocks,
+      so it correctly wins the cascade at this narrow viewport range.
+    */
+    background-size: auto 130%;
+    background-position: center 60%;
+    background-repeat: no-repeat;
+  }
+
+  .hero__inner {
+    justify-content: flex-start;
+    padding-top: var(--space-2xl);
+  }
+
+  .hero__title {
+    font-size: clamp(1.4rem, 3.5vw, 1.75rem);
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero__subtitle {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .hero__actions {
+    margin-top: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .hero__meta {
+    margin-bottom: var(--space-xs);
+  }
+
+  :not(.site-header) > .btn,
+  :not(.site-header) .btn {
+    width: 100%;
+    max-width: none;
+  }
+
+  .hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .contact-form__actions {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 
@@ -1578,8 +1606,6 @@ textarea,
 
 /*
   < 860px — 3-column mode: logo | title (flex: 1) | hamburger
-  CTA is hidden, so .navbar__brand expands to absorb the freed space.
-  The title uses the extra room naturally via its parent's flex growth.
 */
 @media (max-width: 859px) {
   .navbar__brand {
@@ -1593,10 +1619,7 @@ textarea,
 }
 
 /*
-  >= 860px — 4-element, 2-column mode:
-  [ logo | title ]   [ CTA | hamburger ]
-  Brand hugs its content; right side is flex-shrink: 0.
-  CTA becomes visible.
+  >= 860px — 4-element, 2-column mode with CTA visible.
 */
 @media (min-width: 860px) {
   :root {
@@ -1608,7 +1631,6 @@ textarea,
   }
 
   .navbar__brand {
-    /* Reset: no longer flex: 1 — hugs content, right side handles balance */
     flex: 0 0 auto;
   }
 
@@ -1666,12 +1688,7 @@ textarea,
 @media (min-width: 1024px) {
   :root {
     --container-padding: 2rem;
-    --nav-height: 4rem; /* 64px */
-    /*
-      Logo grows at the desktop nav height.
-      max-width upgrades from --logo-size-sm (140px) to --logo-size-lg (200px)
-      by overriding the token at this breakpoint.
-    */
+    --nav-height: 4rem;
     --logo-size-sm: var(--logo-size-lg);
   }
 
@@ -1699,7 +1716,6 @@ textarea,
     margin-left: var(--space-sm);
   }
 
-  /* Two-column hero — centered, no .container ceiling */
   .hero__inner {
     flex-direction: row;
     align-items: stretch;
@@ -1772,7 +1788,7 @@ textarea,
    ===================================================== */
 @media (min-width: 1440px) {
   :root {
-    --nav-height: 4.5rem; /* 72px */
+    --nav-height: 4.5rem;
   }
 
   body {
@@ -1791,37 +1807,18 @@ textarea,
 
 /* =====================================================
    PHONE LANDSCAPE — max-height: 500px + orientation: landscape + max-width: 900px
-   Targets short-viewport landscape phones (~310px usable height after nav).
-   Excludes landscape laptops (their height > 500px at typical resolutions).
    ===================================================== */
 @media (max-height: 500px) and (orientation: landscape) and (max-width: 900px) {
-  /*
-    Section padding: var(--space-2xl)/var(--space-3xl) is far too tall for
-    ~310px of usable height. Compress to var(--space-lg) so sections don't
-    eat the entire viewport on their own.
-  */
   .section {
     padding-block: var(--space-lg);
   }
 
-  /*
-    Hero: release the 100dvh hard clamp (which crushes content to ~310px),
-    switch to auto height so the section grows with its content.
-    Reduce vertical padding to keep the first fold tight.
-    overflow: visible lets any decorative overflow escape the box.
-  */
   #hero {
     height: auto;
     overflow: visible;
     padding-block: var(--space-md);
   }
 
-  /*
-    Hero inner: switch to a horizontal split (copy left, media right)
-    so text is not forced to scroll past a tall image column.
-    Tighten the gap and cap the max-width so it doesn't over-stretch
-    on wide landscape phones (e.g. 844px wide).
-  */
   .hero__inner {
     flex-direction: row;
     align-items: center;
@@ -1841,9 +1838,6 @@ textarea,
     max-width: none;
   }
 
-  /*
-    Scale hero title down so it doesn't consume most of the short viewport.
-  */
   .hero__title {
     font-size: clamp(1.1rem, 3.5vw, 1.5rem);
     margin-bottom: var(--space-xs);
@@ -1867,10 +1861,6 @@ textarea,
     justify-content: flex-start;
   }
 
-  /*
-    Hero media: show a compact side panel. Keep aspect-ratio unset so it
-    fills the available column height, but cap width so copy gets room.
-  */
   .hero__media {
     display: block;
     flex: 0 0 38%;
@@ -1878,89 +1868,5 @@ textarea,
     min-height: 0;
     aspect-ratio: 4 / 3;
     border-radius: var(--radius-md);
-  }
-
-  /*
-    Navbar: the base sticky navbar is fine at 56px (--nav-height).
-    No layout changes needed — just ensure title stays visible.
-    At 421px-630px the grid navbar fires; at 631px+ flex is restored.
-    Both hold up cleanly in landscape without intervention.
-  */
-}
-
-/* =====================================================
-   TABLET / PORTRAIT PHONE — max-width: 1023px
-   At this width, .hero__media stays display:none (default).
-   The hero image is applied as a CSS background-image on #hero
-   with a linear-gradient scrim layered on top for copy legibility.
-   ===================================================== */
-@media (max-width: 1023px) {
-  #hero {
-    /*
-      Apply the hero image as a CSS background so it shows on mobile/tablet
-      where .hero__media (the <picture> element) is hidden.
-      Neutral black scrim — no color tint, opacity 0.40.
-
-      background-size: cover is the baseline for 631px–1023px.
-      The full composition reads well at these wider widths so no zoom
-      is needed here — cover handles centering automatically.
-
-      Inner breakpoints (421px–630px and <=420px) override both
-      background-size and background-position to progressively zoom in
-      and anchor to the focal point as the viewport narrows.
-
-      background-repeat: no-repeat is set here as the base default and
-      repeated in each inner breakpoint so it is never accidentally
-      dropped when background-size is overridden.
-    */
-    background-image:
-      linear-gradient(
-        to bottom,
-        var(--color-hero-scrim),
-        var(--color-hero-scrim)
-      ),
-      url("assets/compressed/verdance-hero-768.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    /* Pure white text for maximum legibility over the darkened image */
-    color: #ffffff;
-  }
-
-  /*
-    All hero copy elements forced to pure white.
-    More vertical breathing room between title and subtitle.
-  */
-  #hero h1,
-  #hero h2,
-  #hero h3,
-  #hero p,
-  .hero__title,
-  .hero__subtitle,
-  .hero__meta-item,
-  .hero__note {
-    color: #ffffff;
-  }
-
-  .hero__title {
-    margin-bottom: var(--space-xl);
-  }
-
-  .hero__subtitle {
-    margin-bottom: var(--space-lg);
-  }
-
-  /*
-    Ghost button over hero image: switch to white text + semi-white
-    background so the button reads clearly against the darkened photo.
-    Border also switches to a white alpha so it remains visible.
-    Hover darkens the fill slightly for feedback.
-  */
-  #hero .btn--ghost {
-    --color-btn-ghost-text: #ffffff;
-    --color-btn-ghost-bg: rgba(255, 255, 255, 0.15);
-    --color-btn-ghost-border: rgba(255, 255, 255, 0.55);
-    --color-btn-ghost-hover: rgba(255, 255, 255, 0.25);
   }
 }
