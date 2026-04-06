@@ -1870,4 +1870,12 @@ textarea,
   .hero__subtitle {
     margin-bottom: var(--space-lg);
   }
+
+  /*
+    Ghost button border is slightly thicker over the hero image
+    for better visibility against the darkened background.
+  */
+  .btn--ghost {
+    border-width: 1.5px;
+  }
 }
