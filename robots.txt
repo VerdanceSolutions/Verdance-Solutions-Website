@@ -2,5 +2,15 @@
 User-agent: *
 Allow: /
 
+# Explicitly allow social media crawlers for Open Graph scraping
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
 # Sitemap
 Sitemap: https://www.verdancesolutions.net/sitemap.xml
