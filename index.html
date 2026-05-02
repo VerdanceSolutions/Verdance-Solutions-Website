@@ -81,6 +81,14 @@
       }
     </script>
 
+    <link
+      rel="preload"
+      as="image"
+      href="assets/compressed/verdance-hero-768.webp"
+      imagesrcset="assets/compressed/verdance-hero-768.webp 768w, assets/compressed/verdance-hero-1200.webp 1200w, assets/compressed/verdance-hero.webp 1640w"
+      imagesizes="(min-width: 1051px) 520px, 100vw"
+    />
+
     <link rel="preload" href="styles.css" as="style" />
     <link rel="canonical" href="https://www.verdancesolutions.net" />
     <link rel="stylesheet" href="styles.css" />
@@ -205,6 +213,8 @@
               />
               <img
                 src="assets/compressed/verdance-hero-768.jpg"
+                fetchpriority="high"
+                loading="eager"
                 srcset="
                   assets/compressed/verdance-hero-768.jpg   768w,
                   assets/compressed/verdance-hero-1200.jpg 1200w,
@@ -212,7 +222,6 @@
                 "
                 sizes="(min-width: 1051px) 520px, 100vw"
                 alt="Rural Mexican production worker wrapping vanilla beans in twine for storage and export"
-                loading="eager"
                 width="1640"
                 height="1094"
               />

@@ -31,7 +31,7 @@
 
   /* Component-specific tokens that must adapt to dark mode */
   --color-hero-bg: #e4eee4;
-  --color-hero-scrim: rgba(0, 0, 0, 0.40);
+  --color-hero-scrim: rgba(0, 0, 0, 0.4);
   --color-about-bg: #e4eee4;
   --color-contact-card-bg: radial-gradient(circle at 0% 0%, #f5e5c4, #fdfaf5);
   --color-btn-ghost-text: var(--color-primary);
@@ -211,7 +211,7 @@
 
   /* Component tokens */
   --color-hero-bg: #e4eee4;
-  --color-hero-scrim: rgba(0, 0, 0, 0.40);
+  --color-hero-scrim: rgba(0, 0, 0, 0.4);
   --color-about-bg: #e4eee4;
   --color-contact-card-bg: radial-gradient(circle at 0% 0%, #f5e5c4, #fdfaf5);
   --color-btn-ghost-text: var(--color-primary);
@@ -699,6 +699,7 @@ p {
   inset: 0;
   width: 100%;
   height: 100%;
+  aspect-ratio: 1640 / 1094;
   object-fit: cover;
 }
 

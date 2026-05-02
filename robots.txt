@@ -13,4 +13,4 @@ User-agent: LinkedInBot
 Allow: /
 
 # Sitemap
-Sitemap: https://www.verdancesolutions.net/sitemap.xml
+Sitemap: https://www.verdancesolutions.net/sitemap_verdance.xml
