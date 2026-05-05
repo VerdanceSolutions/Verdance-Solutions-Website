@@ -1,6 +1,7 @@
 # Allow all search engines to crawl the site
 User-agent: *
 Allow: /
+Disallow: /exclude-me.html
 
 # Explicitly allow social media crawlers for Open Graph scraping
 User-agent: facebookexternalhit
